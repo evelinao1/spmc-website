@@ -5,16 +5,16 @@ const campuses = [
   {
     title: "Šilutės profesinio mokymo centras",
     subtitle: "Pagrindinis padalinys",
-    image: "/images/campus-main.JPG",
+    image: "/images/campus-main.jpg",
   },
   {
-    title: "Žuvininkystės praktinio mokymo centras",
-    subtitle: "Praktinio mokymo bazė",
-    image: "/images/campus-fishery.JPG",
+    title: "Žuvininkystės sektorinis praktinio mokymo centras",
+    subtitle: "Sektorinis centras",
+    image: "/images/campus-fishery.jpg",
   },
   {
-    title: "Prekybos ir paslaugų skyrius",
-    subtitle: "Paslaugų sritis",
+    title: "Paslaugų ir turizmo ir skyrius",
+    subtitle: "Skyrius",
     image: "/images/campus-services.jpg",
   },
 ];
@@ -22,29 +22,30 @@ const campuses = [
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-slate-50">
-        <div className="absolute inset-0">
-  <Image
-    src="/images/campus-main.JPG"
-    alt="ŠPMC"
-    fill
-    className="object-cover opacity-40"
-    priority
-  />
-</div>
+      <div className="absolute inset-0">
+        <Image
+          src="/images/campus-main.jpg"
+          alt="ŠPMC"
+          fill
+          className="object-cover opacity-40"
+          priority
+        />
+      </div>
 
-<div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/40" />
+      <div className="absolute inset-0 bg-linear-to-r from-white via-white/85 to-white/40" />
+
       <div className="relative z-10 mx-auto grid max-w-7xl gap-10 px-6 py-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:py-16">
         <div>
           <div className="mb-8">
-  <Image
-    src="/images/logo.png"
-    alt="Šilutės profesinio mokymo centras"
-    width={220}
-    height={160}
-    className="h-20 w-auto md:h-44"
-    priority
-  />
-</div>
+            <Image
+              src="/images/logo.png"
+              alt="Šilutės profesinio mokymo centras"
+              width={220}
+              height={160}
+              className="h-20 w-auto md:h-44"
+              priority
+            />
+          </div>
 
           <h1 className="max-w-3xl text-3xl font-bold tracking-tight text-slate-900 md:text-6xl">
             Kuriame profesinę ateitį kartu

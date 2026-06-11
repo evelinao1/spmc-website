@@ -16,9 +16,9 @@ export function Footer() {
         <div>
           <h3 className="font-semibold">Kontaktai</h3>
           <div className="mt-4 space-y-2 text-sm text-blue-100">
-            <p>Klaipėdos g. 72, Šilutė</p>
-            <p>Tel. +370 441 60500</p>
-            <p>El. p. info@silutespmc.lt</p>
+            <p>Mokyklos g. 3, Pagryniai</p>
+            <p>Tel. +370 441 53360</p>
+            <p>El. p. sekretore@silutespmc.lt</p>
           </div>
         </div>
 
@@ -36,8 +36,8 @@ export function Footer() {
           <h3 className="font-semibold">Padaliniai</h3>
           <div className="mt-4 space-y-2 text-sm text-blue-100">
             <p>Šilutės profesinio mokymo centras</p>
-            <p>Žuvininkystės praktinio mokymo centras</p>
-            <p>Prekybos ir paslaugų skyrius</p>
+            <p>Žuvininkystės sektorinis praktinio mokymo centras</p>
+            <p>Paslaugų ir turizmo skyrius</p>
           </div>
         </div>
       </div>

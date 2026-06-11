@@ -5,13 +5,13 @@ export const campuses = [
     image: "/images/campus-main.JPG",
   },
   {
-    title: "Žuvininkystės praktinio mokymo centras",
+    title: "Žuvininkystės sektorinis praktinio mokymo centras",
     description: "Moderni praktinio mokymo bazė žuvininkystės programoms.",
     image: "/images/campus-fishery.JPG",
   },
   {
-    title: "Prekybos ir paslaugų skyrius",
-    description: "Padalinys paslaugų, prekybos ir aptarnavimo sritims.",
+    title: "Paslaugų ir turizmo skyrius",
+    description: "Padalinys paslaugų, socialinės gerovės ir aptarnavimo sritims.",
     image: "/images/campus-services.jpg",
   },
 ];
