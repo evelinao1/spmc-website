@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeader } from "@/components/SectionHeader";
 import { InfoCard } from "@/components/InfoCard";
+import Link from "next/link";
 
 export default function PranesejoApsaugaPage() {
   return (
@@ -22,13 +23,23 @@ export default function PranesejoApsaugaPage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <InfoCard title="Vidinis informacijos teikimo kanalas">
-            Informacija apie pranešimų teikimo tvarką ir atsakingus asmenis.
-          </InfoCard>
+          <Link
+            href="/apie/pranesejo-apsauga/vidinis-informacijos-teikimo-kanalas"
+            className="block"
+          >
+            <InfoCard title="Vidinis informacijos teikimo kanalas">
+              Informacija apie pranešimų teikimo tvarką ir atsakingus asmenis.
+            </InfoCard>
+          </Link>
 
-          <InfoCard title="Pranešėjų apsauga">
-            Teisinė informacija, dokumentai ir apsaugos priemonės pranešėjams.
-          </InfoCard>
+          <Link
+            href="/apie/pranesejo-apsauga/praneseju-apsauga"
+            className="block"
+          >
+            <InfoCard title="Pranešėjų apsauga">
+              Teisinė informacija, dokumentai ir apsaugos priemonės pranešėjams.
+            </InfoCard>
+          </Link>
         </div>
       </main>
 

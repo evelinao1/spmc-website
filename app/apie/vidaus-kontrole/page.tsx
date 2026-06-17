@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeader } from "@/components/SectionHeader";
 import { InfoCard } from "@/components/InfoCard";
+import Link from "next/link";
 
 export default function VidausKontrolePage() {
   return (
@@ -22,13 +23,23 @@ export default function VidausKontrolePage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <InfoCard title="Vidaus kontrolės politika">
-            Vidaus kontrolės tikslai, principai ir pagrindinės nuostatos.
-          </InfoCard>
+          <Link
+            href="/apie/vidaus-kontrole/vidaus-kontroles-politika"
+            className="block"
+          >
+            <InfoCard title="Vidaus kontrolės politika">
+              Vidaus kontrolės tikslai, principai ir pagrindinės nuostatos.
+            </InfoCard>
+          </Link>
 
-          <InfoCard title="Dokumentai">
-            Vidaus kontrolės tvarkos, aprašai ir kita susijusi dokumentacija.
-          </InfoCard>
+          <Link
+            href="/apie/vidaus-kontrole/vidaus-kontroles-dokumentai"
+            className="block"
+          >
+            <InfoCard title="Dokumentai">
+              Vidaus kontrolės tvarkos, aprašai ir kita susijusi dokumentacija.
+            </InfoCard>
+          </Link>
         </div>
       </main>
 

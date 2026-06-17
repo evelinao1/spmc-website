@@ -1,35 +1,87 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
-import { SectionHeader } from "@/components/SectionHeader";
-import { InfoCard } from "@/components/InfoCard";
+import { fetchFromStrapi } from "@/lib/strapi";
 
-export default function KorupcijosPrevencijaPage() {
+type BlocksContent = {
+  type: string;
+  children?: {
+    type: string;
+    text?: string;
+  }[];
+}[];
+
+function BlocksRenderer({ content }: { content: BlocksContent }) {
+  return (
+    <div className="space-y-5 text-slate-700">
+      {content?.map((block, index) => {
+        if (block.type === "paragraph") {
+          const text = block.children?.map((child) => child.text).join("");
+
+          if (!text) return null;
+
+          return (
+            <p key={index} className="text-base leading-7">
+              {text}
+            </p>
+          );
+        }
+
+        return null;
+      })}
+    </div>
+  );
+}
+
+export default async function KorupcijosPrevencijaPage() {
+  const response = await fetchFromStrapi(
+    "/pages?filters[slug][$eq]=korupcijos-prevencija&filters[active][$eq]=true&populate=attachments"
+  );
+
+  const page = response.data?.[0];
+
   return (
     <>
       <Header />
 
       <PageHero
         label="Apie centrą"
-        title="Korupcijos prevencija"
-        description="Informacija apie korupcijos prevencijos priemones, dokumentus ir atsakingus asmenis."
+        title={page?.title ?? "Korupcijos prevencija"}
+        description={
+          page?.excerpt ??
+          "Informacija apie korupcijos prevencijos priemones, dokumentus ir atsakingus asmenis."
+        }
       />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
-        <SectionHeader
-          title="Korupcijos prevencijos informacija"
-          description="Čia bus skelbiami korupcijos prevencijos dokumentai, priemonės ir aktuali informacija."
-        />
+      <main className="mx-auto max-w-4xl px-6 py-16">
+        {page?.content ? (
+          <BlocksRenderer content={page.content} />
+        ) : (
+          <p className="text-slate-600">Turinys ruošiamas.</p>
+        )}
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <InfoCard title="Korupcijos prevencijos dokumentai">
-            Politika, tvarkos aprašai, planai ir kita su korupcijos prevencija susijusi informacija.
-          </InfoCard>
+        {page?.attachments?.length > 0 && (
+          <section className="mt-12 rounded-2xl border border-slate-200 bg-white p-6">
+            <h2 className="text-xl font-bold text-slate-900">Dokumentai</h2>
 
-          <InfoCard title="Atsakinga informacija">
-            Kontaktai ir informacija, kur kreiptis dėl korupcijos prevencijos klausimų.
-          </InfoCard>
-        </div>
+            <ul className="mt-4 space-y-3">
+              {page.attachments.map(
+                (file: { id: number; name: string; url: string }) => (
+                  <li key={file.id}>
+                    <a
+                      href={`${process.env.NEXT_PUBLIC_STRAPI_URL}${file.url}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-medium text-blue-800 hover:underline"
+                    >
+                      {file.name}
+                    </a>
+                  </li>
+                )
+              )}
+            </ul>
+          </section>
+        )}
       </main>
 
       <Footer />

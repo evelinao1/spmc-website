@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeader } from "@/components/SectionHeader";
 import { InfoCard } from "@/components/InfoCard";
+import Link from "next/link";
 
 export default function SuaugusiujuMokymasPage() {
   return (
@@ -22,18 +23,33 @@ export default function SuaugusiujuMokymasPage() {
           />
 
           <div className="mt-10 grid gap-6 md:grid-cols-3">
-            <InfoCard title="Užimtumo tarnybos klientams">
-              Informacija apie mokymo programas ir galimybes mokytis pagal Užimtumo tarnybos priemones.
-            </InfoCard>
+              <Link
+                href="/suaugusiuju-mokymas/uzimtumo-tarnybos-klientams"
+                className="block"
+              >
+                <InfoCard title="Užimtumo tarnybos klientams">
+                  Informacija apie mokymo programas ir galimybes mokytis pagal Užimtumo tarnybos priemones.
+                </InfoCard>
+              </Link>
 
-            <InfoCard title="Neformalus suaugusiųjų mokymas">
-              Trumpi mokymai, kursai ir kvalifikacijos tobulinimo galimybės.
-            </InfoCard>
+              <Link
+                href="/suaugusiuju-mokymas/neformalus-suaugusiuju-mokymas"
+                className="block"
+              >
+                <InfoCard title="Neformalus suaugusiųjų mokymas">
+                  Trumpi mokymai, kursai ir kvalifikacijos tobulinimo galimybės.
+                </InfoCard>
+              </Link>
 
-            <InfoCard title="Edukacijos">
-              Edukacinės veiklos, praktiniai užsiėmimai ir mokymai įvairioms tikslinėms grupėms.
-            </InfoCard>
-          </div>
+              <Link
+                href="/suaugusiuju-mokymas/edukacijos"
+                className="block"
+              >
+                <InfoCard title="Edukacijos">
+                  Edukacinės veiklos, praktiniai užsiėmimai ir mokymai įvairioms tikslinėms grupėms.
+                </InfoCard>
+              </Link>
+            </div>
         </section>
       </main>
 

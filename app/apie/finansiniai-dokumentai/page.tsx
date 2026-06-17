@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeader } from "@/components/SectionHeader";
 import { InfoCard } from "@/components/InfoCard";
+import Link from "next/link";
 
 export default function FinansiniaiDokumentaiPage() {
   return (
@@ -22,13 +23,23 @@ export default function FinansiniaiDokumentaiPage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <InfoCard title="Biudžeto vykdymo ataskaitų rinkiniai">
-            Biudžeto vykdymo ataskaitų rinkiniai ir susijusi informacija.
-          </InfoCard>
+          <Link
+            href="/apie/finansiniai-dokumentai/biudzeto-vykdymo-ataskaitu-rinkiniai"
+            className="block"
+          >
+            <InfoCard title="Biudžeto vykdymo ataskaitų rinkiniai">
+              Biudžeto vykdymo ataskaitų rinkiniai ir susijusi informacija.
+            </InfoCard>
+          </Link>
 
-          <InfoCard title="Finansinių ataskaitų rinkiniai">
-            Finansinių ataskaitų rinkiniai ir kita finansinė dokumentacija.
-          </InfoCard>
+          <Link
+            href="/apie/finansiniai-dokumentai/finansiniu-ataskaitu-rinkiniai"
+            className="block"
+          >
+            <InfoCard title="Finansinių ataskaitų rinkiniai">
+              Finansinių ataskaitų rinkiniai ir kita finansinė dokumentacija.
+            </InfoCard>
+          </Link>
         </div>
       </main>
 

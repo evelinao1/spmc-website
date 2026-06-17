@@ -3,27 +3,38 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeader } from "@/components/SectionHeader";
 import { InfoCard } from "@/components/InfoCard";
+import Link from "next/link";
 
 const documentCategories = [
   {
     title: "Strateginiai ir veiklos dokumentai",
-    items: "Strateginis planas, ugdymo planas, metinės veiklos programos, veiklos ataskaitos.",
+    href: "/apie/dokumentai/strateginiai-ir-veiklos-dokumentai",
+    items:
+      "Strateginis planas, ugdymo planas, metinės veiklos programos, veiklos ataskaitos.",
   },
   {
     title: "Tvarkos ir taisyklės",
-    items: "Vidaus tvarkos taisyklės, darbo apmokėjimo sistema, mokinio elgesio taisyklės, bendrabučio taisyklės.",
+    href: "/apie/dokumentai/tvarkos-ir-taisykles",
+    items:
+      "Vidaus tvarkos taisyklės, darbo apmokėjimo sistema, mokinio elgesio taisyklės, bendrabučio taisyklės.",
   },
   {
     title: "Mokiniams aktualūs dokumentai",
-    items: "Nemokamas maitinimas, valgiaraščiai, stipendijos, praktika, bendrabutis.",
+    href: "/apie/dokumentai/mokiniams-aktualus-dokumentai",
+    items:
+      "Nemokamas maitinimas, valgiaraščiai, stipendijos, praktika, bendrabutis.",
   },
   {
     title: "Saugumas ir gerovė",
-    items: "Smurto ir priekabiavimo prevencija, vaiko gerovės komisija, ekstremalių situacijų valdymas.",
+    href: "/apie/dokumentai/saugumas-ir-gerove",
+    items:
+      "Smurto ir priekabiavimo prevencija, vaiko gerovės komisija, ekstremalių situacijų valdymas.",
   },
   {
     title: "Duomenų apsauga ir IT",
-    items: "BDAR taisyklės, elektroninio dienyno nuostatai, naudojimosi kompiuterių tinklais taisyklės.",
+    href: "/apie/dokumentai/duomenu-apsauga-ir-it",
+    items:
+      "BDAR taisyklės, elektroninio dienyno nuostatai, naudojimosi kompiuterių tinklais taisyklės.",
   },
 ];
 
@@ -46,9 +57,15 @@ export default function DokumentaiPage() {
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {documentCategories.map((category) => (
-            <InfoCard key={category.title} title={category.title}>
-              {category.items}
-            </InfoCard>
+            <Link
+              key={category.title}
+              href={category.href}
+              className="block"
+            >
+              <InfoCard title={category.title}>
+                {category.items}
+              </InfoCard>
+            </Link>
           ))}
         </div>
       </main>

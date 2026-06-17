@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeader } from "@/components/SectionHeader";
 import { InfoCard } from "@/components/InfoCard";
+import Link from "next/link";
 
 export default function ViesiejiPirkimaiPage() {
   return (
@@ -22,13 +23,23 @@ export default function ViesiejiPirkimaiPage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <InfoCard title="Viešųjų pirkimų planas">
-            Metiniai viešųjų pirkimų planai ir jų pakeitimai.
-          </InfoCard>
+          <Link
+            href="/apie/viesieji-pirkimai/viesuju-pirkimu-planas"
+            className="block"
+          >
+            <InfoCard title="Viešųjų pirkimų planas">
+              Metiniai viešųjų pirkimų planai ir jų pakeitimai.
+            </InfoCard>
+          </Link>
 
-          <InfoCard title="Viešųjų pirkimų taisyklės">
-            Centro viešųjų pirkimų organizavimo tvarkos ir taisyklės.
-          </InfoCard>
+          <Link
+            href="/apie/viesieji-pirkimai/viesuju-pirkimu-taisykles"
+            className="block"
+          >
+            <InfoCard title="Viešųjų pirkimų taisyklės">
+              Centro viešųjų pirkimų organizavimo tvarkos ir taisyklės.
+            </InfoCard>
+          </Link>
         </div>
       </main>
 

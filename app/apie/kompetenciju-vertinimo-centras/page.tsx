@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeader } from "@/components/SectionHeader";
 import { InfoCard } from "@/components/InfoCard";
+import Link from "next/link";
 
 export default function KompetencijuVertinimoCentrasPage() {
   return (
@@ -22,20 +23,33 @@ export default function KompetencijuVertinimoCentrasPage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          <InfoCard title="Kam skirta?">
-            Asmenims, siekiantiems įsivertinti profesines kompetencijas arba
-            patvirtinti turimą kvalifikaciją.
-          </InfoCard>
+          <Link
+            href="/apie/kompetenciju-vertinimo-centras/apie-centra"
+            className="block"
+          >
+            <InfoCard title="Apie centrą">
+              Centro funkcijos, pasitelktos įstaigos, kontaktinė informacija.
+            </InfoCard>
+          </Link>
 
-          <InfoCard title="Registracija">
-            Čia bus pateikiama registracijos tvarka, terminai ir kontaktinė
-            informacija.
-          </InfoCard>
+          <Link
+            href="/apie/kompetenciju-vertinimo-centras/registracija"
+            className="block"
+          >
+            <InfoCard title="Registracija">
+              Čia bus pateikiama registracijos tvarka, terminai ir kontaktinė
+              informacija.
+            </InfoCard>
+          </Link>
 
-          <InfoCard title="Dokumentai">
-            Čia bus skelbiami prašymų šablonai, tvarkos aprašai ir kiti
-            kompetencijų vertinimui reikalingi dokumentai.
-          </InfoCard>
+          <Link
+            href="/apie/kompetenciju-vertinimo-centras/tvarkarasciai"
+            className="block"
+          >
+            <InfoCard title="Tvarkaraščiai">
+              Čia bus skelbiami kompetencijų vertinimo tvarkaraščiai.
+            </InfoCard>
+          </Link>
         </div>
       </main>
 

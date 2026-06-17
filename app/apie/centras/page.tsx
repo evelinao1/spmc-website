@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeader } from "@/components/SectionHeader";
 import { InfoCard } from "@/components/InfoCard";
+import Link from "next/link";
 
 export default function CentrasPage() {
   return (
@@ -22,17 +23,36 @@ export default function CentrasPage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          <InfoCard title="Centro pristatymas">
-            Šilutės profesinio mokymo centras rengia specialistus, pasirengusius šiuolaikinei darbo rinkai.
-          </InfoCard>
+          <Link
+            href="/apie/centras/centro-pristatymas"
+            className="block"
+          >
+            <InfoCard title="Centro pristatymas">
+              Šilutės profesinio mokymo centras rengia specialistus,
+              pasirengusius šiuolaikinei darbo rinkai.
+            </InfoCard>
+          </Link>
 
-          <InfoCard title="Istorija">
-            Čia bus pateikiama centro istorija, svarbiausi veiklos etapai ir pokyčiai.
-          </InfoCard>
+          <Link
+            href="/apie/centras/istorija"
+            className="block"
+          >
+            <InfoCard title="Istorija">
+              Čia bus pateikiama centro istorija, svarbiausi veiklos
+              etapai ir pokyčiai.
+            </InfoCard>
+          </Link>
 
-          <InfoCard title="Misija ir vizija">
-            Siekiame užtikrinti kokybišką profesinį mokymą, ugdyti atsakingą ir kūrybingą asmenybę bei stiprinti ryšį su darbo rinka.
-          </InfoCard>
+          <Link
+            href="/apie/centras/misija-ir-vizija"
+            className="block"
+          >
+            <InfoCard title="Misija ir vizija">
+              Siekiame užtikrinti kokybišką profesinį mokymą, ugdyti
+              atsakingą ir kūrybingą asmenybę bei stiprinti ryšį su
+              darbo rinka.
+            </InfoCard>
+          </Link>
         </div>
       </main>
 
