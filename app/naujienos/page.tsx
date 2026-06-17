@@ -1,71 +1,99 @@
+import Link from "next/link";
+import Image from "next/image";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
+import { fetchFromStrapi } from "@/lib/strapi";
 
-const newsItems = [
-  {
-    date: "2026 m. gegužės 20 d.",
-    title: "ŠPMC bendruomenės naujienos",
-    description:
-      "Čia bus skelbiamos svarbiausios centro naujienos, renginiai ir mokinių pasiekimai.",
-  },
-  {
-    date: "2026 m. balandžio 8 d.",
-    title: "Mokinių veiklos ir renginiai",
-    description:
-      "Informacija apie mokinių veiklas, konkursus, projektus ir profesinio mokymo patirtis.",
-  },
-  {
-    date: "2026 m. kovo 15 d.",
-    title: "Aktuali informacija stojantiesiems",
-    description:
-      "Svarbūs pranešimai apie priėmimą, mokymo programas ir mokymosi galimybes.",
-  },
-];
+type StrapiImage = {
+  url: string;
+  alternativeText?: string | null;
+};
 
-export default function NaujienosPage() {
+type NewsItem = {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt?: string;
+  publishDate?: string;
+  coverImage?: StrapiImage | null;
+};
+
+function getImageUrl(url?: string) {
+  if (!url) return null;
+  if (url.startsWith("http")) return url;
+  return `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
+}
+
+function formatDate(date?: string) {
+  if (!date) return "";
+  return new Intl.DateTimeFormat("lt-LT", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(new Date(date));
+}
+
+export default async function NewsPage() {
+  const data = await fetchFromStrapi(
+    "/news?filters[active][$eq]=true&sort=publishDate:desc&populate=coverImage"
+  );
+
+  const news: NewsItem[] = data.data;
+
   return (
     <>
       <Header />
 
-      <PageHero
-        label="Naujienos"
-        title="ŠPMC naujienos ir aktualijos"
-        description="Sekite svarbiausias Šilutės profesinio mokymo centro naujienas, renginius, projektus ir mokinių pasiekimus."
-      />
+      <main>
+        <PageHero
+          title="Naujienos"
+          description="Šilutės profesinio mokymo centro naujienos, renginiai ir aktualijos."
+        />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
-        <div className="grid gap-6 md:grid-cols-3">
-          {newsItems.map((item) => (
-            <article
-              key={item.title}
-              className="rounded-2xl border border-slate-200 bg-white p-6"
-            >
-              <p className="text-sm font-semibold text-blue-700">
-                {item.date}
-              </p>
+        <section className="mx-auto max-w-7xl px-6 py-16">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {news.map((item) => {
+              const imageUrl = getImageUrl(item.coverImage?.url);
+              
+              return (
+                <Link
+                  key={item.id}
+                  href={`/naujienos/${item.slug}`}
+                  className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                >
+                  {imageUrl && (
+                    <div className="relative h-56 w-full overflow-hidden">
+                      <Image
+                        src={imageUrl}
+                        alt={item.coverImage?.alternativeText || item.title}
+                        fill
+                        className="object-cover transition duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                  )}
 
-              <h2 className="mt-3 text-xl font-semibold text-slate-900">
-                {item.title}
-              </h2>
+                  <div className="p-6">
+                    {item.publishDate && (
+                      <p className="mb-3 text-sm text-slate-500">
+                        {formatDate(item.publishDate)}
+                      </p>
+                    )}
 
-              <p className="mt-3 text-slate-600">
-                {item.description}
-              </p>
-            </article>
-          ))}
-        </div>
+                    <h2 className="text-xl font-semibold text-slate-900">
+                      {item.title}
+                    </h2>
 
-        <section className="mt-14 rounded-3xl bg-slate-50 p-8">
-          <h2 className="text-2xl font-bold text-slate-900">
-            Naujienos bus valdomos per Strapi
-          </h2>
-
-          <p className="mt-4 max-w-3xl text-slate-600">
-            Vėliau naujienos bus keliamos per turinio valdymo sistemą: su
-            nuotraukomis, kategorijomis, paskelbimo data, autoriais ir detaliu
-            naujienos puslapiu.
-          </p>
+                    {item.excerpt && (
+                      <p className="mt-3 text-sm leading-6 text-slate-600">
+                        {item.excerpt}
+                      </p>
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </section>
       </main>
 

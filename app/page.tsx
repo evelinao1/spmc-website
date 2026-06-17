@@ -9,10 +9,15 @@ import { fetchFromStrapi } from "@/lib/strapi";
 
 export default async function Home() {
   const heroSlidesResponse = await fetchFromStrapi(
-  "/hero-slides?filters[active][$eq]=true&sort=order:asc&populate=image"
-);
+    "/hero-slides?filters[active][$eq]=true&sort=order:asc&populate=image"
+  );
+
+  const newsResponse = await fetchFromStrapi(
+    "/news?filters[active][$eq]=true&sort=publishDate:desc&pagination[limit]=3&populate=coverImage"
+  );
 
   const heroSlides = heroSlidesResponse.data;
+  const news = newsResponse.data;
 
   return (
     <>
@@ -21,7 +26,7 @@ export default async function Home() {
       <QuickLinks />
       <Programs />
       <Campuses />
-      <NewsSection />
+      <NewsSection news={news} />
       <Footer />
     </>
   );
