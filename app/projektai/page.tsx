@@ -1,69 +1,115 @@
+import Link from "next/link";
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
-import { InfoCard } from "@/components/InfoCard";
-import { SectionHeader } from "@/components/SectionHeader";
+import { fetchFromStrapi } from "@/lib/strapi";
 
-const projectCategories = [
-  {
-    title: "Erasmus+ projektai",
-    description:
-      "Tarptautiniai mobilumo, bendradarbiavimo ir profesinio tobulėjimo projektai.",
-  },
-  {
-    title: "ES finansuojami projektai",
-    description:
-      "Projektai, įgyvendinami Europos Sąjungos struktūrinių fondų ir kitų programų lėšomis.",
-  },
-  {
-    title: "Vykdomi projektai",
-    description:
-      "Šiuo metu centre įgyvendinami projektai, jų veiklos, partneriai ir rezultatai.",
-  },
-  {
-    title: "Baigti projektai",
-    description:
-      "Įgyvendinti projektai, sukūrę naujas galimybes mokiniams, mokytojams ir centro bendruomenei.",
-  },
+type Project = {
+  id: number;
+  title: string;
+  slug: string;
+  summary?: string;
+  category?: string;
+};
+
+type Props = {
+  searchParams: Promise<{
+    category?: string;
+  }>;
+};
+
+const categories = [
+  "Visi projektai",
+  "Erasmus+",
+  "ES finansuojami projektai",
+  "Kiti projektai",
 ];
 
-export default function ProjektaiPage() {
+export default async function ProjectsPage({ searchParams }: Props) {
+  const { category } = await searchParams;
+
+  const categoryFilter =
+    category && category !== "Visi projektai"
+      ? `&filters[category][$eq]=${encodeURIComponent(category)}`
+      : "";
+
+  const data = await fetchFromStrapi(
+    `/projects?filters[active][$eq]=true${categoryFilter}&sort=order:asc`
+  );
+
+  const projects = data.data as Project[];
+
   return (
     <>
       <Header />
 
-      <PageHero
-        label="Projektai"
-        title="Projektai, kuriantys naujas galimybes"
-        description="Šilutės profesinio mokymo centras dalyvauja nacionaliniuose ir tarptautiniuose projektuose, kurie stiprina mokymosi kokybę, tarptautiškumą ir praktinio mokymo galimybes."
-      />
+      <main>
+        <PageHero
+          title="Projektai"
+          description="Šilutės profesinio mokymo centro vykdomi projektai."
+        />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
-        <section>
-          <SectionHeader
-            title="Projektų kryptys"
-                description="Susipažinkite su pagrindinėmis projektinėmis veiklomis ir iniciatyvomis."
-                />
+        <section className="mx-auto max-w-6xl px-6 py-16">
+          <div className="mb-10 flex flex-wrap gap-3">
+            {categories.map((item) => {
+              const isActive =
+                (!category && item === "Visi projektai") || category === item;
 
-          <div className="mt-6 grid gap-6 md:grid-cols-2">
-            {projectCategories.map((project) => (
-              <InfoCard key={project.title} title={project.title}>
-                <p>{project.description}</p>
-                </InfoCard>
-            ))}
+              const href =
+                item === "Visi projektai"
+                  ? "/projektai"
+                  : `/projektai?category=${encodeURIComponent(item)}`;
+
+              return (
+                <Link
+                  key={item}
+                  href={href}
+                  className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
+                    isActive
+                      ? "border-blue-700 bg-blue-700 text-white"
+                      : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  }`}
+                >
+                  {item}
+                </Link>
+              );
+            })}
           </div>
-        </section>
 
-        <section className="mt-14 rounded-3xl bg-slate-50 p-8">
-          <h2 className="text-2xl font-bold text-slate-900">
-            Projektų sąrašas bus pildomas
-          </h2>
+          {projects.length === 0 ? (
+            <p className="text-slate-600">
+              Šioje kategorijoje projektų nėra.
+            </p>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2">
+              {projects.map((project) => (
+                <Link
+                  key={project.id}
+                  href={`/projektai/${project.slug}`}
+                  className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md"
+                >
+                  {project.category && (
+                    <p className="mb-3 text-sm font-medium text-blue-700">
+                      {project.category}
+                    </p>
+                  )}
 
-          <p className="mt-4 max-w-3xl text-slate-600">
-            Vėliau šiame puslapyje bus pateikiami konkretūs vykdomi ir baigti
-            projektai su aprašymais, finansavimo šaltiniais, partneriais,
-            veiklomis, rezultatais ir projekto laikotarpiu.
-          </p>
+                  <h2 className="mb-3 text-2xl font-semibold text-slate-900">
+                    {project.title}
+                  </h2>
+
+                  {project.summary && (
+                    <p className="text-slate-600">{project.summary}</p>
+                  )}
+
+                  <p className="mt-4 font-medium text-blue-700">
+                    Skaityti daugiau →
+                  </p>
+                </Link>
+              ))}
+            </div>
+          )}
         </section>
       </main>
 
