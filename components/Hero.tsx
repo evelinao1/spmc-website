@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { HeroSlider } from "@/components/HeroSlider";
 
 type HeroSlide = {
   id: number;
@@ -36,61 +37,9 @@ const campuses = [
 ];
 
 export function Hero({ slides = [] }: HeroProps) {
-  const slide = slides[0];
-
-  if (slide) {
-  const imageUrl = slide.image?.url
-    ? slide.image.url.startsWith("http")
-      ? slide.image.url
-      : `${process.env.NEXT_PUBLIC_STRAPI_URL}${slide.image.url}`
-    : null;
-
-  return (
-    <section className="bg-slate-50 px-6 py-8">
-      <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-        {imageUrl ? (
-          <Link href={slide.buttonLink || "#"} className="block">
-            <Image
-              src={imageUrl}
-              alt={slide.image?.alternativeText || slide.title || "Aktuali informacija"}
-              width={1302}
-              height={521}
-              className="h-auto w-full object-cover"
-              priority
-            />
-          </Link>
-        ) : (
-          <div className="p-8 md:p-12">
-            <p className="mb-3 text-sm font-bold uppercase tracking-wide text-blue-700">
-              Aktualu
-            </p>
-
-            {slide.title && (
-              <h1 className="max-w-3xl text-3xl font-bold tracking-tight text-slate-900 md:text-5xl">
-                {slide.title}
-              </h1>
-            )}
-
-            {slide.subtitle && (
-              <p className="mt-5 max-w-2xl text-lg leading-7 text-slate-600">
-                {slide.subtitle}
-              </p>
-            )}
-
-            {slide.buttonText && slide.buttonLink && (
-              <Link
-                href={slide.buttonLink}
-                className="mt-8 inline-flex rounded-xl bg-blue-900 px-6 py-3 font-semibold text-white hover:bg-blue-800"
-              >
-                {slide.buttonText}
-              </Link>
-            )}
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
+  if (slides.length > 0) {
+    return <HeroSlider slides={slides} />;
+  }
 
   return (
     <section className="relative overflow-hidden bg-slate-50">

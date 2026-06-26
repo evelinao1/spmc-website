@@ -1,26 +1,29 @@
+import Image from "next/image";
+import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
+import { fetchFromStrapi } from "@/lib/strapi";
 
-const campuses = [
-  {
-    title: "Paslaugų ir turizmo skyrius",
-    description:
-      "Profesinio mokymo programos, praktinis mokymas ir mokinių veiklos Paslaugų ir turizmo skyriuje.",
-  },
-  {
-    title: "Pagrynių skyrius",
-    description:
-      "Mokymo programos, praktinis rengimas ir bendruomenės veiklos Pagrynių skyriuje.",
-  },
-  {
-    title: "Žuvininkystės sektorinis praktinio mokymo centras",
-    description:
-      "Moderni praktinio mokymo bazė žuvininkystės ir susijusių sričių specialistams rengti.",
-  },
-];
+type Campus = {
+  id: number;
+  title: string;
+  slug: string;
+  shortDescription?: string | null;
+  address?: string | null;
+  image?: {
+    url: string;
+    alternativeText?: string | null;
+  } | null;
+};
 
-export default function PadaliniaiPage() {
+export default async function PadaliniaiPage() {
+  const data = await fetchFromStrapi(
+    "/campuses?populate=image&sort=order:asc&filters[active][$eq]=true"
+  );
+
+  const campuses: Campus[] = data.data;
+
   return (
     <>
       <Header />
@@ -33,32 +36,49 @@ export default function PadaliniaiPage() {
 
       <main className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-6 md:grid-cols-3">
-          {campuses.map((campus) => (
-            <div
-              key={campus.title}
-              className="rounded-2xl border border-slate-200 bg-white p-6"
-            >
-              <h2 className="text-xl font-semibold text-slate-900">
-                {campus.title}
-              </h2>
+          {campuses.map((campus) => {
+            const imageUrl = campus.image?.url
+              ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${campus.image.url}`
+              : null;
 
-              <p className="mt-3 text-slate-600">
-                {campus.description}
-              </p>
-            </div>
-          ))}
+            return (
+              <Link
+                key={campus.id}
+                href={`/padaliniai/${campus.slug}`}
+                className="overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:-translate-y-1 hover:shadow-lg"
+              >
+                {imageUrl && (
+                  <div className="relative h-52 w-full">
+                    <Image
+                      src={imageUrl}
+                      alt={campus.image?.alternativeText || campus.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold text-slate-900">
+                    {campus.title}
+                  </h2>
+
+                  {campus.shortDescription && (
+                    <p className="mt-3 text-slate-600">
+                      {campus.shortDescription}
+                    </p>
+                  )}
+
+                  {campus.address && (
+                    <p className="mt-4 text-sm font-medium text-slate-500">
+                      {campus.address}
+                    </p>
+                  )}
+                </div>
+              </Link>
+            );
+          })}
         </div>
-
-        <section className="mt-14 rounded-3xl bg-slate-50 p-8">
-          <h2 className="text-2xl font-bold text-slate-900">
-            Daugiau informacijos apie padalinius
-          </h2>
-
-          <p className="mt-4 max-w-3xl text-slate-600">
-            Ateityje kiekvienas padalinys turės savo puslapį su nuotraukomis,
-            kontaktais, mokymo programomis ir virtualiu pristatymu.
-          </p>
-        </section>
       </main>
 
       <Footer />

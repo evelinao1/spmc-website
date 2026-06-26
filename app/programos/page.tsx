@@ -1,90 +1,133 @@
+import Image from "next/image";
+import Link from "next/link";
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
+import {
+  getPrograms,
+  getProgramCategoryLabel,
+  programCategories,
+  type ProgramCategory,
+} from "@/lib/programs";
 
-const programCategories = [
-  {
-    title: "Baigusiems 10 klasių",
-    description: "Programos mokiniams, norintiems įgyti profesiją kartu su viduriniu išsilavinimu.",
-  },
-  {
-    title: "Baigusiems 12 klasių",
-    description: "Profesinio mokymo programos jau turintiems vidurinį išsilavinimą.",
-  },
-  {
-    title: "Suaugusiesiems",
-    description: "Mokymosi galimybės norintiems persikvalifikuoti ar įgyti naujų įgūdžių.",
-  },
-];
+type ProgramosPageProps = {
+  searchParams: Promise<{
+    category?: string;
+  }>;
+};
 
-const fields = [
-  "Inžinerija ir technologijos",
-  "Paslaugos ir turizmas",
-  "Žuvininkystė",
-  "Socialinė sritis",
-];
+function getMediaUrl(url?: string) {
+  if (!url) return null;
+  if (url.startsWith("http")) return url;
 
-export default function ProgramosPage() {
+  return `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
+}
+
+export default async function ProgramosPage({
+  searchParams,
+}: ProgramosPageProps) {
+  const { category } = await searchParams;
+  const programs = await getPrograms();
+
+  const activeCategory = programCategories.includes(category as ProgramCategory)
+    ? (category as ProgramCategory)
+    : null;
+
+  const filteredPrograms = activeCategory
+    ? programs.filter((program) => program.category === activeCategory)
+    : programs;
+
   return (
     <>
       <Header />
 
-      <PageHero
-        label="Mokymo programos"
-        title="Atrask sau tinkamą profesinio mokymo programą"
-        description="Šilutės profesinio mokymo centre gali rinktis programas pagal turimą išsilavinimą, interesus ir norimą profesinį kelią."
-      />
+      <main>
+        <PageHero
+          title="Mokymo programos"
+          description="Atraskite profesinio mokymo programas pagal savo išsilavinimą, poreikius ir karjeros tikslus."
+        />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
-        <section>
-          <h2 className="text-2xl font-bold text-slate-900">
-            Programos pagal mokymosi kelią
-          </h2>
+        <section className="mx-auto max-w-7xl px-6 py-16">
+          <div className="mb-8 flex flex-wrap gap-3">
+            <Link
+              href="/programos"
+              className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
+                !activeCategory
+                  ? "border-blue-700 bg-blue-700 text-white"
+                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+              }`}
+            >
+              Visos
+            </Link>
 
-          <div className="mt-6 grid gap-6 md:grid-cols-3">
-            {programCategories.map((category) => (
-              <div
-                key={category.title}
-                className="rounded-2xl border border-slate-200 bg-white p-6"
+            {programCategories.map((item) => (
+              <Link
+                key={item}
+                href={`/programos?category=${encodeURIComponent(item)}`}
+                className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
+                  activeCategory === item
+                    ? "border-blue-700 bg-blue-700 text-white"
+                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                }`}
               >
-                <h3 className="text-xl font-semibold text-slate-900">
-                  {category.title}
-                </h3>
-
-                <p className="mt-3 text-slate-600">
-                  {category.description}
-                </p>
-              </div>
+                {getProgramCategoryLabel(item)}
+              </Link>
             ))}
           </div>
-        </section>
 
-        <section className="mt-14">
-          <h2 className="text-2xl font-bold text-slate-900">
-            Mokymo sritys
-          </h2>
-
-          <div className="mt-6 flex flex-wrap gap-3">
-            {fields.map((field) => (
-              <span
-                key={field}
-                className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700"
-              >
-                {field}
-              </span>
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-14 rounded-3xl bg-slate-50 p-8">
-          <h2 className="text-2xl font-bold text-slate-900">
-            Programų sąrašas bus pildomas
-          </h2>
-
-          <p className="mt-4 max-w-3xl text-slate-600">
-            Vėliau čia bus rodomos konkrečios profesinio mokymo programos su aprašymais,
-            trukme, mokymosi forma, priėmimo sąlygomis ir galimybėmis po mokslų.
+          <p className="mb-8 text-sm font-medium text-slate-600">
+            {activeCategory
+              ? `${getProgramCategoryLabel(activeCategory)} (${filteredPrograms.length})`
+              : `Visos programos (${filteredPrograms.length})`}
           </p>
+
+          {filteredPrograms.length === 0 ? (
+            <p className="text-slate-600">
+              Šioje kategorijoje programų šiuo metu nėra.
+            </p>
+          ) : (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {filteredPrograms.map((program) => {
+                const imageUrl = getMediaUrl(program.image?.url);
+
+                return (
+                  <Link
+                    key={program.id}
+                    href={`/programos/${program.slug}`}
+                    className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                  >
+                    {imageUrl && (
+                      <div className="relative h-56 w-full">
+                        <Image
+                          src={imageUrl}
+                          alt={program.image?.alternativeText || program.title}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+
+                    <div className="p-6">
+                      <p className="mb-3 text-sm font-semibold text-blue-700">
+                        {getProgramCategoryLabel(program.category)}
+                      </p>
+
+                      <h2 className="mb-3 text-xl font-bold text-slate-900">
+                        {program.title}
+                      </h2>
+
+                      {program.shortDescription && (
+                        <p className="line-clamp-3 text-sm leading-6 text-slate-600">
+                          {program.shortDescription}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </section>
       </main>
 

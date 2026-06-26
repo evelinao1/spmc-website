@@ -1,24 +1,10 @@
-import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { RichText, type StrapiBlock } from "@/components/RichText";
 import { fetchFromStrapi } from "@/lib/strapi";
-
-type StrapiTextChild = {
-  type: "text";
-  text: string;
-  bold?: boolean;
-  italic?: boolean;
-  underline?: boolean;
-};
-
-type StrapiBlock = {
-  type: string;
-  level?: number;
-  children?: StrapiTextChild[] | StrapiBlock[];
-};
 
 type StrapiMedia = {
   id: number;
@@ -61,63 +47,6 @@ function formatDate(date?: string) {
     month: "long",
     day: "numeric",
   }).format(new Date(date));
-}
-
-function renderText(children?: StrapiTextChild[]) {
-  if (!children) return null;
-
-  return children.map((child, index) => {
-    let text: ReactNode = child.text;
-
-    if (child.bold) text = <strong>{text}</strong>;
-    if (child.italic) text = <em>{text}</em>;
-    if (child.underline) text = <u>{text}</u>;
-
-    return <span key={index}>{text}</span>;
-  });
-}
-
-function BlocksRenderer({ blocks }: { blocks?: StrapiBlock[] }) {
-  if (!blocks || blocks.length === 0) return null;
-
-  return (
-    <div className="space-y-5 text-lg leading-8 text-slate-700">
-      {blocks.map((block, index) => {
-        if (block.type === "paragraph") {
-          return (
-            <p key={index}>
-              {renderText(block.children as StrapiTextChild[])}
-            </p>
-          );
-        }
-
-        if (block.type === "heading") {
-          return (
-            <h2
-              key={index}
-              className="pt-6 text-2xl font-semibold text-slate-900"
-            >
-              {renderText(block.children as StrapiTextChild[])}
-            </h2>
-          );
-        }
-
-        if (block.type === "list") {
-          return (
-            <ul key={index} className="list-disc space-y-2 pl-6">
-              {(block.children as StrapiBlock[])?.map((item, itemIndex) => (
-                <li key={itemIndex}>
-                  {renderText(item.children as StrapiTextChild[])}
-                </li>
-              ))}
-            </ul>
-          );
-        }
-
-        return null;
-      })}
-    </div>
-  );
 }
 
 export default async function AnnouncementDetailPage({ params }: Props) {
@@ -176,7 +105,9 @@ export default async function AnnouncementDetailPage({ params }: Props) {
             </div>
           )}
 
-          <BlocksRenderer blocks={announcement.content} />
+          {announcement.content && (
+            <RichText blocks={announcement.content as StrapiBlock[]} />
+          )}
 
           {announcement.attachments && announcement.attachments.length > 0 && (
             <section className="mt-12">
