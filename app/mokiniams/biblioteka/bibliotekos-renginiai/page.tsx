@@ -3,19 +3,20 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { NewsList } from "@/components/NewsList";
 
-export default function NewsPage() {
+export default function BibliotekosRenginiaiPage() {
   return (
     <>
       <Header />
 
       <main>
         <PageHero
-          title="Naujienos"
-          description="Šilutės profesinio mokymo centro naujienos, renginiai ir aktualijos."
+          label="Biblioteka"
+          title="Bibliotekos renginiai"
+          description="Šilutės profesinio mokymo centro bibliotekos renginių archyvas."
         />
 
         <section className="mx-auto max-w-7xl px-6 py-16">
-          <NewsList />
+          <NewsList category="Bibliotekos renginiai" />
         </section>
       </main>
 

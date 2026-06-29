@@ -15,26 +15,33 @@ export type StrapiBlock = {
   children?: StrapiTextChild[] | StrapiBlock[];
 };
 
+type RichTextProps = {
+  blocks?: StrapiBlock[] | null;
+  content?: StrapiBlock[] | null;
+};
+
 function renderText(children?: StrapiTextChild[]) {
   if (!children) return null;
 
   return children.map((child, index) => {
     let text: ReactNode = child.text;
 
-    if (child.bold) text = <strong>{text}</strong>;
-    if (child.italic) text = <em>{text}</em>;
-    if (child.underline) text = <u>{text}</u>;
+    if (child.bold) text = <strong key={index}>{text}</strong>;
+    if (child.italic) text = <em key={index}>{text}</em>;
+    if (child.underline) text = <u key={index}>{text}</u>;
 
     return <span key={index}>{text}</span>;
   });
 }
 
-export function RichText({ blocks }: { blocks?: StrapiBlock[] | null }) {
-  if (!blocks || blocks.length === 0) return null;
+export function RichText({ blocks, content }: RichTextProps) {
+  const items = blocks ?? content;
+
+  if (!items || items.length === 0) return null;
 
   return (
     <div className="space-y-5 text-lg leading-8 text-slate-700">
-      {blocks.map((block, index) => {
+      {items.map((block, index) => {
         if (block.type === "paragraph") {
           return (
             <p key={index}>

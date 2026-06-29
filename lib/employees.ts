@@ -42,6 +42,7 @@ export type Employee = {
   padaliniais?: EmployeeCampus[];
   active?: boolean;
   order?: number | null;
+  sortOrder?: number | null;
   showOnContacts?: boolean | null;
 };
 
@@ -63,4 +64,11 @@ export async function getEmployeeBySlug(slug: string) {
   );
 
   return data.data?.[0] as Employee | undefined;
+}
+export async function getContactEmployees() {
+  const data = await fetchFromStrapi(
+    "/employees?filters[active][$eq]=true&filters[showOnContacts][$eq]=true&sort=sortOrder:asc&populate[photo]=true&populate[padaliniais]=true"
+  );
+
+  return data.data as Employee[];
 }
