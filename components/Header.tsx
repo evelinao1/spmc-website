@@ -1,79 +1,106 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
+import { useState } from "react";
+
 import { navigation } from "@/data/navigation";
+import { DesktopNavigation } from "@/components/header/DesktopNavigation";
+import { SearchButton } from "@/components/header/SearchButton";
+import { TamoButton } from "@/components/header/TamoButton";
+import { SearchDialog } from "@/components/search/SearchDialog";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
-    <header className="border-b border-slate-200 bg-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link
-          href="/"
-          className="shrink-0 text-lg font-bold tracking-tight text-slate-900 hover:text-blue-700"
-        >
-          ŠPMC
-        </Link>
-
-        <nav className="hidden items-center gap-6 text-sm font-medium text-slate-700 lg:flex">
-          {navigation.map((item) => (
-            <Link key={item.href} href={item.href} className="hover:text-blue-700">
-              {item.title}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-3">
-          <a
-            href="https://www.tamo.lt"
-            className="hidden rounded-xl bg-blue-900 px-4 py-2 text-sm font-semibold text-white lg:inline-flex"
+    <>
+      <header className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          <Link
+            href="/"
+            className="shrink-0 text-lg font-bold tracking-tight text-slate-900 hover:text-blue-700"
           >
-            TAMO
-          </a>
+            ŠPMC
+          </Link>
 
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-900 lg:hidden"
-          >
-            {isOpen ? "Uždaryti" : "Meniu"}
-          </button>
-        </div>
-      </div>
+          <DesktopNavigation />
 
-      {isOpen && (
-        <div className="border-t border-slate-200 bg-white px-6 py-4 lg:hidden">
-          <nav className="mx-auto flex max-w-7xl flex-col gap-3">
-            <Link
-              href="/"
-              onClick={() => setIsOpen(false)}
-              className="rounded-lg px-3 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+          <div className="flex items-center gap-3">
+            <div className="hidden lg:block">
+              <SearchButton onClick={() => setIsSearchOpen(true)} />
+            </div>
+
+            <div className="hidden lg:block">
+              <TamoButton />
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsOpen((value) => !value)}
+              className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-900 lg:hidden"
             >
-              Pradžia
-            </Link>
+              {isOpen ? "Uždaryti" : "Meniu"}
+            </button>
+          </div>
+        </div>
 
-            {navigation.map((item) => (
+        {isOpen && (
+          <div className="border-t border-slate-200 bg-white px-6 py-4 lg:hidden">
+            <nav className="mx-auto flex max-w-7xl flex-col gap-2">
               <Link
-                key={item.href}
-                href={item.href}
+                href="/"
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg px-3 py-2 text-sm font-medium text-slate-800 hover:bg-slate-50"
+                className="rounded-lg px-3 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50"
               >
-                {item.title}
+                Pradžia
               </Link>
-            ))}
 
-            <a
-              href="https://www.tamo.lt"
-              className="mt-2 rounded-xl bg-blue-900 px-4 py-3 text-center text-sm font-semibold text-white"
-            >
-              TAMO
-            </a>
-          </nav>
-        </div>
-      )}
-    </header>
+              {navigation.map((item) =>
+                item.children?.length ? (
+                  <div key={item.title} className="rounded-lg px-3 py-2">
+                    <p className="mb-2 text-sm font-semibold text-slate-900">
+                      {item.title}
+                    </p>
+
+                    <div className="flex flex-col gap-1 border-l border-slate-200 pl-3">
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.href ?? child.title}
+                          href={child.href ?? "#"}
+                          onClick={() => setIsOpen(false)}
+                          className="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                        >
+                          {child.title}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    key={item.href ?? item.title}
+                    href={item.href ?? "#"}
+                    onClick={() => setIsOpen(false)}
+                    className="rounded-lg px-3 py-2 text-sm font-medium text-slate-800 hover:bg-slate-50"
+                  >
+                    {item.title}
+                  </Link>
+                )
+              )}
+
+              <div className="mt-2 flex items-center justify-between">
+                <SearchButton onClick={() => setIsSearchOpen(true)} />
+                <TamoButton />
+              </div>
+            </nav>
+          </div>
+        )}
+      </header>
+
+      <SearchDialog
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
+    </>
   );
 }
