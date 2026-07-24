@@ -4,7 +4,9 @@ import Image from "next/image";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RichText, type StrapiBlock } from "@/components/RichText";
+import { LightboxGallery } from "@/components/LightboxGallery";
 import { fetchFromStrapi } from "@/lib/strapi";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 type StrapiMedia = {
   id: number;
@@ -59,6 +61,21 @@ export default async function ProjectDetailPage({ params }: Props) {
       <Header />
 
       <main className="mx-auto max-w-4xl px-6 py-16">
+        <Breadcrumb
+          items={[
+            {
+              label: "Pradžia",
+              href: "/",
+            },
+            {
+              label: "Projektai",
+              href: "/projektai",
+            },
+            {
+              label: project.title,
+            },
+          ]}
+        />
         <article>
           {project.category && (
             <p className="mb-4 text-sm font-semibold uppercase tracking-wider text-blue-700">
@@ -108,26 +125,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                 Nuotraukos
               </h2>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                {project.gallery.map((image) => {
-                  const galleryImageUrl = getFileUrl(image.url);
-                  if (!galleryImageUrl) return null;
-
-                  return (
-                    <div
-                      key={image.id}
-                      className="relative h-64 overflow-hidden rounded-xl"
-                    >
-                      <Image
-                        src={galleryImageUrl}
-                        alt={image.alternativeText || project.title}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+              <LightboxGallery images={project.gallery} />
             </section>
           )}
 

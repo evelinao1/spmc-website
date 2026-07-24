@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { NewsList } from "@/components/NewsList";
 
+
 export default function NewsPage() {
   return (
     <>

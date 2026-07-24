@@ -6,7 +6,10 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RichText, type StrapiBlock } from "@/components/RichText";
+import { LightboxGallery } from "@/components/LightboxGallery";
 import { fetchFromStrapi } from "@/lib/strapi";
+import { Breadcrumb } from "@/components/Breadcrumb";
+
 
 type StrapiMedia = {
   id: number;
@@ -96,13 +99,31 @@ export default async function NewsDetailPage({ params }: Props) {
   );
 
   const otherNews = otherNewsResponse.data as NewsArticle[];
+ 
   const imageUrl = getImageUrl(article.coverImage?.url);
+
+  console.log("ARTICLE GALLERY:", JSON.stringify(article.gallery, null, 2));
 
   return (
     <>
       <Header />
 
       <main className="mx-auto max-w-4xl px-6 py-16">
+        <Breadcrumb
+          items={[
+            {
+              label: "Pradžia",
+              href: "/",
+            },
+            {
+              label: "Naujienos",
+              href: "/naujienos",
+            },
+            {
+              label: article.title,
+            },
+          ]}
+        />
         <article>
           <h1 className="mb-6 text-4xl font-bold text-slate-950">
             {article.title}
@@ -135,26 +156,7 @@ export default async function NewsDetailPage({ params }: Props) {
                 Nuotraukos
               </h2>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                {article.gallery.map((image) => {
-                  const galleryImageUrl = getImageUrl(image.url);
-                  if (!galleryImageUrl) return null;
-
-                  return (
-                    <div
-                      key={image.id}
-                      className="relative h-64 overflow-hidden rounded-xl"
-                    >
-                      <Image
-                        src={galleryImageUrl}
-                        alt={image.alternativeText || article.title}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+              <LightboxGallery images={article.gallery} />
             </section>
           )}
 
