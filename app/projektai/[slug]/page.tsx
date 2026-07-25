@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
@@ -5,8 +6,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RichText, type StrapiBlock } from "@/components/RichText";
 import { LightboxGallery } from "@/components/LightboxGallery";
-import { fetchFromStrapi } from "@/lib/strapi";
 import { Breadcrumb } from "@/components/Breadcrumb";
+
+import { fetchFromStrapi } from "@/lib/strapi";
+import { createMetadata } from "@/lib/seo";
 
 type StrapiMedia = {
   id: number;
@@ -26,6 +29,7 @@ type Project = {
   gallery?: StrapiMedia[];
   attachments?: StrapiMedia[];
   projectLink?: string;
+  updatedAt?: string;
 };
 
 type Props = {
@@ -34,21 +38,66 @@ type Props = {
   }>;
 };
 
-function getFileUrl(url?: string) {
-  if (!url) return null;
-  if (url.startsWith("http")) return url;
+function getFileUrl(url?: string | null) {
+  if (!url) {
+    return null;
+  }
+
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
 
   return `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
 }
 
-export default async function ProjectDetailPage({ params }: Props) {
-  const { slug } = await params;
+async function getProject(slug: string): Promise<Project | undefined> {
+  const encodedSlug = encodeURIComponent(slug);
 
   const data = await fetchFromStrapi(
-    `/projects?filters[slug][$eq]=${slug}&filters[active][$eq]=true&populate=*`
+    `/projects?filters[slug][$eq]=${encodedSlug}&filters[active][$eq]=true&populate=*`
   );
 
-  const project = data.data?.[0] as Project | undefined;
+  return data?.data?.[0] as Project | undefined;
+}
+
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const project = await getProject(slug);
+
+  if (!project) {
+    return createMetadata({
+      title: "Projektas nerastas",
+      description:
+        "Ieškomas Šilutės profesinio mokymo centro projektas nerastas.",
+      path: `/projektai/${slug}`,
+      noIndex: true,
+    });
+  }
+
+  const imageUrl = getFileUrl(project.coverImage?.url);
+
+  const description =
+    project.summary ||
+    `${project.title} – Šilutės profesinio mokymo centro projektas.`;
+
+  return createMetadata({
+    title: project.title,
+    description,
+    path: `/projektai/${project.slug}`,
+    image: imageUrl,
+    imageAlt:
+      project.coverImage?.alternativeText ||
+      project.title,
+    type: "website",
+    modifiedTime: project.updatedAt,
+  });
+}
+
+export default async function ProjectDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const project = await getProject(slug);
 
   if (!project) {
     notFound();
@@ -76,6 +125,7 @@ export default async function ProjectDetailPage({ params }: Props) {
             },
           ]}
         />
+
         <article>
           {project.category && (
             <p className="mb-4 text-sm font-semibold uppercase tracking-wider text-blue-700">
@@ -110,13 +160,15 @@ export default async function ProjectDetailPage({ params }: Props) {
                 src={imageUrl}
                 alt={project.coverImage?.alternativeText || project.title}
                 fill
+                sizes="(max-width: 896px) 100vw, 896px"
                 className="object-cover"
+                priority
               />
             </div>
           )}
 
           {project.content && (
-            <RichText blocks={project.content as StrapiBlock[]} />
+            <RichText blocks={project.content} />
           )}
 
           {project.gallery && project.gallery.length > 0 && (
@@ -138,7 +190,10 @@ export default async function ProjectDetailPage({ params }: Props) {
               <div className="space-y-3">
                 {project.attachments.map((file) => {
                   const fileUrl = getFileUrl(file.url);
-                  if (!fileUrl) return null;
+
+                  if (!fileUrl) {
+                    return null;
+                  }
 
                   return (
                     <a
@@ -148,7 +203,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                       rel="noopener noreferrer"
                       className="block rounded-xl border border-slate-200 p-4 text-slate-700 transition hover:bg-slate-50"
                     >
-                      {file.name}
+                      {file.name || "Atsisiųsti failą"}
                     </a>
                   );
                 })}

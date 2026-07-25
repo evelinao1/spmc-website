@@ -1,9 +1,13 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
+
 import { fetchFromStrapi } from "@/lib/strapi";
+import { createMetadata } from "@/lib/seo";
 
 type Campus = {
   id: number;
@@ -16,6 +20,14 @@ type Campus = {
     alternativeText?: string | null;
   } | null;
 };
+
+export const metadata: Metadata = createMetadata({
+  title: "Padaliniai",
+  description:
+    "Susipažinkite su Šilutės profesinio mokymo centro padaliniais, jų veikla, infrastruktūra ir vykdomomis profesinio mokymo programomis.",
+  path: "/padaliniai",
+  type: "website",
+});
 
 export default async function PadaliniaiPage() {
   const data = await fetchFromStrapi(
@@ -53,6 +65,7 @@ export default async function PadaliniaiPage() {
                       src={imageUrl}
                       alt={campus.image?.alternativeText || campus.title}
                       fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
                       className="object-cover"
                     />
                   </div>

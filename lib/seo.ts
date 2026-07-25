@@ -15,39 +15,23 @@ export const DEFAULT_OG_IMAGE = "/opengraph-image.jpg";
 
 const FALLBACK_SITE_URL = "http://localhost:3000";
 
-/**
- * Grąžina pagrindinį svetainės adresą be pasvirojo brūkšnio pabaigoje.
- *
- * Lokaliai:
- * http://localhost:3000
- *
- * Produkcijoje:
- * reikšmė iš NEXT_PUBLIC_SITE_URL
- */
 export function getSiteUrl(): string {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || FALLBACK_SITE_URL;
 
   return siteUrl.replace(/\/$/, "");
 }
 
-/**
- * Santykinį kelią paverčia absoliučiu svetainės URL.
- *
- * Pavyzdžiai:
- * "/" -> "https://svetaine.lt/"
- * "/naujienos" -> "https://svetaine.lt/naujienos"
- */
 export function getAbsoluteUrl(path = "/"): string {
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    return path;
+  }
+
   const siteUrl = getSiteUrl();
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
 
   return `${siteUrl}${normalizedPath}`;
 }
 
-/**
- * Pašalina HTML žymas ir sutvarko nereikalingus tarpus.
- * Naudinga kuriant description iš Strapi teksto.
- */
 export function stripHtml(value?: string | null): string {
   if (!value) {
     return "";
@@ -59,9 +43,6 @@ export function stripHtml(value?: string | null): string {
     .trim();
 }
 
-/**
- * Sutrumpina tekstą iki rekomenduojamo meta description ilgio.
- */
 export function truncateDescription(
   value?: string | null,
   maxLength = 160
@@ -86,12 +67,6 @@ export function truncateDescription(
   return `${shortenedValue.slice(0, lastSpaceIndex).trim()}…`;
 }
 
-/**
- * Sudaro puslapio pavadinimą.
- *
- * Rezultatas:
- * "Priėmimo terminai | ŠPMC"
- */
 export function createPageTitle(title?: string | null): string {
   const cleanedTitle = title?.trim();
 
@@ -107,24 +82,19 @@ type CreateMetadataOptions = {
   description?: string | null;
   path?: string;
   image?: string | null;
+  imageAlt?: string | null;
   type?: "website" | "article";
   publishedTime?: string | null;
   modifiedTime?: string | null;
   noIndex?: boolean;
 };
 
-/**
- * Universalus metadata generatorius.
- *
- * Jį naudosime statiniuose ir dinaminiuose puslapiuose,
- * kad nereikėtų kiekviename faile kartoti Open Graph,
- * canonical ir Twitter nustatymų.
- */
 export function createMetadata({
   title,
   description,
   path = "/",
   image,
+  imageAlt,
   type = "website",
   publishedTime,
   modifiedTime,
@@ -134,6 +104,7 @@ export function createMetadata({
   const metadataDescription = truncateDescription(description);
   const canonicalUrl = getAbsoluteUrl(path);
   const imageUrl = getAbsoluteUrl(image || DEFAULT_OG_IMAGE);
+  const metadataImageAlt = imageAlt?.trim() || metadataTitle;
 
   const openGraph: Metadata["openGraph"] =
     type === "article"
@@ -151,7 +122,7 @@ export function createMetadata({
               url: imageUrl,
               width: 1200,
               height: 630,
-              alt: metadataTitle,
+              alt: metadataImageAlt,
             },
           ],
         }
@@ -167,7 +138,7 @@ export function createMetadata({
               url: imageUrl,
               width: 1200,
               height: 630,
-              alt: metadataTitle,
+              alt: metadataImageAlt,
             },
           ],
         };

@@ -1,9 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
+
 import { fetchFromStrapi } from "@/lib/strapi";
+import { createMetadata } from "@/lib/seo";
 
 type Project = {
   id: number;
@@ -26,7 +29,32 @@ const categories = [
   "Kiti projektai",
 ];
 
-export default async function ProjectsPage({ searchParams }: Props) {
+export async function generateMetadata({
+  searchParams,
+}: Props): Promise<Metadata> {
+  const { category } = await searchParams;
+
+  if (category && category !== "Visi projektai") {
+    return createMetadata({
+      title: `${category} projektai`,
+      description: `Šilutės profesinio mokymo centro kategorijos „${category}“ projektai.`,
+      path: "/projektai",
+      noIndex: true,
+    });
+  }
+
+  return createMetadata({
+    title: "Projektai",
+    description:
+      "Šilutės profesinio mokymo centro vykdomi projektai, partnerystės, Erasmus+ iniciatyvos ir Europos Sąjungos finansuojamos veiklos.",
+    path: "/projektai",
+    type: "website",
+  });
+}
+
+export default async function ProjectsPage({
+  searchParams,
+}: Props) {
   const { category } = await searchParams;
 
   const categoryFilter =
@@ -46,7 +74,7 @@ export default async function ProjectsPage({ searchParams }: Props) {
 
       <main>
         <PageHero
-          title="Projektai"
+          title={category && category !== "Visi projektai" ? category : "Projektai"}
           description="Šilutės profesinio mokymo centro vykdomi projektai."
         />
 
@@ -54,7 +82,8 @@ export default async function ProjectsPage({ searchParams }: Props) {
           <div className="mb-10 flex flex-wrap gap-3">
             {categories.map((item) => {
               const isActive =
-                (!category && item === "Visi projektai") || category === item;
+                (!category && item === "Visi projektai") ||
+                category === item;
 
               const href =
                 item === "Visi projektai"
@@ -100,7 +129,9 @@ export default async function ProjectsPage({ searchParams }: Props) {
                   </h2>
 
                   {project.summary && (
-                    <p className="text-slate-600">{project.summary}</p>
+                    <p className="text-slate-600">
+                      {project.summary}
+                    </p>
                   )}
 
                   <p className="mt-4 font-medium text-blue-700">

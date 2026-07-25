@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,7 +7,9 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { RichText, type StrapiBlock } from "@/components/RichText";
+
 import { getProgramBySlug, getProgramCategoryLabel } from "@/lib/programs";
+import { createMetadata } from "@/lib/seo";
 
 type ProgramPageProps = {
   params: Promise<{
@@ -14,14 +17,53 @@ type ProgramPageProps = {
   }>;
 };
 
-function getMediaUrl(url?: string) {
-  if (!url) return null;
-  if (url.startsWith("http")) return url;
+function getMediaUrl(url?: string | null) {
+  if (!url) {
+    return null;
+  }
+
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
 
   return `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
 }
 
-export default async function ProgramPage({ params }: ProgramPageProps) {
+export async function generateMetadata({
+  params,
+}: ProgramPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const program = await getProgramBySlug(slug);
+
+  if (!program) {
+    return createMetadata({
+      title: "Mokymo programa nerasta",
+      description:
+        "Ieškoma Šilutės profesinio mokymo centro mokymo programa nerasta.",
+      path: `/programos/${slug}`,
+      noIndex: true,
+    });
+  }
+
+  const imageUrl = getMediaUrl(program.image?.url);
+
+  const description =
+    program.shortDescription ||
+    `${program.title} – mokymo programa Šilutės profesinio mokymo centre.`;
+
+  return createMetadata({
+    title: program.title,
+    description,
+    path: `/programos/${program.slug}`,
+    image: imageUrl,
+    imageAlt: program.image?.alternativeText || program.title,
+    type: "website",
+  });
+}
+
+export default async function ProgramPage({
+  params,
+}: ProgramPageProps) {
   const { slug } = await params;
   const program = await getProgramBySlug(slug);
 
@@ -40,7 +82,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
         <PageHero
           title={program.title}
           description={
-            program.shortDescription ?? "Mokymo programos informacija"
+            program.shortDescription || "Mokymo programos informacija"
           }
         />
 
@@ -59,7 +101,9 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
                   src={imageUrl}
                   alt={program.image?.alternativeText || program.title}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 1024px"
                   className="object-cover"
+                  priority
                 />
               </div>
             </div>
@@ -73,8 +117,13 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
             <div className="grid gap-4 md:grid-cols-3">
               {program.duration && (
                 <div>
-                  <p className="text-sm font-semibold text-slate-900">Trukmė</p>
-                  <p className="text-sm text-slate-600">{program.duration}</p>
+                  <p className="text-sm font-semibold text-slate-900">
+                    Trukmė
+                  </p>
+
+                  <p className="text-sm text-slate-600">
+                    {program.duration}
+                  </p>
                 </div>
               )}
 
@@ -83,6 +132,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
                   <p className="text-sm font-semibold text-slate-900">
                     Kvalifikacija
                   </p>
+
                   <p className="text-sm text-slate-600">
                     {program.qualification}
                   </p>
@@ -94,6 +144,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
                   <p className="text-sm font-semibold text-slate-900">
                     Kam skirta
                   </p>
+
                   <p className="text-sm text-slate-600">
                     {program.targetAudience}
                   </p>
@@ -116,7 +167,9 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
           )}
 
           {program.description && (
-            <RichText blocks={program.description as StrapiBlock[]} />
+            <RichText
+              blocks={program.description as StrapiBlock[]}
+            />
           )}
         </section>
       </main>

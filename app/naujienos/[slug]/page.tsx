@@ -7,9 +7,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RichText, type StrapiBlock } from "@/components/RichText";
 import { LightboxGallery } from "@/components/LightboxGallery";
-import { fetchFromStrapi } from "@/lib/strapi";
 import { Breadcrumb } from "@/components/Breadcrumb";
 
+import { fetchFromStrapi } from "@/lib/strapi";
+import { createMetadata } from "@/lib/seo";
 
 type StrapiMedia = {
   id: number;
@@ -25,6 +26,7 @@ type NewsArticle = {
   excerpt?: string;
   content?: StrapiBlock[];
   publishDate?: string;
+  updatedAt?: string;
   coverImage?: StrapiMedia | null;
   gallery?: StrapiMedia[];
   attachments?: StrapiMedia[];
@@ -37,14 +39,21 @@ type Props = {
 };
 
 function getImageUrl(url?: string) {
-  if (!url) return null;
-  if (url.startsWith("http")) return url;
+  if (!url) {
+    return null;
+  }
+
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
 
   return `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
 }
 
 function formatDate(date?: string) {
-  if (!date) return "";
+  if (!date) {
+    return "";
+  }
 
   return new Intl.DateTimeFormat("lt-LT", {
     year: "numeric",
@@ -53,37 +62,47 @@ function formatDate(date?: string) {
   }).format(new Date(date));
 }
 
-async function getArticle(slug: string) {
+async function getArticle(slug: string): Promise<NewsArticle | undefined> {
+  const encodedSlug = encodeURIComponent(slug);
+
   const data = await fetchFromStrapi(
-    `/news?filters[slug][$eq]=${slug}&filters[active][$eq]=true&populate=*`
+    `/news?filters[slug][$eq]=${encodedSlug}&filters[active][$eq]=true&populate=*`
   );
 
-  return data.data?.[0] as NewsArticle | undefined;
+  return data?.data?.[0] as NewsArticle | undefined;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticle(slug);
 
   if (!article) {
-    return {
-      title: "Naujiena nerasta | Šilutės profesinio mokymo centras",
-    };
+    return createMetadata({
+      title: "Naujiena nerasta",
+      description: "Ieškoma Šilutės profesinio mokymo centro naujiena nerasta.",
+      path: `/naujienos/${slug}`,
+      noIndex: true,
+    });
   }
 
-  const imageUrl = getImageUrl(article.coverImage?.url);
+  const coverImageUrl = getImageUrl(article.coverImage?.url);
 
-  return {
-    title: `${article.title} | Šilutės profesinio mokymo centras`,
+  return createMetadata({
+    title: article.title,
     description:
-      article.excerpt || "Šilutės profesinio mokymo centro naujiena.",
-    openGraph: {
-      title: article.title,
-      description:
-        article.excerpt || "Šilutės profesinio mokymo centro naujiena.",
-      images: imageUrl ? [imageUrl] : [],
-    },
-  };
+      article.excerpt ||
+      `Šilutės profesinio mokymo centro naujiena „${article.title}“.`,
+    path: `/naujienos/${article.slug}`,
+    image: coverImageUrl,
+    imageAlt:
+      article.coverImage?.alternativeText ||
+      article.title,
+    type: "article",
+    publishedTime: article.publishDate,
+    modifiedTime: article.updatedAt,
+  });
 }
 
 export default async function NewsDetailPage({ params }: Props) {
@@ -94,15 +113,17 @@ export default async function NewsDetailPage({ params }: Props) {
     notFound();
   }
 
+  const encodedSlug = encodeURIComponent(slug);
+
   const otherNewsResponse = await fetchFromStrapi(
-    `/news?filters[active][$eq]=true&filters[slug][$ne]=${slug}&sort=publishDate:desc&pagination[limit]=3&populate=coverImage`
+    `/news?filters[active][$eq]=true&filters[slug][$ne]=${encodedSlug}&sort=publishDate:desc&pagination[limit]=3&populate=coverImage`
   );
 
-  const otherNews = otherNewsResponse.data as NewsArticle[];
- 
-  const imageUrl = getImageUrl(article.coverImage?.url);
+  const otherNews = Array.isArray(otherNewsResponse?.data)
+    ? (otherNewsResponse.data as NewsArticle[])
+    : [];
 
-  console.log("ARTICLE GALLERY:", JSON.stringify(article.gallery, null, 2));
+  const imageUrl = getImageUrl(article.coverImage?.url);
 
   return (
     <>
@@ -124,6 +145,7 @@ export default async function NewsDetailPage({ params }: Props) {
             },
           ]}
         />
+
         <article>
           <h1 className="mb-6 text-4xl font-bold text-slate-950">
             {article.title}
@@ -141,13 +163,15 @@ export default async function NewsDetailPage({ params }: Props) {
                 src={imageUrl}
                 alt={article.coverImage?.alternativeText || article.title}
                 fill
+                sizes="(max-width: 896px) 100vw, 896px"
                 className="object-cover"
+                priority
               />
             </div>
           )}
 
           {article.content && (
-            <RichText blocks={article.content as StrapiBlock[]} />
+            <RichText blocks={article.content} />
           )}
 
           {article.gallery && article.gallery.length > 0 && (
@@ -169,7 +193,10 @@ export default async function NewsDetailPage({ params }: Props) {
               <div className="space-y-3">
                 {article.attachments.map((file) => {
                   const fileUrl = getImageUrl(file.url);
-                  if (!fileUrl) return null;
+
+                  if (!fileUrl) {
+                    return null;
+                  }
 
                   return (
                     <a
@@ -179,7 +206,7 @@ export default async function NewsDetailPage({ params }: Props) {
                       rel="noopener noreferrer"
                       className="block rounded-xl border border-slate-200 p-4 text-slate-700 transition hover:bg-slate-50"
                     >
-                      {file.name}
+                      {file.name || "Atsisiųsti failą"}
                     </a>
                   );
                 })}

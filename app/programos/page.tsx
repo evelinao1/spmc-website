@@ -1,15 +1,18 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
+
 import {
   getPrograms,
   getProgramCategoryLabel,
   programCategories,
   type ProgramCategory,
 } from "@/lib/programs";
+import { createMetadata } from "@/lib/seo";
 
 type ProgramosPageProps = {
   searchParams: Promise<{
@@ -17,11 +20,48 @@ type ProgramosPageProps = {
   }>;
 };
 
-function getMediaUrl(url?: string) {
-  if (!url) return null;
-  if (url.startsWith("http")) return url;
+function getMediaUrl(url?: string | null) {
+  if (!url) {
+    return null;
+  }
+
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
 
   return `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
+}
+
+function getActiveCategory(category?: string): ProgramCategory | null {
+  return programCategories.includes(category as ProgramCategory)
+    ? (category as ProgramCategory)
+    : null;
+}
+
+export async function generateMetadata({
+  searchParams,
+}: ProgramosPageProps): Promise<Metadata> {
+  const { category } = await searchParams;
+  const activeCategory = getActiveCategory(category);
+
+  if (activeCategory) {
+    const categoryLabel = getProgramCategoryLabel(activeCategory);
+
+    return createMetadata({
+      title: `${categoryLabel} mokymo programos`,
+      description: `Atraskite Šilutės profesinio mokymo centro kategorijos „${categoryLabel}“ mokymo programas, jų trukmę, kvalifikacijas ir mokymosi galimybes.`,
+      path: "/programos",
+      noIndex: true,
+    });
+  }
+
+  return createMetadata({
+    title: "Mokymo programos",
+    description:
+      "Atraskite Šilutės profesinio mokymo centro profesinio mokymo programas pagal išsilavinimą, poreikius ir karjeros tikslus.",
+    path: "/programos",
+    type: "website",
+  });
 }
 
 export default async function ProgramosPage({
@@ -30,13 +70,21 @@ export default async function ProgramosPage({
   const { category } = await searchParams;
   const programs = await getPrograms();
 
-  const activeCategory = programCategories.includes(category as ProgramCategory)
-    ? (category as ProgramCategory)
-    : null;
+  const activeCategory = getActiveCategory(category);
 
   const filteredPrograms = activeCategory
     ? programs.filter((program) => program.category === activeCategory)
     : programs;
+
+  const pageTitle = activeCategory
+    ? getProgramCategoryLabel(activeCategory)
+    : "Mokymo programos";
+
+  const pageDescription = activeCategory
+    ? `Peržiūrėkite kategorijos „${getProgramCategoryLabel(
+        activeCategory
+      )}“ mokymo programas.`
+    : "Atraskite profesinio mokymo programas pagal savo išsilavinimą, poreikius ir karjeros tikslus.";
 
   return (
     <>
@@ -44,8 +92,8 @@ export default async function ProgramosPage({
 
       <main>
         <PageHero
-          title="Mokymo programos"
-          description="Atraskite profesinio mokymo programas pagal savo išsilavinimą, poreikius ir karjeros tikslus."
+          title={pageTitle}
+          description={pageDescription}
         />
 
         <section className="mx-auto max-w-7xl px-6 py-16">
@@ -78,7 +126,9 @@ export default async function ProgramosPage({
 
           <p className="mb-8 text-sm font-medium text-slate-600">
             {activeCategory
-              ? `${getProgramCategoryLabel(activeCategory)} (${filteredPrograms.length})`
+              ? `${getProgramCategoryLabel(activeCategory)} (${
+                  filteredPrograms.length
+                })`
               : `Visos programos (${filteredPrograms.length})`}
           </p>
 
@@ -101,8 +151,11 @@ export default async function ProgramosPage({
                       <div className="relative h-56 w-full">
                         <Image
                           src={imageUrl}
-                          alt={program.image?.alternativeText || program.title}
+                          alt={
+                            program.image?.alternativeText || program.title
+                          }
                           fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           className="object-cover"
                         />
                       </div>

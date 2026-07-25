@@ -1,9 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
+
 import { fetchFromStrapi } from "@/lib/strapi";
+import { createMetadata } from "@/lib/seo";
 
 type Announcement = {
   id: number;
@@ -15,8 +18,18 @@ type Announcement = {
   important?: boolean;
 };
 
+export const metadata: Metadata = createMetadata({
+  title: "Skelbimai",
+  description:
+    "Svarbi Šilutės profesinio mokymo centro informacija mokiniams, darbuotojams, tėvams ir visai bendruomenei.",
+  path: "/skelbimai",
+  type: "website",
+});
+
 function formatDate(date?: string) {
-  if (!date) return "";
+  if (!date) {
+    return "";
+  }
 
   return new Intl.DateTimeFormat("lt-LT", {
     year: "numeric",

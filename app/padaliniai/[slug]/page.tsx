@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,7 +7,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { RichText, type StrapiBlock } from "@/components/RichText";
+import { Breadcrumb } from "@/components/Breadcrumb";
+
 import { fetchFromStrapi } from "@/lib/strapi";
+import { createMetadata } from "@/lib/seo";
 
 type MediaFile = {
   id: number;
@@ -51,6 +55,7 @@ type Campus = {
   attachments?: MediaFile[];
   programos?: Program[];
   darbuotojais?: Employee[];
+  updatedAt?: string;
 };
 
 type CampusPageProps = {
@@ -59,27 +64,73 @@ type CampusPageProps = {
   }>;
 };
 
-function getMediaUrl(url?: string) {
-  if (!url) return null;
-  if (url.startsWith("http")) return url;
+function getMediaUrl(url?: string | null) {
+  if (!url) {
+    return null;
+  }
+
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
 
   return `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
 }
 
-export default async function CampusPage({ params }: CampusPageProps) {
-  const { slug } = await params;
+async function getCampus(slug: string): Promise<Campus | undefined> {
+  const encodedSlug = encodeURIComponent(slug);
 
   const data = await fetchFromStrapi(
-    `/campuses?filters[slug][$eq]=${slug}&populate[image]=true&populate[gallery]=true&populate[attachments]=true&populate[programos][populate]=image&populate[darbuotojais][populate]=photo`
+    `/campuses?filters[slug][$eq]=${encodedSlug}&populate[image]=true&populate[gallery]=true&populate[attachments]=true&populate[programos][populate]=image&populate[darbuotojais][populate]=photo`
   );
 
-  const campus: Campus | undefined = data.data?.[0];
+  return data?.data?.[0] as Campus | undefined;
+}
+
+export async function generateMetadata({
+  params,
+}: CampusPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const campus = await getCampus(slug);
+
+  if (!campus) {
+    return createMetadata({
+      title: "Padalinys nerastas",
+      description:
+        "Ieškomas Šilutės profesinio mokymo centro padalinys nerastas.",
+      path: `/padaliniai/${slug}`,
+      noIndex: true,
+    });
+  }
+
+  const imageUrl = getMediaUrl(campus.image?.url);
+
+  const description =
+    campus.shortDescription ||
+    `${campus.title} – Šilutės profesinio mokymo centro padalinys.`;
+
+  return createMetadata({
+    title: campus.title,
+    description,
+    path: `/padaliniai/${campus.slug}`,
+    image: imageUrl,
+    imageAlt: campus.image?.alternativeText || campus.title,
+    type: "website",
+    modifiedTime: campus.updatedAt,
+  });
+}
+
+export default async function CampusPage({
+  params,
+}: CampusPageProps) {
+  const { slug } = await params;
+  const campus = await getCampus(slug);
 
   if (!campus) {
     notFound();
   }
 
   const imageUrl = getMediaUrl(campus.image?.url);
+
   const mapsUrl = campus.address
     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
         campus.address
@@ -101,6 +152,22 @@ export default async function CampusPage({ params }: CampusPageProps) {
         />
 
         <section className="mx-auto max-w-5xl px-6 py-16">
+          <Breadcrumb
+            items={[
+              {
+                label: "Pradžia",
+                href: "/",
+              },
+              {
+                label: "Padaliniai",
+                href: "/padaliniai",
+              },
+              {
+                label: campus.title,
+              },
+            ]}
+          />
+
           <Link
             href="/padaliniai"
             className="mb-8 inline-flex text-sm font-medium text-blue-700 transition hover:text-blue-900"
@@ -115,7 +182,9 @@ export default async function CampusPage({ params }: CampusPageProps) {
                   src={imageUrl}
                   alt={campus.image?.alternativeText || campus.title}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 1024px"
                   className="object-cover"
+                  priority
                 />
               </div>
             </div>
@@ -132,7 +201,10 @@ export default async function CampusPage({ params }: CampusPageProps) {
                   <p className="text-sm font-semibold text-slate-900">
                     Adresas
                   </p>
-                  <p className="text-sm text-slate-600">{campus.address}</p>
+
+                  <p className="text-sm text-slate-600">
+                    {campus.address}
+                  </p>
 
                   {mapsUrl && (
                     <a
@@ -152,7 +224,13 @@ export default async function CampusPage({ params }: CampusPageProps) {
                   <p className="text-sm font-semibold text-slate-900">
                     Telefonas
                   </p>
-                  <p className="text-sm text-slate-600">{campus.phone}</p>
+
+                  <a
+                    href={`tel:${campus.phone.replace(/\s+/g, "")}`}
+                    className="text-sm text-blue-700 hover:underline"
+                  >
+                    {campus.phone}
+                  </a>
                 </div>
               )}
 
@@ -161,6 +239,7 @@ export default async function CampusPage({ params }: CampusPageProps) {
                   <p className="text-sm font-semibold text-slate-900">
                     El. paštas
                   </p>
+
                   <a
                     href={`mailto:${campus.email}`}
                     className="text-sm text-blue-700 hover:underline"
@@ -172,8 +251,8 @@ export default async function CampusPage({ params }: CampusPageProps) {
             </div>
           </div>
 
-          {campus.content && (
-            <RichText blocks={campus.content as StrapiBlock[]} />
+          {campus.content && campus.content.length > 0 && (
+            <RichText blocks={campus.content} />
           )}
 
           {campus.programos && campus.programos.length > 0 && (
@@ -200,6 +279,7 @@ export default async function CampusPage({ params }: CampusPageProps) {
                               program.image?.alternativeText || program.title
                             }
                             fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
                             className="object-cover"
                           />
                         </div>
@@ -248,6 +328,7 @@ export default async function CampusPage({ params }: CampusPageProps) {
                               employee.fullName
                             }
                             fill
+                            sizes="64px"
                             className="object-cover"
                           />
                         ) : (
@@ -296,7 +377,9 @@ export default async function CampusPage({ params }: CampusPageProps) {
                 {campus.gallery.map((image) => {
                   const galleryImageUrl = getMediaUrl(image.url);
 
-                  if (!galleryImageUrl) return null;
+                  if (!galleryImageUrl) {
+                    return null;
+                  }
 
                   return (
                     <div
@@ -307,6 +390,7 @@ export default async function CampusPage({ params }: CampusPageProps) {
                         src={galleryImageUrl}
                         alt={image.alternativeText || image.name}
                         fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
                         className="object-cover"
                       />
                     </div>
@@ -326,7 +410,9 @@ export default async function CampusPage({ params }: CampusPageProps) {
                 {campus.attachments.map((file) => {
                   const fileUrl = getMediaUrl(file.url);
 
-                  if (!fileUrl) return null;
+                  if (!fileUrl) {
+                    return null;
+                  }
 
                   return (
                     <a
@@ -336,7 +422,7 @@ export default async function CampusPage({ params }: CampusPageProps) {
                       rel="noopener noreferrer"
                       className="block rounded-xl border border-slate-200 bg-white px-5 py-4 font-medium text-slate-700 transition hover:bg-slate-50"
                     >
-                      {file.name}
+                      {file.name || "Atsisiųsti dokumentą"}
                     </a>
                   );
                 })}
