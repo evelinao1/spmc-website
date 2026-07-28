@@ -1,12 +1,38 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { FaFacebookF, FaYoutube } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaYoutube,
+} from "react-icons/fa";
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { RichText } from "@/components/RichText";
+import { Breadcrumb } from "@/components/Breadcrumb";
+import { SchemaJsonLd } from "@/components/SchemaJsonLd";
+
 import { getContact } from "@/lib/contact";
 import { getCampuses } from "@/lib/campuses";
 import { getContactEmployees } from "@/lib/employees";
+import { createMetadata } from "@/lib/seo";
+import {
+  createBreadcrumbJsonLd,
+  createContactPageJsonLd,
+} from "@/lib/schema";
+
+const pageTitle = "Kontaktai";
+
+const pageDescription =
+  "Šilutės profesinio mokymo centro kontaktai, adresas, telefonas, el. paštas, darbo laikas ir padalinių informacija.";
+
+export const metadata: Metadata = createMetadata({
+  title: pageTitle,
+  description: pageDescription,
+  path: "/kontaktai",
+  type: "website",
+});
 
 function getPhoneHref(phone: string) {
   return `tel:${phone.replace(/[^\d+]/g, "")}`;
@@ -25,8 +51,45 @@ export default async function KontaktaiPage() {
     getContactEmployees(),
   ]);
 
+  const breadcrumbJsonLd = createBreadcrumbJsonLd([
+    {
+      label: "Pradžia",
+      href: "/",
+    },
+    {
+      label: "Kontaktai",
+      href: "/kontaktai",
+    },
+  ]);
+
+  const streetAddress =
+    contact?.streetAddress ||
+    contact?.address ||
+    null;
+
+  const contactPageJsonLd = createContactPageJsonLd({
+    name: "Šilutės profesinio mokymo centro kontaktai",
+    description: pageDescription,
+    path: "/kontaktai",
+    telephone: contact?.phone,
+    email: contact?.email,
+    streetAddress,
+    postalCode: contact?.postalCode,
+    addressLocality: contact?.addressLocality,
+    addressRegion: contact?.addressRegion,
+    addressCountry: contact?.addressCountry,
+    socialLinks: [
+      contact?.facebook,
+      contact?.instagram,
+      contact?.youtube,
+    ],
+  });
+
   return (
     <>
+      <SchemaJsonLd data={breadcrumbJsonLd} />
+      <SchemaJsonLd data={contactPageJsonLd} />
+
       <Header />
 
       <PageHero
@@ -36,6 +99,18 @@ export default async function KontaktaiPage() {
       />
 
       <main className="mx-auto max-w-7xl px-6 py-16">
+        <Breadcrumb
+          items={[
+            {
+              label: "Pradžia",
+              href: "/",
+            },
+            {
+              label: "Kontaktai",
+            },
+          ]}
+        />
+
         <div className="grid gap-6 md:grid-cols-2">
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-xl font-semibold text-slate-900">
@@ -45,7 +120,9 @@ export default async function KontaktaiPage() {
             <div className="mt-4 space-y-3 text-slate-600">
               {contact?.address && (
                 <p>
-                  <strong className="text-slate-900">Adresas:</strong>{" "}
+                  <strong className="text-slate-900">
+                    Adresas:
+                  </strong>{" "}
                   <a
                     href={getMapsHref(contact.address)}
                     target="_blank"
@@ -59,7 +136,9 @@ export default async function KontaktaiPage() {
 
               {contact?.phone && (
                 <p>
-                  <strong className="text-slate-900">Tel.</strong>{" "}
+                  <strong className="text-slate-900">
+                    Tel.
+                  </strong>{" "}
                   <a
                     href={getPhoneHref(contact.phone)}
                     className="text-blue-700 hover:underline"
@@ -71,7 +150,9 @@ export default async function KontaktaiPage() {
 
               {contact?.email && (
                 <p>
-                  <strong className="text-slate-900">El. paštas:</strong>{" "}
+                  <strong className="text-slate-900">
+                    El. paštas:
+                  </strong>{" "}
                   <a
                     href={`mailto:${contact.email}`}
                     className="text-blue-700 hover:underline"
@@ -83,34 +164,53 @@ export default async function KontaktaiPage() {
 
               {contact?.workingHours && (
                 <div>
-                  <strong className="text-slate-900">Darbo laikas:</strong>
+                  <strong className="text-slate-900">
+                    Darbo laikas:
+                  </strong>
+
                   <div className="mt-2">
-                    <RichText blocks={contact.workingHours} />
+                    <RichText
+                      blocks={contact.workingHours}
+                    />
                   </div>
                 </div>
               )}
 
-              {(contact?.facebook || contact?.youtube) && (
+              {(contact?.facebook ||
+                contact?.instagram ||
+                contact?.youtube) && (
                 <div className="flex gap-3 pt-2">
-                  {contact?.facebook && (
+                  {contact.facebook && (
                     <a
                       href={contact.facebook}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="rounded-full border border-slate-200 p-3 text-slate-600 transition hover:border-blue-600 hover:bg-blue-50 hover:text-blue-700"
-                      aria-label="Facebook"
+                      aria-label="Šilutės profesinio mokymo centras Facebook"
                     >
                       <FaFacebookF size={20} />
                     </a>
                   )}
 
-                  {contact?.youtube && (
+                  {contact.instagram && (
+                    <a
+                      href={contact.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-full border border-slate-200 p-3 text-slate-600 transition hover:border-pink-600 hover:bg-pink-50 hover:text-pink-700"
+                      aria-label="Šilutės profesinio mokymo centras Instagram"
+                    >
+                      <FaInstagram size={20} />
+                    </a>
+                  )}
+
+                  {contact.youtube && (
                     <a
                       href={contact.youtube}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="rounded-full border border-slate-200 p-3 text-slate-600 transition hover:border-red-600 hover:bg-red-50 hover:text-red-600"
-                      aria-label="YouTube"
+                      aria-label="Šilutės profesinio mokymo centras YouTube"
                     >
                       <FaYoutube size={20} />
                     </a>
@@ -127,9 +227,13 @@ export default async function KontaktaiPage() {
 
             <div className="mt-4">
               {contact?.legalInformation ? (
-                <RichText blocks={contact.legalInformation} />
+                <RichText
+                  blocks={contact.legalInformation}
+                />
               ) : (
-                <p className="text-slate-600">Rekvizitai ruošiami.</p>
+                <p className="text-slate-600">
+                  Rekvizitai ruošiami.
+                </p>
               )}
             </div>
           </div>
@@ -147,7 +251,9 @@ export default async function KontaktaiPage() {
         )}
 
         <section className="mt-16">
-          <h2 className="text-2xl font-bold text-slate-900">Padaliniai</h2>
+          <h2 className="text-2xl font-bold text-slate-900">
+            Padaliniai
+          </h2>
 
           <div className="mt-6 grid gap-6 md:grid-cols-3">
             {campuses.map((campus) => (
@@ -162,9 +268,13 @@ export default async function KontaktaiPage() {
                 <div className="mt-4 space-y-2 text-sm text-slate-600">
                   {campus.address && (
                     <p>
-                      <strong className="text-slate-900">Adresas:</strong>{" "}
+                      <strong className="text-slate-900">
+                        Adresas:
+                      </strong>{" "}
                       <a
-                        href={getMapsHref(campus.address)}
+                        href={getMapsHref(
+                          campus.address
+                        )}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-700 hover:underline"
@@ -176,9 +286,13 @@ export default async function KontaktaiPage() {
 
                   {campus.phone && (
                     <p>
-                      <strong className="text-slate-900">Tel.</strong>{" "}
+                      <strong className="text-slate-900">
+                        Tel.
+                      </strong>{" "}
                       <a
-                        href={getPhoneHref(campus.phone)}
+                        href={getPhoneHref(
+                          campus.phone
+                        )}
                         className="text-blue-700 hover:underline"
                       >
                         {campus.phone}
@@ -188,7 +302,9 @@ export default async function KontaktaiPage() {
 
                   {campus.email && (
                     <p>
-                      <strong className="text-slate-900">El. paštas:</strong>{" "}
+                      <strong className="text-slate-900">
+                        El. paštas:
+                      </strong>{" "}
                       <a
                         href={`mailto:${campus.email}`}
                         className="text-blue-700 hover:underline"
@@ -234,9 +350,13 @@ export default async function KontaktaiPage() {
                 <div className="mt-4 space-y-2 text-sm text-slate-600">
                   {employee.phone && (
                     <p>
-                      <strong className="text-slate-900">Tel.</strong>{" "}
+                      <strong className="text-slate-900">
+                        Tel.
+                      </strong>{" "}
                       <a
-                        href={getPhoneHref(employee.phone)}
+                        href={getPhoneHref(
+                          employee.phone
+                        )}
                         className="text-blue-700 hover:underline"
                       >
                         {employee.phone}
@@ -246,7 +366,9 @@ export default async function KontaktaiPage() {
 
                   {employee.email && (
                     <p>
-                      <strong className="text-slate-900">El. paštas:</strong>{" "}
+                      <strong className="text-slate-900">
+                        El. paštas:
+                      </strong>{" "}
                       <a
                         href={`mailto:${employee.email}`}
                         className="text-blue-700 hover:underline"
@@ -256,14 +378,21 @@ export default async function KontaktaiPage() {
                     </p>
                   )}
 
-                  {employee.padaliniais && employee.padaliniais.length > 0 && (
-                    <p>
-                      <strong className="text-slate-900">Padalinys:</strong>{" "}
-                      {employee.padaliniais
-                        .map((campus) => campus.title)
-                        .join(", ")}
-                    </p>
-                  )}
+                  {employee.padaliniais &&
+                    employee.padaliniais.length >
+                      0 && (
+                      <p>
+                        <strong className="text-slate-900">
+                          Padalinys:
+                        </strong>{" "}
+                        {employee.padaliniais
+                          .map(
+                            (campus) =>
+                              campus.title
+                          )
+                          .join(", ")}
+                      </p>
+                    )}
                 </div>
 
                 <Link

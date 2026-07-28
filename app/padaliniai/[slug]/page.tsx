@@ -8,9 +8,14 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { RichText, type StrapiBlock } from "@/components/RichText";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { SchemaJsonLd } from "@/components/SchemaJsonLd";
 
 import { fetchFromStrapi } from "@/lib/strapi";
 import { createMetadata } from "@/lib/seo";
+import {
+  createBreadcrumbJsonLd,
+  createCampusJsonLd,
+} from "@/lib/schema";
 
 type MediaFile = {
   id: number;
@@ -69,14 +74,19 @@ function getMediaUrl(url?: string | null) {
     return null;
   }
 
-  if (url.startsWith("http://") || url.startsWith("https://")) {
+  if (
+    url.startsWith("http://") ||
+    url.startsWith("https://")
+  ) {
     return url;
   }
 
   return `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
 }
 
-async function getCampus(slug: string): Promise<Campus | undefined> {
+async function getCampus(
+  slug: string
+): Promise<Campus | undefined> {
   const encodedSlug = encodeURIComponent(slug);
 
   const data = await fetchFromStrapi(
@@ -113,7 +123,8 @@ export async function generateMetadata({
     description,
     path: `/padaliniai/${campus.slug}`,
     image: imageUrl,
-    imageAlt: campus.image?.alternativeText || campus.title,
+    imageAlt:
+      campus.image?.alternativeText || campus.title,
     type: "website",
     modifiedTime: campus.updatedAt,
   });
@@ -131,6 +142,10 @@ export default async function CampusPage({
 
   const imageUrl = getMediaUrl(campus.image?.url);
 
+  const description =
+    campus.shortDescription ||
+    `${campus.title} – Šilutės profesinio mokymo centro padalinys.`;
+
   const mapsUrl = campus.address
     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
         campus.address
@@ -139,16 +154,50 @@ export default async function CampusPage({
 
   const activeEmployees = (campus.darbuotojais || [])
     .filter((employee) => employee.active !== false)
-    .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+    .sort(
+      (a, b) =>
+        (a.order ?? 999) - (b.order ?? 999)
+    );
+
+  const breadcrumbJsonLd = createBreadcrumbJsonLd([
+    {
+      label: "Pradžia",
+      href: "/",
+    },
+    {
+      label: "Padaliniai",
+      href: "/padaliniai",
+    },
+    {
+      label: campus.title,
+      href: `/padaliniai/${campus.slug}`,
+    },
+  ]);
+
+  const campusJsonLd = createCampusJsonLd({
+    name: campus.title,
+    description,
+    path: `/padaliniai/${campus.slug}`,
+    imageUrl,
+    address: campus.address,
+    telephone: campus.phone,
+    email: campus.email,
+  });
 
   return (
     <>
+      <SchemaJsonLd data={breadcrumbJsonLd} />
+      <SchemaJsonLd data={campusJsonLd} />
+
       <Header />
 
       <main>
         <PageHero
           title={campus.title}
-          description={campus.shortDescription ?? "Padalinio informacija"}
+          description={
+            campus.shortDescription ??
+            "Padalinio informacija"
+          }
         />
 
         <section className="mx-auto max-w-5xl px-6 py-16">
@@ -180,7 +229,10 @@ export default async function CampusPage({
               <div className="relative h-[420px] w-full">
                 <Image
                   src={imageUrl}
-                  alt={campus.image?.alternativeText || campus.title}
+                  alt={
+                    campus.image?.alternativeText ||
+                    campus.title
+                  }
                   fill
                   sizes="(max-width: 1024px) 100vw, 1024px"
                   className="object-cover"
@@ -226,7 +278,10 @@ export default async function CampusPage({
                   </p>
 
                   <a
-                    href={`tel:${campus.phone.replace(/\s+/g, "")}`}
+                    href={`tel:${campus.phone.replace(
+                      /\s+/g,
+                      ""
+                    )}`}
                     className="text-sm text-blue-700 hover:underline"
                   >
                     {campus.phone}
@@ -251,67 +306,77 @@ export default async function CampusPage({
             </div>
           </div>
 
-          {campus.content && campus.content.length > 0 && (
-            <RichText blocks={campus.content} />
-          )}
+          {campus.content &&
+            campus.content.length > 0 && (
+              <RichText blocks={campus.content} />
+            )}
 
-          {campus.programos && campus.programos.length > 0 && (
-            <section className="mt-14">
-              <h2 className="mb-6 text-2xl font-bold text-slate-900">
-                Šiame padalinyje vykdomos programos ({campus.programos.length})
-              </h2>
+          {campus.programos &&
+            campus.programos.length > 0 && (
+              <section className="mt-14">
+                <h2 className="mb-6 text-2xl font-bold text-slate-900">
+                  Šiame padalinyje vykdomos programos (
+                  {campus.programos.length})
+                </h2>
 
-              <div className="grid gap-5 md:grid-cols-2">
-                {campus.programos.map((program) => {
-                  const programImageUrl = getMediaUrl(program.image?.url);
+                <div className="grid gap-5 md:grid-cols-2">
+                  {campus.programos.map((program) => {
+                    const programImageUrl =
+                      getMediaUrl(program.image?.url);
 
-                  return (
-                    <Link
-                      key={program.id}
-                      href={`/programos/${program.slug}`}
-                      className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-                    >
-                      {programImageUrl && (
-                        <div className="relative h-44 w-full">
-                          <Image
-                            src={programImageUrl}
-                            alt={
-                              program.image?.alternativeText || program.title
-                            }
-                            fill
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                            className="object-cover"
-                          />
-                        </div>
-                      )}
-
-                      <div className="p-5">
-                        <h3 className="text-lg font-bold text-slate-900">
-                          {program.title}
-                        </h3>
-
-                        {program.shortDescription && (
-                          <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-600">
-                            {program.shortDescription}
-                          </p>
+                    return (
+                      <Link
+                        key={program.id}
+                        href={`/programos/${program.slug}`}
+                        className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                      >
+                        {programImageUrl && (
+                          <div className="relative h-44 w-full">
+                            <Image
+                              src={programImageUrl}
+                              alt={
+                                program.image
+                                  ?.alternativeText ||
+                                program.title
+                              }
+                              fill
+                              sizes="(max-width: 768px) 100vw, 50vw"
+                              className="object-cover"
+                            />
+                          </div>
                         )}
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </section>
-          )}
+
+                        <div className="p-5">
+                          <h3 className="text-lg font-bold text-slate-900">
+                            {program.title}
+                          </h3>
+
+                          {program.shortDescription && (
+                            <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-600">
+                              {
+                                program.shortDescription
+                              }
+                            </p>
+                          )}
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
 
           {activeEmployees.length > 0 && (
             <section className="mt-14">
               <h2 className="mb-6 text-2xl font-bold text-slate-900">
-                Padalinio darbuotojai ({activeEmployees.length})
+                Padalinio darbuotojai (
+                {activeEmployees.length})
               </h2>
 
               <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white">
                 {activeEmployees.map((employee) => {
-                  const employeePhotoUrl = getMediaUrl(employee.photo?.url);
+                  const employeePhotoUrl =
+                    getMediaUrl(employee.photo?.url);
 
                   return (
                     <Link
@@ -324,7 +389,8 @@ export default async function CampusPage({
                           <Image
                             src={employeePhotoUrl}
                             alt={
-                              employee.photo?.alternativeText ||
+                              employee.photo
+                                ?.alternativeText ||
                               employee.fullName
                             }
                             fill
@@ -357,8 +423,13 @@ export default async function CampusPage({
                       </div>
 
                       <div className="hidden text-right text-sm text-slate-600 md:block">
-                        {employee.email && <p>{employee.email}</p>}
-                        {employee.phone && <p>{employee.phone}</p>}
+                        {employee.email && (
+                          <p>{employee.email}</p>
+                        )}
+
+                        {employee.phone && (
+                          <p>{employee.phone}</p>
+                        )}
                       </div>
                     </Link>
                   );
@@ -367,68 +438,77 @@ export default async function CampusPage({
             </section>
           )}
 
-          {campus.gallery && campus.gallery.length > 0 && (
-            <section className="mt-14">
-              <h2 className="mb-6 text-2xl font-bold text-slate-900">
-                Galerija
-              </h2>
+          {campus.gallery &&
+            campus.gallery.length > 0 && (
+              <section className="mt-14">
+                <h2 className="mb-6 text-2xl font-bold text-slate-900">
+                  Galerija
+                </h2>
 
-              <div className="grid gap-5 md:grid-cols-3">
-                {campus.gallery.map((image) => {
-                  const galleryImageUrl = getMediaUrl(image.url);
+                <div className="grid gap-5 md:grid-cols-3">
+                  {campus.gallery.map((image) => {
+                    const galleryImageUrl =
+                      getMediaUrl(image.url);
 
-                  if (!galleryImageUrl) {
-                    return null;
-                  }
+                    if (!galleryImageUrl) {
+                      return null;
+                    }
 
-                  return (
-                    <div
-                      key={image.id}
-                      className="relative h-56 overflow-hidden rounded-2xl"
-                    >
-                      <Image
-                        src={galleryImageUrl}
-                        alt={image.alternativeText || image.name}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-cover"
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          )}
+                    return (
+                      <div
+                        key={image.id}
+                        className="relative h-56 overflow-hidden rounded-2xl"
+                      >
+                        <Image
+                          src={galleryImageUrl}
+                          alt={
+                            image.alternativeText ||
+                            image.name
+                          }
+                          fill
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                          className="object-cover"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
 
-          {campus.attachments && campus.attachments.length > 0 && (
-            <section className="mt-14">
-              <h2 className="mb-6 text-2xl font-bold text-slate-900">
-                Dokumentai
-              </h2>
+          {campus.attachments &&
+            campus.attachments.length > 0 && (
+              <section className="mt-14">
+                <h2 className="mb-6 text-2xl font-bold text-slate-900">
+                  Dokumentai
+                </h2>
 
-              <div className="space-y-3">
-                {campus.attachments.map((file) => {
-                  const fileUrl = getMediaUrl(file.url);
+                <div className="space-y-3">
+                  {campus.attachments.map((file) => {
+                    const fileUrl = getMediaUrl(
+                      file.url
+                    );
 
-                  if (!fileUrl) {
-                    return null;
-                  }
+                    if (!fileUrl) {
+                      return null;
+                    }
 
-                  return (
-                    <a
-                      key={file.id}
-                      href={fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block rounded-xl border border-slate-200 bg-white px-5 py-4 font-medium text-slate-700 transition hover:bg-slate-50"
-                    >
-                      {file.name || "Atsisiųsti dokumentą"}
-                    </a>
-                  );
-                })}
-              </div>
-            </section>
-          )}
+                    return (
+                      <a
+                        key={file.id}
+                        href={fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block rounded-xl border border-slate-200 bg-white px-5 py-4 font-medium text-slate-700 transition hover:bg-slate-50"
+                      >
+                        {file.name ||
+                          "Atsisiųsti dokumentą"}
+                      </a>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
         </section>
       </main>
 

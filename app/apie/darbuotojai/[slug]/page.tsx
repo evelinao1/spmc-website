@@ -8,12 +8,17 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { RichText } from "@/components/RichText";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { SchemaJsonLd } from "@/components/SchemaJsonLd";
 
 import {
   getEmployeeBySlug,
   getEmployeeCategoryLabel,
 } from "@/lib/employees";
 import { createMetadata } from "@/lib/seo";
+import {
+  createBreadcrumbJsonLd,
+  createPersonJsonLd,
+} from "@/lib/schema";
 
 type EmployeePageProps = {
   params: Promise<{
@@ -26,7 +31,10 @@ function getMediaUrl(url?: string | null) {
     return null;
   }
 
-  if (url.startsWith("http://") || url.startsWith("https://")) {
+  if (
+    url.startsWith("http://") ||
+    url.startsWith("https://")
+  ) {
     return url;
   }
 
@@ -65,7 +73,9 @@ export async function generateMetadata({
     description,
     path: `/apie/darbuotojai/${employee.slug}`,
     image: photoUrl,
-    imageAlt: employee.photo?.alternativeText || employee.fullName,
+    imageAlt:
+      employee.photo?.alternativeText ||
+      employee.fullName,
     type: "website",
   });
 }
@@ -82,12 +92,47 @@ export default async function EmployeePage({
 
   const photoUrl = getMediaUrl(employee.photo?.url);
 
+  const categoryLabel = employee.category
+    ? getEmployeeCategoryLabel(employee.category)
+    : null;
+
   const heroDescription =
     employee.position ||
-    getEmployeeCategoryLabel(employee.category);
+    categoryLabel ||
+    "Šilutės profesinio mokymo centro darbuotojas";
+
+  const jobTitle =
+    employee.position || categoryLabel;
+
+  const breadcrumbJsonLd = createBreadcrumbJsonLd([
+    {
+      label: "Pradžia",
+      href: "/",
+    },
+    {
+      label: "Darbuotojai",
+      href: "/apie/darbuotojai",
+    },
+    {
+      label: employee.fullName,
+      href: `/apie/darbuotojai/${employee.slug}`,
+    },
+  ]);
+
+  const personJsonLd = createPersonJsonLd({
+    name: employee.fullName,
+    path: `/apie/darbuotojai/${employee.slug}`,
+    jobTitle,
+    imageUrl: photoUrl,
+    email: employee.email,
+    telephone: employee.phone,
+  });
 
   return (
     <>
+      <SchemaJsonLd data={breadcrumbJsonLd} />
+      <SchemaJsonLd data={personJsonLd} />
+
       <Header />
 
       <main>
@@ -152,7 +197,9 @@ export default async function EmployeePage({
                       </p>
 
                       <p>
-                        {getEmployeeCategoryLabel(employee.category)}
+                        {getEmployeeCategoryLabel(
+                          employee.category
+                        )}
                       </p>
                     </div>
                   )}
@@ -189,7 +236,10 @@ export default async function EmployeePage({
                       </p>
 
                       <a
-                        href={`tel:${employee.phone.replace(/\s+/g, "")}`}
+                        href={`tel:${employee.phone.replace(
+                          /\s+/g,
+                          ""
+                        )}`}
                         className="text-blue-700 hover:underline"
                       >
                         {employee.phone}
@@ -205,15 +255,17 @@ export default async function EmployeePage({
                         </p>
 
                         <div className="mt-2 space-y-1">
-                          {employee.padaliniais.map((campus) => (
-                            <Link
-                              key={campus.id}
-                              href={`/padaliniai/${campus.slug}`}
-                              className="block text-blue-700 hover:underline"
-                            >
-                              {campus.title}
-                            </Link>
-                          ))}
+                          {employee.padaliniais.map(
+                            (campus) => (
+                              <Link
+                                key={campus.id}
+                                href={`/padaliniai/${campus.slug}`}
+                                className="block text-blue-700 hover:underline"
+                              >
+                                {campus.title}
+                              </Link>
+                            )
+                          )}
                         </div>
                       </div>
                     )}
@@ -229,7 +281,9 @@ export default async function EmployeePage({
                       Aprašymas
                     </h2>
 
-                    <RichText blocks={employee.description} />
+                    <RichText
+                      blocks={employee.description}
+                    />
                   </section>
                 )}
 
@@ -240,7 +294,9 @@ export default async function EmployeePage({
                       Darbo laikas
                     </h2>
 
-                    <RichText blocks={employee.workingHours} />
+                    <RichText
+                      blocks={employee.workingHours}
+                    />
                   </section>
                 )}
 
@@ -252,25 +308,30 @@ export default async function EmployeePage({
                     </h2>
 
                     <div className="space-y-3">
-                      {employee.attachments.map((file) => {
-                        const fileUrl = getMediaUrl(file.url);
+                      {employee.attachments.map(
+                        (file) => {
+                          const fileUrl = getMediaUrl(
+                            file.url
+                          );
 
-                        if (!fileUrl) {
-                          return null;
+                          if (!fileUrl) {
+                            return null;
+                          }
+
+                          return (
+                            <a
+                              key={file.id}
+                              href={fileUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block rounded-xl border border-slate-200 p-4 text-slate-700 transition hover:bg-slate-50"
+                            >
+                              {file.name ||
+                                "Atsisiųsti failą"}
+                            </a>
+                          );
                         }
-
-                        return (
-                          <a
-                            key={file.id}
-                            href={fileUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="block rounded-xl border border-slate-200 p-4 text-slate-700 transition hover:bg-slate-50"
-                          >
-                            {file.name || "Atsisiųsti failą"}
-                          </a>
-                        );
-                      })}
+                      )}
                     </div>
                   </section>
                 )}

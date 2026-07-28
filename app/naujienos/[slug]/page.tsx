@@ -11,6 +11,11 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 
 import { fetchFromStrapi } from "@/lib/strapi";
 import { createMetadata } from "@/lib/seo";
+import {
+  createBreadcrumbJsonLd,
+  createNewsArticleJsonLd,
+} from "@/lib/schema";
+import { SchemaJsonLd } from "@/components/SchemaJsonLd";
 
 type StrapiMedia = {
   id: number;
@@ -62,7 +67,9 @@ function formatDate(date?: string) {
   }).format(new Date(date));
 }
 
-async function getArticle(slug: string): Promise<NewsArticle | undefined> {
+async function getArticle(
+  slug: string
+): Promise<NewsArticle | undefined> {
   const encodedSlug = encodeURIComponent(slug);
 
   const data = await fetchFromStrapi(
@@ -81,7 +88,8 @@ export async function generateMetadata({
   if (!article) {
     return createMetadata({
       title: "Naujiena nerasta",
-      description: "Ieškoma Šilutės profesinio mokymo centro naujiena nerasta.",
+      description:
+        "Ieškoma Šilutės profesinio mokymo centro naujiena nerasta.",
       path: `/naujienos/${slug}`,
       noIndex: true,
     });
@@ -97,8 +105,7 @@ export async function generateMetadata({
     path: `/naujienos/${article.slug}`,
     image: coverImageUrl,
     imageAlt:
-      article.coverImage?.alternativeText ||
-      article.title,
+      article.coverImage?.alternativeText || article.title,
     type: "article",
     publishedTime: article.publishDate,
     modifiedTime: article.updatedAt,
@@ -125,9 +132,38 @@ export default async function NewsDetailPage({ params }: Props) {
 
   const imageUrl = getImageUrl(article.coverImage?.url);
 
+  const breadcrumbJsonLd = createBreadcrumbJsonLd([
+    {
+      label: "Pradžia",
+      href: "/",
+    },
+    {
+      label: "Naujienos",
+      href: "/naujienos",
+    },
+    {
+      label: article.title,
+      href: `/naujienos/${article.slug}`,
+    },
+  ]);
+
+  const newsArticleJsonLd = createNewsArticleJsonLd({
+  title: article.title,
+  description:
+    article.excerpt ||
+    `Šilutės profesinio mokymo centro naujiena „${article.title}“.`,
+  path: `/naujienos/${article.slug}`,
+  publishedTime: article.publishDate,
+  modifiedTime: article.updatedAt,
+  imageUrl,
+});
+
   return (
     <>
-      <Header />
+  <SchemaJsonLd data={breadcrumbJsonLd} />
+<SchemaJsonLd data={newsArticleJsonLd} />
+
+  <Header />
 
       <main className="mx-auto max-w-4xl px-6 py-16">
         <Breadcrumb
@@ -161,7 +197,10 @@ export default async function NewsDetailPage({ params }: Props) {
             <div className="relative mb-10 h-[420px] w-full overflow-hidden rounded-2xl">
               <Image
                 src={imageUrl}
-                alt={article.coverImage?.alternativeText || article.title}
+                alt={
+                  article.coverImage?.alternativeText ||
+                  article.title
+                }
                 fill
                 sizes="(max-width: 896px) 100vw, 896px"
                 className="object-cover"
@@ -184,35 +223,36 @@ export default async function NewsDetailPage({ params }: Props) {
             </section>
           )}
 
-          {article.attachments && article.attachments.length > 0 && (
-            <section className="mt-12">
-              <h2 className="mb-4 text-2xl font-semibold text-slate-900">
-                Priedai
-              </h2>
+          {article.attachments &&
+            article.attachments.length > 0 && (
+              <section className="mt-12">
+                <h2 className="mb-4 text-2xl font-semibold text-slate-900">
+                  Priedai
+                </h2>
 
-              <div className="space-y-3">
-                {article.attachments.map((file) => {
-                  const fileUrl = getImageUrl(file.url);
+                <div className="space-y-3">
+                  {article.attachments.map((file) => {
+                    const fileUrl = getImageUrl(file.url);
 
-                  if (!fileUrl) {
-                    return null;
-                  }
+                    if (!fileUrl) {
+                      return null;
+                    }
 
-                  return (
-                    <a
-                      key={file.id}
-                      href={fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block rounded-xl border border-slate-200 p-4 text-slate-700 transition hover:bg-slate-50"
-                    >
-                      {file.name || "Atsisiųsti failą"}
-                    </a>
-                  );
-                })}
-              </div>
-            </section>
-          )}
+                    return (
+                      <a
+                        key={file.id}
+                        href={fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block rounded-xl border border-slate-200 p-4 text-slate-700 transition hover:bg-slate-50"
+                      >
+                        {file.name || "Atsisiųsti failą"}
+                      </a>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
         </article>
 
         {otherNews.length > 0 && (

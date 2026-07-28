@@ -10,6 +10,8 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 
 import { fetchFromStrapi } from "@/lib/strapi";
 import { createMetadata } from "@/lib/seo";
+import { createBreadcrumbJsonLd } from "@/lib/schema";
+import { SchemaJsonLd } from "@/components/SchemaJsonLd";
 
 type StrapiMedia = {
   id: number;
@@ -87,9 +89,7 @@ export async function generateMetadata({
     description,
     path: `/projektai/${project.slug}`,
     image: imageUrl,
-    imageAlt:
-      project.coverImage?.alternativeText ||
-      project.title,
+    imageAlt: project.coverImage?.alternativeText || project.title,
     type: "website",
     modifiedTime: project.updatedAt,
   });
@@ -105,8 +105,25 @@ export default async function ProjectDetailPage({ params }: Props) {
 
   const imageUrl = getFileUrl(project.coverImage?.url);
 
+  const breadcrumbJsonLd = createBreadcrumbJsonLd([
+    {
+      label: "Pradžia",
+      href: "/",
+    },
+    {
+      label: "Projektai",
+      href: "/projektai",
+    },
+    {
+      label: project.title,
+      href: `/projektai/${project.slug}`,
+    },
+  ]);
+
   return (
     <>
+      <SchemaJsonLd data={breadcrumbJsonLd} />
+
       <Header />
 
       <main className="mx-auto max-w-4xl px-6 py-16">
@@ -158,7 +175,10 @@ export default async function ProjectDetailPage({ params }: Props) {
             <div className="relative mb-10 h-[420px] w-full overflow-hidden rounded-2xl">
               <Image
                 src={imageUrl}
-                alt={project.coverImage?.alternativeText || project.title}
+                alt={
+                  project.coverImage?.alternativeText ||
+                  project.title
+                }
                 fill
                 sizes="(max-width: 896px) 100vw, 896px"
                 className="object-cover"
@@ -181,35 +201,36 @@ export default async function ProjectDetailPage({ params }: Props) {
             </section>
           )}
 
-          {project.attachments && project.attachments.length > 0 && (
-            <section className="mt-12">
-              <h2 className="mb-4 text-2xl font-semibold text-slate-900">
-                Priedai
-              </h2>
+          {project.attachments &&
+            project.attachments.length > 0 && (
+              <section className="mt-12">
+                <h2 className="mb-4 text-2xl font-semibold text-slate-900">
+                  Priedai
+                </h2>
 
-              <div className="space-y-3">
-                {project.attachments.map((file) => {
-                  const fileUrl = getFileUrl(file.url);
+                <div className="space-y-3">
+                  {project.attachments.map((file) => {
+                    const fileUrl = getFileUrl(file.url);
 
-                  if (!fileUrl) {
-                    return null;
-                  }
+                    if (!fileUrl) {
+                      return null;
+                    }
 
-                  return (
-                    <a
-                      key={file.id}
-                      href={fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block rounded-xl border border-slate-200 p-4 text-slate-700 transition hover:bg-slate-50"
-                    >
-                      {file.name || "Atsisiųsti failą"}
-                    </a>
-                  );
-                })}
-              </div>
-            </section>
-          )}
+                    return (
+                      <a
+                        key={file.id}
+                        href={fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block rounded-xl border border-slate-200 p-4 text-slate-700 transition hover:bg-slate-50"
+                      >
+                        {file.name || "Atsisiųsti failą"}
+                      </a>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
         </article>
       </main>
 

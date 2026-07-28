@@ -1,15 +1,23 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { RichText, type StrapiBlock } from "@/components/RichText";
+import { Breadcrumb } from "@/components/Breadcrumb";
+import { SchemaJsonLd } from "@/components/SchemaJsonLd";
 
-import { getProgramBySlug, getProgramCategoryLabel } from "@/lib/programs";
+import {
+  getProgramBySlug,
+  getProgramCategoryLabel,
+} from "@/lib/programs";
 import { createMetadata } from "@/lib/seo";
+import {
+  createBreadcrumbJsonLd,
+  createCourseJsonLd,
+} from "@/lib/schema";
 
 type ProgramPageProps = {
   params: Promise<{
@@ -22,7 +30,10 @@ function getMediaUrl(url?: string | null) {
     return null;
   }
 
-  if (url.startsWith("http://") || url.startsWith("https://")) {
+  if (
+    url.startsWith("http://") ||
+    url.startsWith("https://")
+  ) {
     return url;
   }
 
@@ -56,7 +67,8 @@ export async function generateMetadata({
     description,
     path: `/programos/${program.slug}`,
     image: imageUrl,
-    imageAlt: program.image?.alternativeText || program.title,
+    imageAlt:
+      program.image?.alternativeText || program.title,
     type: "website",
   });
 }
@@ -72,34 +84,85 @@ export default async function ProgramPage({
   }
 
   const imageUrl = getMediaUrl(program.image?.url);
-  const attachmentUrl = getMediaUrl(program.attachment?.url);
+  const attachmentUrl = getMediaUrl(
+    program.attachment?.url
+  );
+
+  const description =
+    program.shortDescription ||
+    `${program.title} – mokymo programa Šilutės profesinio mokymo centre.`;
+
+  const categoryLabel = getProgramCategoryLabel(
+    program.category
+  );
+
+  const breadcrumbJsonLd = createBreadcrumbJsonLd([
+    {
+      label: "Pradžia",
+      href: "/",
+    },
+    {
+      label: "Programos",
+      href: "/programos",
+    },
+    {
+      label: program.title,
+      href: `/programos/${program.slug}`,
+    },
+  ]);
+
+  const courseJsonLd = createCourseJsonLd({
+    title: program.title,
+    description,
+    path: `/programos/${program.slug}`,
+    imageUrl,
+    qualification: program.qualification,
+    targetAudience: program.targetAudience,
+    category: categoryLabel,
+  });
 
   return (
     <>
+      <SchemaJsonLd data={breadcrumbJsonLd} />
+      <SchemaJsonLd data={courseJsonLd} />
+
       <Header />
 
       <main>
         <PageHero
           title={program.title}
           description={
-            program.shortDescription || "Mokymo programos informacija"
+            program.shortDescription ||
+            "Mokymo programos informacija"
           }
         />
 
         <section className="mx-auto max-w-5xl px-6 py-16">
-          <Link
-            href="/programos"
-            className="mb-8 inline-flex text-sm font-medium text-blue-700 transition hover:text-blue-900"
-          >
-            ← Visos programos
-          </Link>
+          <Breadcrumb
+            items={[
+              {
+                label: "Pradžia",
+                href: "/",
+              },
+              {
+                label: "Programos",
+                href: "/programos",
+              },
+              {
+                label: program.title,
+              },
+            ]}
+          />
 
           {imageUrl && (
             <div className="mb-10 overflow-hidden rounded-2xl">
               <div className="relative h-[420px] w-full">
                 <Image
                   src={imageUrl}
-                  alt={program.image?.alternativeText || program.title}
+                  alt={
+                    program.image?.alternativeText ||
+                    program.title
+                  }
                   fill
                   sizes="(max-width: 1024px) 100vw, 1024px"
                   className="object-cover"
@@ -111,7 +174,7 @@ export default async function ProgramPage({
 
           <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <p className="mb-4 text-sm font-semibold text-blue-700">
-              {getProgramCategoryLabel(program.category)}
+              {categoryLabel}
             </p>
 
             <div className="grid gap-4 md:grid-cols-3">
@@ -168,7 +231,9 @@ export default async function ProgramPage({
 
           {program.description && (
             <RichText
-              blocks={program.description as StrapiBlock[]}
+              blocks={
+                program.description as StrapiBlock[]
+              }
             />
           )}
         </section>
