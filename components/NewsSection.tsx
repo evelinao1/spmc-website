@@ -4,17 +4,15 @@ type NewsItem = {
   id: number;
   title: string;
   slug: string;
-  excerpt?: string;
-  publishDate?: string;
+  excerpt?: string | null;
+  publishDate?: string | null;
 };
 
 type NewsSectionProps = {
   news: NewsItem[];
 };
 
-function formatDate(date?: string) {
-  if (!date) return "";
-
+function formatDate(date: string) {
   return new Intl.DateTimeFormat("lt-LT", {
     year: "numeric",
     month: "long",
@@ -45,35 +43,49 @@ export function NewsSection({ news }: NewsSectionProps) {
           </Link>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          {news.map((item) => (
-            <Link
-              key={item.id}
-              href={`/naujienos/${item.slug}`}
-              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-lg"
-            >
-              {item.publishDate && (
-                <p className="mb-4 text-sm text-slate-500">
-                  {formatDate(item.publishDate)}
+        {news.length > 0 ? (
+          <div className="grid gap-6 md:grid-cols-3">
+            {news.map((item) => (
+              <Link
+                key={item.id}
+                href={`/naujienos/${item.slug}`}
+                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-lg"
+              >
+                {item.publishDate && (
+                  <time
+                    dateTime={item.publishDate}
+                    className="mb-4 block text-sm text-slate-500"
+                  >
+                    {formatDate(item.publishDate)}
+                  </time>
+                )}
+
+                <h3 className="mb-3 text-xl font-bold text-slate-900">
+                  {item.title}
+                </h3>
+
+                {item.excerpt && (
+                  <p className="text-slate-600">{item.excerpt}</p>
+                )}
+
+                <p className="mt-4 font-medium text-blue-700">
+                  Skaityti daugiau →
                 </p>
-              )}
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-slate-600">
+            Šiuo metu naujų įrašų nėra.
+          </p>
+        )}
 
-              <h3 className="mb-3 text-xl font-bold text-slate-900">
-                {item.title}
-              </h3>
-
-              {item.excerpt && (
-                <p className="text-slate-600">
-                  {item.excerpt}
-                </p>
-              )}
-
-              <p className="mt-4 font-medium text-blue-700">
-                Skaityti daugiau →
-              </p>
-            </Link>
-          ))}
-        </div>
+        <Link
+          href="/naujienos"
+          className="mt-8 inline-flex text-blue-700 hover:underline md:hidden"
+        >
+          Visos naujienos →
+        </Link>
       </div>
     </section>
   );

@@ -15,7 +15,10 @@ export const navigation: NavigationItem[] = [
       { title: "Naujienos", href: "/naujienos" },
       { title: "Skelbimai", href: "/skelbimai" },
       { title: "Projektai", href: "/projektai" },
-      { title: "Edukacijos", href: "/edukacijos" },
+      {
+        title: "Edukacijos",
+        href: "/suaugusiuju-mokymas/edukacijos",
+      },
     ],
   },
   { title: "Apie centrą", href: "/apie" },

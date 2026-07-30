@@ -1,11 +1,31 @@
 import Link from "next/link";
 
 const quickLinks = [
-  { title: "Priėmimas", description: "Informacija stojantiesiems", href: "/stojantiesiems" },
-  { title: "Mokymo programos", description: "Rask sau tinkamą profesiją", href: "/programos" },
-  { title: "Tvarkaraščiai", description: "Pamokų ir užsiėmimų informacija", href: "/tvarkarasciai" },
-  { title: "Dokumentai", description: "Tvarkos, formos ir ataskaitos", href: "/dokumentai" },
-  { title: "Kontaktai", description: "Padaliniai ir susisiekimas", href: "/kontaktai" },
+  {
+    title: "Priėmimas",
+    description: "Informacija stojantiesiems",
+    href: "/stojantiesiems",
+  },
+  {
+    title: "Mokymo programos",
+    description: "Rask sau tinkamą profesiją",
+    href: "/programos",
+  },
+  {
+    title: "Mokiniams",
+    description: "Tvarkaraščiai ir kita svarbi informacija",
+    href: "/mokiniams",
+  },
+  {
+    title: "Apie centrą",
+    description: "Dokumentai ir centro veiklos informacija",
+    href: "/apie",
+  },
+  {
+    title: "Kontaktai",
+    description: "Padaliniai ir susisiekimas",
+    href: "/kontaktai",
+  },
 ];
 
 export function QuickLinks() {
@@ -20,7 +40,10 @@ export function QuickLinks() {
               className="border-b border-slate-200 p-6 hover:bg-slate-50 md:border-b-0 md:border-r last:md:border-r-0"
             >
               <p className="font-bold text-slate-900">{item.title}</p>
-              <p className="mt-2 text-sm text-slate-600">{item.description}</p>
+
+              <p className="mt-2 text-sm text-slate-600">
+                {item.description}
+              </p>
             </Link>
           ))}
         </div>

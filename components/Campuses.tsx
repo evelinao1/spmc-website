@@ -1,4 +1,5 @@
 import Image from "next/image";
+
 import { campuses } from "@/data/campuses";
 
 export function Campuses() {
@@ -31,6 +32,7 @@ export function Campuses() {
                   src={campus.image}
                   alt={campus.title}
                   fill
+                  sizes="(max-width: 1023px) 100vw, 33vw"
                   className="object-cover"
                 />
               </div>
