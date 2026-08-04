@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -39,14 +40,34 @@ export function Header() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <Link
             href="/"
+            aria-label="Šilutės profesinio mokymo centras – pradinis puslapis"
             aria-current={pathname === "/" ? "page" : undefined}
-            className={`shrink-0 text-lg font-bold tracking-tight transition-colors ${
-              pathname === "/"
-                ? "text-blue-700"
-                : "text-slate-900 hover:text-blue-700"
-            }`}
+            className="
+              flex shrink-0 items-center rounded-md
+              focus-visible:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-[#154280]
+              focus-visible:ring-offset-2
+            "
           >
-            ŠPMC
+            <Image
+              src="/logo-header.svg"
+              alt="Šilutės profesinio mokymo centras"
+              width={183}
+              height={61}
+              priority
+              className="hidden h-auto w-[168px] lg:block xl:w-[183px]"
+            />
+
+            <Image
+              src="/favicon.svg"
+              alt=""
+              width={42}
+              height={42}
+              priority
+              aria-hidden="true"
+              className="h-10 w-10 lg:hidden"
+            />
           </Link>
 
           <DesktopNavigation />
@@ -65,7 +86,19 @@ export function Header() {
               onClick={() => setIsOpen((value) => !value)}
               aria-expanded={isOpen}
               aria-controls="mobile-navigation"
-              className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-900 transition hover:border-blue-300 hover:text-blue-700 lg:hidden"
+              className="
+                rounded-lg border border-slate-300
+                px-3 py-2
+                text-sm font-semibold text-slate-900
+                transition-colors duration-200
+                hover:border-[#154280]
+                hover:text-[#154280]
+                focus-visible:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-[#154280]
+                focus-visible:ring-offset-2
+                lg:hidden
+              "
             >
               {isOpen ? "Uždaryti" : "Meniu"}
             </button>
@@ -85,10 +118,10 @@ export function Header() {
                 href="/"
                 onClick={() => setIsOpen(false)}
                 aria-current={pathname === "/" ? "page" : undefined}
-                className={`rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
+                className={`rounded-lg px-3 py-2 text-sm font-semibold transition-colors duration-200 ${
                   pathname === "/"
-                    ? "bg-blue-50 text-blue-700"
-                    : "text-slate-900 hover:bg-slate-50 hover:text-blue-700"
+                    ? "bg-[rgba(21,66,128,0.08)] text-[#154280]"
+                    : "text-slate-900 hover:bg-[rgba(21,66,128,0.06)] hover:text-[#154280]"
                 }`}
               >
                 Pradžia
@@ -110,13 +143,15 @@ export function Header() {
                     <div
                       key={item.title}
                       className={`rounded-lg px-3 py-2 ${
-                        itemIsActive ? "bg-blue-50" : ""
+                        itemIsActive
+                          ? "bg-[rgba(21,66,128,0.08)]"
+                          : ""
                       }`}
                     >
                       <p
                         className={`mb-2 text-sm font-semibold ${
                           itemIsActive
-                            ? "text-blue-700"
+                            ? "text-[#154280]"
                             : "text-slate-900"
                         }`}
                       >
@@ -138,10 +173,10 @@ export function Header() {
                               aria-current={
                                 childIsActive ? "page" : undefined
                               }
-                              className={`rounded-lg px-3 py-2 text-sm transition-colors ${
+                              className={`rounded-lg px-3 py-2 text-sm transition-colors duration-200 ${
                                 childIsActive
-                                  ? "bg-white font-semibold text-blue-700 shadow-sm"
-                                  : "font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-700"
+                                  ? "bg-white font-semibold text-[#154280] shadow-sm"
+                                  : "font-medium text-slate-700 hover:bg-[rgba(21,66,128,0.06)] hover:text-[#154280]"
                               }`}
                             >
                               {child.title}
@@ -159,10 +194,10 @@ export function Header() {
                     href={item.href ?? "#"}
                     onClick={() => setIsOpen(false)}
                     aria-current={itemIsActive ? "page" : undefined}
-                    className={`rounded-lg px-3 py-2 text-sm transition-colors ${
+                    className={`rounded-lg px-3 py-2 text-sm transition-colors duration-200 ${
                       itemIsActive
-                        ? "bg-blue-50 font-semibold text-blue-700"
-                        : "font-medium text-slate-800 hover:bg-slate-50 hover:text-blue-700"
+                        ? "bg-[rgba(21,66,128,0.08)] font-semibold text-[#154280]"
+                        : "font-medium text-slate-800 hover:bg-[rgba(21,66,128,0.06)] hover:text-[#154280]"
                     }`}
                   >
                     {item.title}
@@ -170,7 +205,9 @@ export function Header() {
                 );
               })}
 
-              <div className="mt-2 flex items-center justify-between gap-3 border-t border-slate-200 pt-4">
+              <div className="mt-2 border-t border-slate-200" />
+
+              <div className="flex items-center justify-between gap-3 pt-4">
                 <SearchButton onClick={openSearch} />
                 <TamoButton />
               </div>
