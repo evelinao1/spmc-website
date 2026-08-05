@@ -37,7 +37,7 @@ export function QuickLinks() {
             <Link
               key={item.title}
               href={item.href}
-              className="border-b border-slate-200 p-6 hover:bg-slate-50 md:border-b-0 md:border-r last:md:border-r-0"
+              className="border-b border-slate-200 p-6 transition-colors duration-200 hover:bg-blue-50 active:bg-blue-100 md:border-b-0 md:border-r last:md:border-r-0"
             >
               <p className="font-bold text-slate-900">{item.title}</p>
 

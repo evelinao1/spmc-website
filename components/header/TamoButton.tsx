@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+
+import { colors } from "@/lib/theme";
 
 export function TamoButton() {
   return (
@@ -8,22 +12,24 @@ export function TamoButton() {
       rel="noopener noreferrer"
       aria-label="Atidaryti TAMO dienyną"
       onMouseEnter={(event) => {
-        event.currentTarget.style.backgroundColor = "#10376B";
+        event.currentTarget.style.backgroundColor = colors.primaryHover;
         event.currentTarget.style.boxShadow =
           "0 4px 12px rgba(21, 66, 128, 0.18)";
       }}
       onMouseLeave={(event) => {
-        event.currentTarget.style.backgroundColor = "#154280";
+        event.currentTarget.style.backgroundColor = colors.primary;
         event.currentTarget.style.boxShadow = "none";
       }}
       style={{
+        width: "94px",
         height: "40px",
+        minWidth: "94px",
         minHeight: "40px",
         padding: "0 18px",
         borderRadius: "10px",
-        backgroundColor: "#154280",
+        backgroundColor: colors.primary,
         color: "#FFFFFF",
-        border: "1px solid #154280",
+        border: `1px solid ${colors.primary}`,
         boxSizing: "border-box",
         display: "inline-flex",
         alignItems: "center",

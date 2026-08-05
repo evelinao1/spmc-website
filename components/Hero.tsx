@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { HeroSlider } from "@/components/HeroSlider";
@@ -23,16 +25,19 @@ const campuses = [
     title: "Šilutės profesinio mokymo centras",
     subtitle: "Pagrindinis padalinys",
     image: "/images/campus-main.jpg",
+    href: "/padaliniai/centras",
   },
   {
     title: "Žuvininkystės sektorinis praktinio mokymo centras",
     subtitle: "Sektorinis centras",
     image: "/images/campus-fishery.jpg",
+    href: "/padaliniai/zuvininkystes-sektorinis-praktinio-mokymo-centras",
   },
   {
     title: "Paslaugų ir turizmo skyrius",
     subtitle: "Skyrius",
     image: "/images/campus-services.jpg",
+    href: "/padaliniai/turizmo-ir-paslaugu-skyrius",
   },
 ];
 
@@ -68,7 +73,7 @@ export function Hero({ slides = [] }: HeroProps) {
             />
           </div>
 
-          <h1 className="max-w-3xl text-3xl font-bold tracking-tight text-slate-900 md:text-6xl">
+          <h1 className="max-w-2xl text-3xl font-bold tracking-tight text-slate-900 md:text-6xl">
             Kuriame profesinę ateitį kartu
           </h1>
 
@@ -80,14 +85,49 @@ export function Hero({ slides = [] }: HeroProps) {
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
               href="/stojantiesiems"
-              className="rounded-xl bg-blue-900 px-6 py-3 font-semibold text-white hover:bg-blue-800"
+              onMouseEnter={(event) => {
+                event.currentTarget.style.backgroundColor = "#10376B";
+                event.currentTarget.style.boxShadow =
+                  "0 4px 12px rgba(21, 66, 128, 0.18)";
+              }}
+              onMouseLeave={(event) => {
+                event.currentTarget.style.backgroundColor = "#154280";
+                event.currentTarget.style.boxShadow = "none";
+              }}
+              style={{
+                height: "52px",
+                minHeight: "52px",
+                padding: "0 28px",
+                borderRadius: "12px",
+                backgroundColor: "#154280",
+                color: "#FFFFFF",
+                border: "1px solid #154280",
+                boxSizing: "border-box",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+                fontSize: "16px",
+                fontWeight: 600,
+                lineHeight: 1,
+                textDecoration: "none",
+                cursor: "pointer",
+                transition:
+                  "background-color 200ms ease, box-shadow 200ms ease, border-color 200ms ease",
+              }}
+              className="
+                focus-visible:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-[#154280]
+                focus-visible:ring-offset-2
+              "
             >
               Stojantiesiems
             </Link>
 
             <Link
               href="/programos"
-              className="rounded-xl border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-900 hover:border-blue-900"
+              className="rounded-xl border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-900 transition-colors duration-200 hover:border-blue-900"
             >
               Mokymo programos
             </Link>
@@ -96,28 +136,58 @@ export function Hero({ slides = [] }: HeroProps) {
 
         <div className="hidden gap-4 lg:grid">
           {campuses.map((campus) => (
-            <article
+            <Link
               key={campus.title}
-              className="grid grid-cols-[140px_1fr] overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200"
+              href={campus.href}
+              className="
+                group
+                grid
+                grid-cols-[140px_1fr]
+                overflow-hidden
+                rounded-2xl
+                bg-white
+                shadow-sm
+                ring-1
+                ring-slate-200
+                transition-all
+                duration-300
+                ease-out
+                hover:-translate-y-1
+                hover:shadow-xl
+                focus-visible:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-[#154280]
+                focus-visible:ring-offset-2
+              "
             >
-              <div className="relative h-32">
+              <div className="relative h-32 overflow-hidden">
                 <Image
                   src={campus.image}
                   alt={campus.title}
                   fill
-                  className="object-cover"
+                  className="
+                    object-cover
+                    transition-transform
+                    duration-500
+                    ease-out
+                    group-hover:scale-105
+                  "
                 />
               </div>
 
               <div className="flex flex-col justify-center p-5">
-                <p className="mb-2 text-xs font-bold uppercase text-blue-700">
+                <p
+                  className="mb-2 text-xs font-semibold uppercase tracking-wider"
+                  style={{ color: "#154280" }}
+                >
                   {campus.subtitle}
                 </p>
+
                 <h2 className="text-lg font-bold text-slate-900">
                   {campus.title}
                 </h2>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </div>

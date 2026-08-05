@@ -1,12 +1,20 @@
 import Link from "next/link";
-import { programs } from "@/data/programs";
 
-export function Programs() {
+import { ProgramCard } from "@/components/ProgramCard";
+import { getPrograms } from "@/lib/programs";
+import { colors } from "@/lib/theme";
+
+export async function Programs() {
+  const programs = await getPrograms();
+
   return (
     <section className="bg-white py-20">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-10">
-          <p className="text-sm font-semibold uppercase tracking-wider text-blue-700">
+          <p
+            className="text-sm font-semibold uppercase tracking-wider"
+            style={{ color: colors.primary }}
+          >
             Mokymo programos
           </p>
 
@@ -20,27 +28,23 @@ export function Programs() {
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {programs.map((program) => (
-            <article
-              key={program.title}
-              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-            >
-              <p className="mb-3 text-sm font-semibold text-blue-700">
-                {program.category}
-              </p>
-
-              <h3 className="text-xl font-bold text-slate-900">
-                {program.title}
-              </h3>
-            </article>
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {programs.slice(0, 4).map((program) => (
+            <ProgramCard
+              key={program.id}
+              program={program}
+            />
           ))}
         </div>
 
         <div className="mt-10">
           <Link
             href="/programos"
-            className="inline-flex rounded-xl bg-blue-900 px-6 py-3 font-semibold text-white"
+            className="inline-flex rounded-xl px-6 py-3 font-semibold text-white transition-all duration-200 hover:-translate-y-0.5"
+            style={{
+              backgroundColor: colors.primary,
+              boxShadow: "0 4px 12px rgba(21, 66, 128, 0.18)",
+            }}
           >
             Peržiūrėti visas programas
           </Link>
