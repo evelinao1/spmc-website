@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import { colors } from "@/lib/theme";
 
 import { campuses } from "@/data/campuses";
 
@@ -7,7 +9,10 @@ export function Campuses() {
     <section className="bg-slate-50 py-20">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-10">
-          <p className="text-sm font-semibold uppercase tracking-wider text-blue-700">
+          <p
+            className="text-sm font-semibold uppercase tracking-wider"
+            style={{ color: colors.primary }}
+          >
             Padaliniai
           </p>
 
@@ -23,9 +28,10 @@ export function Campuses() {
 
         <div className="grid gap-6 lg:grid-cols-3">
           {campuses.map((campus) => (
-            <article
+            <Link
               key={campus.title}
-              className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200"
+              href={campus.href}
+              className="block overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div className="relative h-64">
                 <Image
@@ -42,9 +48,11 @@ export function Campuses() {
                   {campus.title}
                 </h3>
 
-                <p className="mt-3 text-slate-600">{campus.description}</p>
+                <p className="mt-3 text-slate-600">
+                  {campus.description}
+                </p>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </div>

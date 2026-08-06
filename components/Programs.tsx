@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { ProgramsButton } from "@/components/ProgramsButton";
 
 import { ProgramCard } from "@/components/ProgramCard";
 import { getPrograms } from "@/lib/programs";
@@ -30,24 +30,14 @@ export async function Programs() {
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {programs.slice(0, 4).map((program) => (
-            <ProgramCard
-              key={program.id}
-              program={program}
-            />
+            <ProgramCard key={program.id} program={program} />
           ))}
         </div>
 
         <div className="mt-10">
-          <Link
-            href="/programos"
-            className="inline-flex rounded-xl px-6 py-3 font-semibold text-white transition-all duration-200 hover:-translate-y-0.5"
-            style={{
-              backgroundColor: colors.primary,
-              boxShadow: "0 4px 12px rgba(21, 66, 128, 0.18)",
-            }}
-          >
-            Peržiūrėti visas programas
-          </Link>
+          <div className="mt-10">
+  <ProgramsButton />
+</div>
         </div>
       </div>
     </section>
