@@ -86,18 +86,22 @@ export function Hero({ slides = [] }: HeroProps) {
             <Link
               href="/stojantiesiems"
               onMouseEnter={(event) => {
-                event.currentTarget.style.backgroundColor = "#10376B";
+                event.currentTarget.style.backgroundColor = "#0D3263";
+                event.currentTarget.style.borderColor = "#0D3263";
                 event.currentTarget.style.boxShadow =
-                  "0 4px 12px rgba(21, 66, 128, 0.18)";
+                  "0 10px 24px rgba(21, 66, 128, 0.32)";
+                event.currentTarget.style.transform = "translateY(-2px)";
               }}
               onMouseLeave={(event) => {
                 event.currentTarget.style.backgroundColor = "#154280";
-                event.currentTarget.style.boxShadow = "none";
+                event.currentTarget.style.borderColor = "#154280";
+                event.currentTarget.style.boxShadow =
+                  "0 4px 12px rgba(21, 66, 128, 0.18)";
+                event.currentTarget.style.transform = "translateY(0)";
               }}
               style={{
-                height: "52px",
-                minHeight: "52px",
-                padding: "0 28px",
+                minHeight: "48px",
+                padding: "0 24px",
                 borderRadius: "12px",
                 backgroundColor: "#154280",
                 color: "#FFFFFF",
@@ -112,8 +116,9 @@ export function Hero({ slides = [] }: HeroProps) {
                 lineHeight: 1,
                 textDecoration: "none",
                 cursor: "pointer",
+                boxShadow: "0 4px 12px rgba(21, 66, 128, 0.18)",
                 transition:
-                  "background-color 200ms ease, box-shadow 200ms ease, border-color 200ms ease",
+                  "background-color 200ms ease, border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease",
               }}
               className="
                 focus-visible:outline-none

@@ -43,8 +43,11 @@ export function ProgramCard({ program }: ProgramCardProps) {
       )}
 
       <div className="p-6">
-        <p className="mb-3 text-sm font-semibold text-blue-700">
-          {getProgramCategoryLabel(program.category)}
+        <p
+        className="mb-3 text-sm font-semibold"
+        style={{ color: "#154280" }}
+        >
+        {getProgramCategoryLabel(program.category)}
         </p>
 
         <h2 className="mb-3 text-xl font-bold text-slate-900">

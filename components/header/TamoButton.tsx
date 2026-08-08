@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-
 import { colors } from "@/lib/theme";
 
 export function TamoButton() {
@@ -12,13 +11,17 @@ export function TamoButton() {
       rel="noopener noreferrer"
       aria-label="Atidaryti TAMO dienyną"
       onMouseEnter={(event) => {
-        event.currentTarget.style.backgroundColor = colors.primaryHover;
+        event.currentTarget.style.backgroundColor = "#0D3263";
+        event.currentTarget.style.borderColor = "#0D3263";
         event.currentTarget.style.boxShadow =
-          "0 4px 12px rgba(21, 66, 128, 0.18)";
+          "0 10px 24px rgba(21, 66, 128, 0.32)";
+        event.currentTarget.style.transform = "translateY(-2px)";
       }}
       onMouseLeave={(event) => {
         event.currentTarget.style.backgroundColor = colors.primary;
+        event.currentTarget.style.borderColor = colors.primary;
         event.currentTarget.style.boxShadow = "none";
+        event.currentTarget.style.transform = "translateY(0)";
       }}
       style={{
         width: "94px",
@@ -41,7 +44,7 @@ export function TamoButton() {
         textDecoration: "none",
         cursor: "pointer",
         transition:
-          "background-color 200ms ease, box-shadow 200ms ease, border-color 200ms ease",
+          "background-color 200ms ease, border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease",
       }}
       className="
         focus-visible:outline-none
