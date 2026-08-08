@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import Link from "next/link";
+import { PrimaryButton } from "@/components/PrimaryButton";
 
 export default function StojantiesiemsPage() {
   return (
@@ -68,9 +69,11 @@ export default function StojantiesiemsPage() {
             Susipažink su siūlomomis programomis ir pateik prašymą mokytis.
           </p>
 
-          <button className="mt-6 rounded-xl bg-blue-900 px-6 py-3 font-semibold text-white transition hover:bg-blue-800">
-            Pildyti prašymą
-          </button>
+          <div className="mt-6">
+            <PrimaryButton href="https://mokausi.lt" external>
+              Pildyti prašymą
+            </PrimaryButton>
+          </div>
         </div>
       </main>
 

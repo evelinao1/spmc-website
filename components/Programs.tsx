@@ -1,4 +1,4 @@
-import { ProgramsButton } from "@/components/ProgramsButton";
+import { PrimaryButton } from "@/components/PrimaryButton";
 
 import { ProgramCard } from "@/components/ProgramCard";
 import { getPrograms } from "@/lib/programs";
@@ -36,7 +36,9 @@ export async function Programs() {
 
         <div className="mt-10">
           <div className="mt-10">
-  <ProgramsButton />
+  <PrimaryButton href="/programos">
+  Peržiūrėti visas programas
+</PrimaryButton>
 </div>
         </div>
       </div>
