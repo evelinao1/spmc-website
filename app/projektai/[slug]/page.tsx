@@ -12,6 +12,7 @@ import { fetchFromStrapi } from "@/lib/strapi";
 import { createMetadata } from "@/lib/seo";
 import { createBreadcrumbJsonLd } from "@/lib/schema";
 import { SchemaJsonLd } from "@/components/SchemaJsonLd";
+import { colors } from "@/lib/theme";
 
 type StrapiMedia = {
   id: number;
@@ -145,7 +146,10 @@ export default async function ProjectDetailPage({ params }: Props) {
 
         <article>
           {project.category && (
-            <p className="mb-4 text-sm font-semibold uppercase tracking-wider text-blue-700">
+            <p
+              className="mb-4 text-sm font-semibold uppercase tracking-wider"
+              style={{ color: colors.primary }}
+            >
               {project.category}
             </p>
           )}
@@ -165,7 +169,11 @@ export default async function ProjectDetailPage({ params }: Props) {
               href={project.projectLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="mb-8 inline-flex rounded-xl bg-blue-700 px-5 py-3 font-medium text-white transition hover:bg-blue-800"
+              className="mb-8 inline-flex rounded-xl border px-5 py-3 font-medium text-white transition"
+              style={{
+                backgroundColor: colors.primary,
+                borderColor: colors.primary,
+              }}
             >
               Aplankyti projekto svetainę
             </a>

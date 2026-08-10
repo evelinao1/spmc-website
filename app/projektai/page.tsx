@@ -7,6 +7,7 @@ import { PageHero } from "@/components/PageHero";
 
 import { fetchFromStrapi } from "@/lib/strapi";
 import { createMetadata } from "@/lib/seo";
+import { colors } from "@/lib/theme";
 
 type Project = {
   id: number;
@@ -26,7 +27,7 @@ const categories = [
   "Visi projektai",
   "Erasmus+",
   "ES finansuojami projektai",
-  "Kiti projektai",
+  "LR valstybės finansuojami projektai",
 ];
 
 export async function generateMetadata({
@@ -74,7 +75,11 @@ export default async function ProjectsPage({
 
       <main>
         <PageHero
-          title={category && category !== "Visi projektai" ? category : "Projektai"}
+          title={
+            category && category !== "Visi projektai"
+              ? category
+              : "Projektai"
+          }
           description="Šilutės profesinio mokymo centro vykdomi projektai."
         />
 
@@ -96,9 +101,17 @@ export default async function ProjectsPage({
                   href={href}
                   className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
                     isActive
-                      ? "border-blue-700 bg-blue-700 text-white"
+                      ? "text-white"
                       : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                   }`}
+                  style={
+                    isActive
+                      ? {
+                          backgroundColor: colors.primary,
+                          borderColor: colors.primary,
+                        }
+                      : undefined
+                  }
                 >
                   {item}
                 </Link>
@@ -119,7 +132,10 @@ export default async function ProjectsPage({
                   className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md"
                 >
                   {project.category && (
-                    <p className="mb-3 text-sm font-medium text-blue-700">
+                    <p
+                      className="mb-3 text-sm font-medium"
+                      style={{ color: colors.primary }}
+                    >
                       {project.category}
                     </p>
                   )}
@@ -134,7 +150,10 @@ export default async function ProjectsPage({
                     </p>
                   )}
 
-                  <p className="mt-4 font-medium text-blue-700">
+                  <p
+                    className="mt-4 font-medium"
+                    style={{ color: colors.primary }}
+                  >
                     Skaityti daugiau →
                   </p>
                 </Link>
