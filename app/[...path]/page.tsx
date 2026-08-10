@@ -28,7 +28,6 @@ const sectionLabels: Record<string, string> = {
   mokiniams: "Mokiniams",
   stojantiesiems: "Stojantiesiems",
   "itraukusis-ugdymas": "Įtraukusis ugdymas",
-  "suaugusiuju-mokymas": "Suaugusiųjų mokymas",
 };
 
 async function getPage(path: string): Promise<DynamicPage | null> {

@@ -17,7 +17,7 @@ export const navigation: NavigationItem[] = [
       { title: "Projektai", href: "/projektai" },
       {
         title: "Edukacijos",
-        href: "/suaugusiuju-mokymas/edukacijos",
+        href: "/edukacijos",
       },
     ],
   },
