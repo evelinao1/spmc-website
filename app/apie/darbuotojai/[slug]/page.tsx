@@ -161,7 +161,8 @@ export default async function EmployeePage({
 
           <Link
             href="/apie/darbuotojai"
-            className="mb-8 inline-flex text-sm font-medium text-blue-700 transition hover:text-blue-900"
+            className="mb-8 inline-flex text-sm font-medium transition-opacity hover:opacity-75"
+            style={{ color: "#154280" }}
           >
             ← Visi darbuotojai
           </Link>
@@ -196,11 +197,9 @@ export default async function EmployeePage({
                         Kategorija
                       </p>
 
-                      <p>
-                        {getEmployeeCategoryLabel(
-                          employee.category
-                        )}
-                      </p>
+                     <p style={{ color: "#154280" }}>
+                      {getEmployeeCategoryLabel(employee.category)}
+                    </p>
                     </div>
                   )}
 
@@ -222,7 +221,8 @@ export default async function EmployeePage({
 
                       <a
                         href={`mailto:${employee.email}`}
-                        className="break-all text-blue-700 hover:underline"
+                        className="break-all hover:underline"
+                        style={{ color: "#154280" }}
                       >
                         {employee.email}
                       </a>
@@ -235,15 +235,13 @@ export default async function EmployeePage({
                         Telefonas
                       </p>
 
-                      <a
-                        href={`tel:${employee.phone.replace(
-                          /\s+/g,
-                          ""
-                        )}`}
-                        className="text-blue-700 hover:underline"
-                      >
-                        {employee.phone}
-                      </a>
+                     <a
+                      href={`tel:${employee.phone.replace(/\s+/g, "")}`}
+                      className="hover:underline"
+                      style={{ color: "#154280" }}
+                    >
+                      {employee.phone}
+                    </a>
                     </div>
                   )}
 
@@ -260,7 +258,8 @@ export default async function EmployeePage({
                               <Link
                                 key={campus.id}
                                 href={`/padaliniai/${campus.slug}`}
-                                className="block text-blue-700 hover:underline"
+                                className="block hover:underline"
+                                style={{ color: "#154280" }}
                               >
                                 {campus.title}
                               </Link>

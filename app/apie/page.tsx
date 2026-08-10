@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
+import { colors } from "@/lib/theme";
 
 const aboutItems = [
   {
@@ -93,7 +94,10 @@ export default function ApiePage() {
                 {item.description}
               </p>
 
-              <span className="mt-5 inline-block text-sm font-semibold text-blue-700">
+              <span
+                className="mt-2 block font-semibold"
+                style={{ color: colors.primary }}
+              >
                 Atverti →
               </span>
             </Link>

@@ -1,25 +1,25 @@
-import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
-import { SectionHeader } from "@/components/SectionHeader";
 import { InfoCard } from "@/components/InfoCard";
+import { Breadcrumb } from "@/components/Breadcrumb";
 import Link from "next/link";
 
 export default function SavivaldaPage() {
   return (
     <>
-      <Header />
-
       <PageHero
         label="Apie centrą"
         title="Savivalda"
         description="Informacija apie centro savivaldos institucijas ir kolegialius valdymo organus."
       />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
-        <SectionHeader
-          title="Savivaldos institucijos"
-          description="Čia bus pateikiama informacija apie centro tarybas, metodines grupes ir mokinių savivaldą."
+      <main className="mx-auto max-w-7xl px-6 pb-16 pt-6">
+        <Breadcrumb
+          items={[
+            { label: "Pradžia", href: "/" },
+            { label: "Apie centrą", href: "/apie" },
+            { label: "Savivalda" },
+          ]}
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">

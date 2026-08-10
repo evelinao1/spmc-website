@@ -1,8 +1,7 @@
-import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
-import { SectionHeader } from "@/components/SectionHeader";
 import { InfoCard } from "@/components/InfoCard";
+import { Breadcrumb } from "@/components/Breadcrumb";
 import Link from "next/link";
 
 const documentCategories = [
@@ -41,18 +40,19 @@ const documentCategories = [
 export default function DokumentaiPage() {
   return (
     <>
-      <Header />
-
       <PageHero
         label="Apie centrą"
         title="Dokumentai"
         description="Svarbiausi Šilutės profesinio mokymo centro dokumentai, tvarkos, planai ir ataskaitos."
       />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
-        <SectionHeader
-          title="Dokumentų kategorijos"
-          description="Dokumentai vėliau bus valdomi per turinio valdymo sistemą ir rūšiuojami pagal kategorijas."
+      <main className="mx-auto max-w-7xl px-6 pb-16 pt-6">
+        <Breadcrumb
+          items={[
+            { label: "Pradžia", href: "/" },
+            { label: "Apie centrą", href: "/apie" },
+            { label: "Dokumentai" },
+          ]}
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">

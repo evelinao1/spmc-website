@@ -93,9 +93,17 @@ export default async function DarbuotojaiPage({
               href="/apie/darbuotojai"
               className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
                 !activeCategory
-                  ? "border-blue-700 bg-blue-700 text-white"
+                  ? "text-white"
                   : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
               }`}
+              style={
+                !activeCategory
+                  ? {
+                      backgroundColor: "#154280",
+                      borderColor: "#154280",
+                    }
+                  : undefined
+              }
             >
               Visi
             </Link>
@@ -106,9 +114,17 @@ export default async function DarbuotojaiPage({
                 href={`/apie/darbuotojai?category=${encodeURIComponent(item)}`}
                 className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
                   activeCategory === item
-                    ? "border-blue-700 bg-blue-700 text-white"
+                    ? "text-white"
                     : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                 }`}
+                style={
+                  activeCategory === item
+                    ? {
+                        backgroundColor: "#154280",
+                        borderColor: "#154280",
+                      }
+                    : undefined
+                }
               >
                 {getEmployeeCategoryLabel(item)}
               </Link>
@@ -167,7 +183,10 @@ export default async function DarbuotojaiPage({
                       )}
 
                       {employee.category && (
-                        <p className="mt-1 text-sm font-medium text-blue-700">
+                        <p
+                          className="mt-1 text-sm font-medium"
+                          style={{ color: "#154280" }}
+                        >
                           {getEmployeeCategoryLabel(employee.category)}
                         </p>
                       )}

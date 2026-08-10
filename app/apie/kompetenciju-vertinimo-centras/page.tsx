@@ -1,25 +1,25 @@
-import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
-import { SectionHeader } from "@/components/SectionHeader";
 import { InfoCard } from "@/components/InfoCard";
+import { Breadcrumb } from "@/components/Breadcrumb";
 import Link from "next/link";
 
 export default function KompetencijuVertinimoCentrasPage() {
   return (
     <>
-      <Header />
-
       <PageHero
         label="Apie centrą"
         title="Kompetencijų vertinimo centras"
         description="Informacija apie asmens įgytų kompetencijų vertinimą, kvalifikacijų suteikimą ir registraciją."
       />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
-        <SectionHeader
-          title="Kompetencijų vertinimas"
-          description="Šiame puslapyje bus pateikiama aktuali informacija asmenims, norintiems įsivertinti turimas kompetencijas ar įgyti kvalifikaciją."
+      <main className="mx-auto max-w-7xl px-6 pb-16 pt-6">
+        <Breadcrumb
+          items={[
+            { label: "Pradžia", href: "/" },
+            { label: "Apie centrą", href: "/apie" },
+            { label: "Kompetencijų vertinimo centras" },
+          ]}
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
