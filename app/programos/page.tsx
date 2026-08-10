@@ -85,9 +85,17 @@ export default async function ProgramosPage({
           <div className="mb-8 flex flex-wrap gap-3">
             <Link
               href="/programos"
+              style={
+                !activeCategory
+                  ? {
+                      backgroundColor: "#154280",
+                      borderColor: "#154280",
+                    }
+                  : undefined
+              }
               className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
                 !activeCategory
-                  ? "border-blue-700 bg-blue-700 text-white"
+                  ? "text-white"
                   : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
               }`}
             >
@@ -98,9 +106,17 @@ export default async function ProgramosPage({
               <Link
                 key={item}
                 href={`/programos?category=${encodeURIComponent(item)}`}
+                style={
+                  activeCategory === item
+                    ? {
+                        backgroundColor: "#154280",
+                        borderColor: "#154280",
+                      }
+                    : undefined
+                }
                 className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
                   activeCategory === item
-                    ? "border-blue-700 bg-blue-700 text-white"
+                    ? "text-white"
                     : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                 }`}
               >

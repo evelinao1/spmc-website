@@ -173,7 +173,10 @@ export default async function ProgramPage({
           )}
 
           <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <p className="mb-4 text-sm font-semibold text-blue-700">
+            <p
+              className="mb-4 text-sm font-semibold"
+              style={{ color: "#154280" }}
+            >
               {categoryLabel}
             </p>
 
