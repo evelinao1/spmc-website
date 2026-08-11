@@ -112,6 +112,7 @@ export default async function KontaktaiPage() {
         />
 
         <div className="grid gap-6 md:grid-cols-2">
+          {/* Bendri kontaktai */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-xl font-semibold text-slate-900">
               {contact?.title || "Bendri kontaktai"}
@@ -127,7 +128,7 @@ export default async function KontaktaiPage() {
                     href={getMapsHref(contact.address)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-700 hover:underline"
+                    className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
                   >
                     {contact.address}
                   </a>
@@ -141,7 +142,7 @@ export default async function KontaktaiPage() {
                   </strong>{" "}
                   <a
                     href={getPhoneHref(contact.phone)}
-                    className="text-blue-700 hover:underline"
+                    className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
                   >
                     {contact.phone}
                   </a>
@@ -155,7 +156,7 @@ export default async function KontaktaiPage() {
                   </strong>{" "}
                   <a
                     href={`mailto:${contact.email}`}
-                    className="text-blue-700 hover:underline"
+                    className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
                   >
                     {contact.email}
                   </a>
@@ -163,12 +164,12 @@ export default async function KontaktaiPage() {
               )}
 
               {contact?.workingHours && (
-                <div>
+                <div className="pt-1">
                   <strong className="text-slate-900">
                     Darbo laikas:
                   </strong>
 
-                  <div className="mt-2">
+                  <div className="mt-2 [&>div]:space-y-1 [&_p]:leading-6">
                     <RichText
                       blocks={contact.workingHours}
                     />
@@ -220,20 +221,89 @@ export default async function KontaktaiPage() {
             </div>
           </div>
 
+          {/* Rekvizitai */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-xl font-semibold text-slate-900">
               Rekvizitai
             </h2>
 
-            <div className="mt-4">
-              {contact?.legalInformation ? (
-                <RichText
-                  blocks={contact.legalInformation}
-                />
-              ) : (
-                <p className="text-slate-600">
-                  Rekvizitai ruošiami.
-                </p>
+            <div className="mt-4 divide-y divide-slate-100">
+              {contact?.institutionCode && (
+                <div className="grid gap-1 py-3 sm:grid-cols-[170px_1fr]">
+                  <span className="font-medium text-slate-900">
+                    Įstaigos kodas
+                  </span>
+
+                  <span className="text-slate-600">
+                    {contact.institutionCode}
+                  </span>
+                </div>
+              )}
+
+              {contact?.legalForm && (
+                <div className="grid gap-1 py-3 sm:grid-cols-[170px_1fr]">
+                  <span className="font-medium text-slate-900">
+                    Teisinė forma
+                  </span>
+
+                  <span className="text-slate-600">
+                    {contact.legalForm}
+                  </span>
+                </div>
+              )}
+
+              {contact?.registryManager && (
+                <div className="grid gap-1 py-3 sm:grid-cols-[170px_1fr]">
+                  <span className="font-medium text-slate-900">
+                    Registro tvarkytojas
+                  </span>
+
+                  <span className="text-slate-600">
+                    {contact.registryManager}
+                  </span>
+                </div>
+              )}
+
+              {(contact?.budgetBank ||
+                contact?.budgetAccount) && (
+                <div className="grid gap-1 py-3 sm:grid-cols-[170px_1fr]">
+                  <span className="font-medium text-slate-900">
+                    Biudžetinė sąskaita
+                  </span>
+
+                  <div className="text-slate-600">
+                    {contact?.budgetBank && (
+                      <p>{contact.budgetBank}</p>
+                    )}
+
+                    {contact?.budgetAccount && (
+                      <p className="mt-1 font-medium text-slate-900">
+                        {contact.budgetAccount}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {(contact?.incomeBank ||
+                contact?.incomeAccount) && (
+                <div className="grid gap-1 py-3 sm:grid-cols-[170px_1fr]">
+                  <span className="font-medium text-slate-900">
+                    Pajamų įmokų sąskaita
+                  </span>
+
+                  <div className="text-slate-600">
+                    {contact?.incomeBank && (
+                      <p>{contact.incomeBank}</p>
+                    )}
+
+                    {contact?.incomeAccount && (
+                      <p className="mt-1 font-medium text-slate-900">
+                        {contact.incomeAccount}
+                      </p>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
           </div>
@@ -250,6 +320,7 @@ export default async function KontaktaiPage() {
           </section>
         )}
 
+        {/* Padaliniai */}
         <section className="mt-16">
           <h2 className="text-2xl font-bold text-slate-900">
             Padaliniai
@@ -277,7 +348,7 @@ export default async function KontaktaiPage() {
                         )}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-700 hover:underline"
+                        className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
                       >
                         {campus.address}
                       </a>
@@ -293,7 +364,7 @@ export default async function KontaktaiPage() {
                         href={getPhoneHref(
                           campus.phone
                         )}
-                        className="text-blue-700 hover:underline"
+                        className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
                       >
                         {campus.phone}
                       </a>
@@ -307,7 +378,7 @@ export default async function KontaktaiPage() {
                       </strong>{" "}
                       <a
                         href={`mailto:${campus.email}`}
-                        className="text-blue-700 hover:underline"
+                        className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
                       >
                         {campus.email}
                       </a>
@@ -317,7 +388,7 @@ export default async function KontaktaiPage() {
 
                 <Link
                   href={`/padaliniai/${campus.slug}`}
-                  className="mt-5 inline-flex text-sm font-semibold text-blue-700 hover:underline"
+                  className="mt-5 flex w-fit text-sm font-semibold text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
                 >
                   Plačiau apie padalinį →
                 </Link>
@@ -326,6 +397,7 @@ export default async function KontaktaiPage() {
           </div>
         </section>
 
+        {/* Darbuotojai */}
         <section className="mt-16 rounded-3xl bg-slate-50 p-8">
           <h2 className="text-2xl font-bold text-slate-900">
             Administracija ir specialistai
@@ -357,7 +429,7 @@ export default async function KontaktaiPage() {
                         href={getPhoneHref(
                           employee.phone
                         )}
-                        className="text-blue-700 hover:underline"
+                        className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
                       >
                         {employee.phone}
                       </a>
@@ -371,7 +443,7 @@ export default async function KontaktaiPage() {
                       </strong>{" "}
                       <a
                         href={`mailto:${employee.email}`}
-                        className="text-blue-700 hover:underline"
+                        className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
                       >
                         {employee.email}
                       </a>
@@ -379,8 +451,7 @@ export default async function KontaktaiPage() {
                   )}
 
                   {employee.padaliniais &&
-                    employee.padaliniais.length >
-                      0 && (
+                    employee.padaliniais.length > 0 && (
                       <p>
                         <strong className="text-slate-900">
                           Padalinys:
@@ -397,7 +468,7 @@ export default async function KontaktaiPage() {
 
                 <Link
                   href={`/apie/darbuotojai/${employee.slug}`}
-                  className="mt-5 inline-flex text-sm font-semibold text-blue-700 hover:underline"
+                  className="mt-5 inline-flex text-sm font-semibold text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
                 >
                   Plačiau →
                 </Link>

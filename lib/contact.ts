@@ -23,6 +23,14 @@ export type Contact = {
   workingHours?: StrapiBlock[] | null;
   legalInformation?: StrapiBlock[] | null;
 
+  institutionCode?: string | null;
+  legalForm?: string | null;
+  registryManager?: string | null;
+  budgetBank?: string | null;
+  budgetAccount?: string | null;
+  incomeBank?: string | null;
+  incomeAccount?: string | null;
+
   facebook?: string | null;
   instagram?: string | null;
   youtube?: string | null;
