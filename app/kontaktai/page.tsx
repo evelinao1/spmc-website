@@ -51,6 +51,23 @@ export default async function KontaktaiPage() {
     getContactEmployees(),
   ]);
 
+  const employeeGroups = campuses
+  .map((campus) => ({
+    campus,
+    employees: employees.filter((employee) =>
+      employee.padaliniais?.some(
+        (employeeCampus) => employeeCampus.id === campus.id
+      )
+    ),
+  }))
+  .filter((group) => group.employees.length > 0);
+
+  const employeesWithoutCampus = employees.filter(
+    (employee) =>
+      !employee.padaliniais ||
+      employee.padaliniais.length === 0
+  );
+  
   const breadcrumbJsonLd = createBreadcrumbJsonLd([
     {
       label: "Pradžia",
@@ -398,84 +415,141 @@ export default async function KontaktaiPage() {
         </section>
 
         {/* Darbuotojai */}
-        <section className="mt-16 rounded-3xl bg-slate-50 p-8">
-          <h2 className="text-2xl font-bold text-slate-900">
-            Administracija ir specialistai
-          </h2>
+<section className="mt-16">
+  <h2 className="text-2xl font-bold text-slate-900">
+    Administracija ir specialistai
+  </h2>
 
-          <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {employees.map((employee) => (
-              <div
-                key={employee.id}
-                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-              >
-                <h3 className="text-lg font-semibold text-slate-900">
-                  {employee.fullName}
-                </h3>
+  <div className="mt-8 space-y-12">
+    {employeeGroups.map(({ campus, employees }) => (
+      <div key={campus.id}>
+        <h3 className="text-xl font-semibold text-slate-900">
+          {campus.title}
+        </h3>
 
-                {employee.position && (
-                  <p className="mt-1 text-sm text-slate-500">
-                    {employee.position}
+        <div className="mt-5 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {employees.map((employee) => (
+            <div
+              key={employee.id}
+              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+            >
+              <h4 className="text-lg font-semibold text-slate-900">
+                {employee.fullName}
+              </h4>
+
+              {employee.position && (
+                <p className="mt-1 text-sm text-slate-500">
+                  {employee.position}
+                </p>
+              )}
+
+              <div className="mt-4 space-y-2 text-sm text-slate-600">
+                {employee.phone && (
+                  <p>
+                    <strong className="text-slate-900">
+                      Tel.
+                    </strong>{" "}
+                    <a
+                      href={getPhoneHref(employee.phone)}
+                      className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
+                    >
+                      {employee.phone}
+                    </a>
                   </p>
                 )}
 
-                <div className="mt-4 space-y-2 text-sm text-slate-600">
-                  {employee.phone && (
-                    <p>
-                      <strong className="text-slate-900">
-                        Tel.
-                      </strong>{" "}
-                      <a
-                        href={getPhoneHref(
-                          employee.phone
-                        )}
-                        className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
-                      >
-                        {employee.phone}
-                      </a>
-                    </p>
-                  )}
-
-                  {employee.email && (
-                    <p>
-                      <strong className="text-slate-900">
-                        El. paštas:
-                      </strong>{" "}
-                      <a
-                        href={`mailto:${employee.email}`}
-                        className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
-                      >
-                        {employee.email}
-                      </a>
-                    </p>
-                  )}
-
-                  {employee.padaliniais &&
-                    employee.padaliniais.length > 0 && (
-                      <p>
-                        <strong className="text-slate-900">
-                          Padalinys:
-                        </strong>{" "}
-                        {employee.padaliniais
-                          .map(
-                            (campus) =>
-                              campus.title
-                          )
-                          .join(", ")}
-                      </p>
-                    )}
-                </div>
-
-                <Link
-                  href={`/apie/darbuotojai/${employee.slug}`}
-                  className="mt-5 inline-flex text-sm font-semibold text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
-                >
-                  Plačiau →
-                </Link>
+                {employee.email && (
+                  <p>
+                    <strong className="text-slate-900">
+                      El. paštas:
+                    </strong>{" "}
+                    <a
+                      href={`mailto:${employee.email}`}
+                      className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
+                    >
+                      {employee.email}
+                    </a>
+                  </p>
+                )}
               </div>
-            ))}
-          </div>
-        </section>
+
+              <Link
+                href={`/apie/darbuotojai/${employee.slug}`}
+                className="mt-5 flex w-fit text-sm font-semibold text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
+              >
+                Plačiau →
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+
+    {employeesWithoutCampus.length > 0 && (
+      <div>
+        <h3 className="text-xl font-semibold text-slate-900">
+          Kiti darbuotojai
+        </h3>
+
+        <div className="mt-5 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {employeesWithoutCampus.map((employee) => (
+            <div
+              key={employee.id}
+              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+            >
+              <h4 className="text-lg font-semibold text-slate-900">
+                {employee.fullName}
+              </h4>
+
+              {employee.position && (
+                <p className="mt-1 text-sm text-slate-500">
+                  {employee.position}
+                </p>
+              )}
+
+              <div className="mt-4 space-y-2 text-sm text-slate-600">
+                {employee.phone && (
+                  <p>
+                    <strong className="text-slate-900">
+                      Tel.
+                    </strong>{" "}
+                    <a
+                      href={getPhoneHref(employee.phone)}
+                      className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
+                    >
+                      {employee.phone}
+                    </a>
+                  </p>
+                )}
+
+                {employee.email && (
+                  <p>
+                    <strong className="text-slate-900">
+                      El. paštas:
+                    </strong>{" "}
+                    <a
+                      href={`mailto:${employee.email}`}
+                      className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
+                    >
+                      {employee.email}
+                    </a>
+                  </p>
+                )}
+              </div>
+
+              <Link
+                href={`/apie/darbuotojai/${employee.slug}`}
+                className="mt-5 flex w-fit text-sm font-semibold text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
+              >
+                Plačiau →
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</section>
       </main>
 
       <Footer />

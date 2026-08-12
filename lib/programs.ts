@@ -21,6 +21,7 @@ export type Program = {
   targetAudience?: string;
   active?: boolean;
   order?: number;
+  showOnHomepage?: boolean;
   image?: {
   url: string;
   alternativeText?: string | null;

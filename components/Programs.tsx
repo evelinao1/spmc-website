@@ -7,6 +7,10 @@ import { colors } from "@/lib/theme";
 export async function Programs() {
   const programs = await getPrograms();
 
+  const featuredPrograms = programs
+    .filter((program) => program.showOnHomepage)
+    .slice(0, 4);
+
   return (
     <section className="bg-white py-20">
       <div className="mx-auto max-w-7xl px-6">
@@ -29,17 +33,18 @@ export async function Programs() {
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {programs.slice(0, 4).map((program) => (
-            <ProgramCard key={program.id} program={program} />
+          {featuredPrograms.map((program) => (
+            <ProgramCard
+              key={program.id}
+              program={program}
+            />
           ))}
         </div>
 
         <div className="mt-10">
-          <div className="mt-10">
-  <PrimaryButton href="/programos">
-  Peržiūrėti visas programas
-</PrimaryButton>
-</div>
+          <PrimaryButton href="/programos">
+            Peržiūrėti visas programas
+          </PrimaryButton>
         </div>
       </div>
     </section>
