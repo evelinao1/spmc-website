@@ -1,4 +1,7 @@
+"use client";
+
 import { ReactNode } from "react";
+import { colors } from "@/lib/theme";
 
 type InfoCardProps = {
   title: string;
@@ -7,8 +10,27 @@ type InfoCardProps = {
 
 export function InfoCard({ title, children }: InfoCardProps) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 transition hover:shadow-md">
-      <h3 className="text-xl font-semibold text-slate-900">
+    <div
+      className="rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+      onMouseEnter={(event) => {
+        const title = event.currentTarget.querySelector("h3");
+
+        if (title) {
+          title.style.color = colors.primary;
+        }
+      }}
+      onMouseLeave={(event) => {
+        const title = event.currentTarget.querySelector("h3");
+
+        if (title) {
+          title.style.color = colors.text;
+        }
+      }}
+    >
+      <h3
+        className="text-xl font-semibold transition-colors duration-200"
+        style={{ color: colors.text }}
+      >
         {title}
       </h3>
 

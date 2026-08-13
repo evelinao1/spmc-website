@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
 
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { StrapiBlocks } from "@/components/StrapiBlocks";
 import { AttachmentsList } from "@/components/AttachmentsList";
+import { DocumentSections } from "@/components/DocumentSections";
 
 import { fetchFromStrapi } from "@/lib/strapi";
 
@@ -19,6 +21,7 @@ const breadcrumbLabels: Record<string, string> = {
   mokiniams: "Mokiniams",
   stojantiesiems: "Stojantiesiems",
   "itraukusis-ugdymas": "Įtraukusis ugdymas",
+  "korupcijos-prevencija": "Korupcijos prevencija",
 };
 
 function formatBreadcrumbLabel(segment: string) {
@@ -37,7 +40,7 @@ export async function StrapiPage({
   label,
 }: StrapiPageProps) {
   const data = await fetchFromStrapi(
-    `/pages?filters[path][$eq]=${path}&filters[active][$eq]=true&populate=attachments`
+    `/pages?filters[path][$eq]=${path}&filters[active][$eq]=true&populate[attachments]=true&populate[documentSections][populate][attachments]=true`
   );
 
   const page = data?.data?.[0];
@@ -71,24 +74,32 @@ export async function StrapiPage({
   ];
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
+      <Header />
+
       <PageHero
         label={label || page.section || ""}
         title={page.title}
         description={page.excerpt || ""}
       />
 
-      <main className="mx-auto max-w-4xl px-6 pb-16 pt-6">
+      <main className="mx-auto w-full max-w-4xl flex-1 px-6 pb-16 pt-6">
         <Breadcrumb items={breadcrumbItems} />
 
         <div className="mt-10">
           <StrapiBlocks content={page.content} />
 
-          <AttachmentsList attachments={page.attachments} />
+          <DocumentSections
+            sections={page.documentSections}
+          />
+
+          <AttachmentsList
+            attachments={page.attachments}
+          />
         </div>
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

@@ -50,14 +50,8 @@ const aboutItems = [
   {
     title: "Korupcijos prevencija",
     description:
-      "Korupcijos prevencijos dokumentai ir atsakinga informacija.",
+      "Korupcijos prevencija, pranešėjų apsauga, interesų konfliktų valdymas ir kita skaidrumo informacija.",
     href: "/apie/korupcijos-prevencija",
-  },
-  {
-    title: "Pranešėjo apsauga",
-    description:
-      "Informacija apie pranešėjų apsaugą ir vidinius pranešimų kanalus.",
-    href: "/apie/pranesejo-apsauga",
   },
   {
     title: "Vidaus kontrolė",
