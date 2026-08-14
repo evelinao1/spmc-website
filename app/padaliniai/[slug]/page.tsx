@@ -9,6 +9,8 @@ import { PageHero } from "@/components/PageHero";
 import { RichText, type StrapiBlock } from "@/components/RichText";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { SchemaJsonLd } from "@/components/SchemaJsonLd";
+import { CampusEmployees } from "@/components/CampusEmployees";
+import { CampusPrograms } from "@/components/CampusPrograms";
 
 import { fetchFromStrapi } from "@/lib/strapi";
 import { createMetadata } from "@/lib/seo";
@@ -219,7 +221,7 @@ export default async function CampusPage({
 
           <Link
             href="/padaliniai"
-            className="mb-8 inline-flex text-sm font-medium text-blue-700 transition hover:text-blue-900"
+            className="mb-8 inline-flex text-sm font-medium text-[#154280] transition hover:text-[#10376B]"
           >
             ← Visi padaliniai
           </Link>
@@ -263,7 +265,7 @@ export default async function CampusPage({
                       href={mapsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-2 inline-flex text-sm font-medium text-blue-700 hover:underline"
+                      className="mt-2 inline-flex text-sm font-medium text-[#154280] transition hover:text-[#10376B] hover:underline"
                     >
                       Rodyti žemėlapyje
                     </a>
@@ -282,7 +284,7 @@ export default async function CampusPage({
                       /\s+/g,
                       ""
                     )}`}
-                    className="text-sm text-blue-700 hover:underline"
+                    className="text-sm text-[#154280] transition hover:text-[#10376B] hover:underline"
                   >
                     {campus.phone}
                   </a>
@@ -297,7 +299,7 @@ export default async function CampusPage({
 
                   <a
                     href={`mailto:${campus.email}`}
-                    className="text-sm text-blue-700 hover:underline"
+                    className="text-sm text-[#154280] transition hover:text-[#10376B] hover:underline"
                   >
                     {campus.email}
                   </a>
@@ -313,129 +315,21 @@ export default async function CampusPage({
 
           {campus.programos &&
             campus.programos.length > 0 && (
-              <section className="mt-14">
-                <h2 className="mb-6 text-2xl font-bold text-slate-900">
-                  Šiame padalinyje vykdomos programos (
-                  {campus.programos.length})
-                </h2>
-
-                <div className="grid gap-5 md:grid-cols-2">
-                  {campus.programos.map((program) => {
-                    const programImageUrl =
-                      getMediaUrl(program.image?.url);
-
-                    return (
-                      <Link
-                        key={program.id}
-                        href={`/programos/${program.slug}`}
-                        className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-                      >
-                        {programImageUrl && (
-                          <div className="relative h-44 w-full">
-                            <Image
-                              src={programImageUrl}
-                              alt={
-                                program.image
-                                  ?.alternativeText ||
-                                program.title
-                              }
-                              fill
-                              sizes="(max-width: 768px) 100vw, 50vw"
-                              className="object-cover"
-                            />
-                          </div>
-                        )}
-
-                        <div className="p-5">
-                          <h3 className="text-lg font-bold text-slate-900">
-                            {program.title}
-                          </h3>
-
-                          {program.shortDescription && (
-                            <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-600">
-                              {
-                                program.shortDescription
-                              }
-                            </p>
-                          )}
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </section>
+              <CampusPrograms
+                programs={campus.programos}
+                strapiUrl={
+                  process.env.NEXT_PUBLIC_STRAPI_URL
+                }
+              />
             )}
 
           {activeEmployees.length > 0 && (
-            <section className="mt-14">
-              <h2 className="mb-6 text-2xl font-bold text-slate-900">
-                Padalinio darbuotojai (
-                {activeEmployees.length})
-              </h2>
-
-              <div className="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white">
-                {activeEmployees.map((employee) => {
-                  const employeePhotoUrl =
-                    getMediaUrl(employee.photo?.url);
-
-                  return (
-                    <Link
-                      key={employee.id}
-                      href={`/apie/darbuotojai/${employee.slug}`}
-                      className="flex items-center gap-5 p-5 transition hover:bg-slate-50"
-                    >
-                      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full bg-slate-100">
-                        {employeePhotoUrl ? (
-                          <Image
-                            src={employeePhotoUrl}
-                            alt={
-                              employee.photo
-                                ?.alternativeText ||
-                              employee.fullName
-                            }
-                            fill
-                            sizes="64px"
-                            className="object-cover"
-                          />
-                        ) : (
-                          <div className="flex h-full items-center justify-center text-xl font-bold text-slate-400">
-                            {employee.fullName.charAt(0)}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="min-w-0 flex-1">
-                        <h3 className="font-semibold text-slate-900">
-                          {employee.fullName}
-                        </h3>
-
-                        {employee.position && (
-                          <p className="mt-1 text-sm text-slate-600">
-                            {employee.position}
-                          </p>
-                        )}
-
-                        {employee.category && (
-                          <p className="mt-1 text-sm font-medium text-blue-700">
-                            {employee.category}
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="hidden text-right text-sm text-slate-600 md:block">
-                        {employee.email && (
-                          <p>{employee.email}</p>
-                        )}
-
-                        {employee.phone && (
-                          <p>{employee.phone}</p>
-                        )}
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </section>
+            <CampusEmployees
+              employees={activeEmployees}
+              strapiUrl={
+                process.env.NEXT_PUBLIC_STRAPI_URL
+              }
+            />
           )}
 
           {campus.gallery &&
