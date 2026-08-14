@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+
 import { getSiteUrl } from "@/lib/seo";
 import { fetchFromStrapi } from "@/lib/strapi";
 
@@ -15,6 +16,8 @@ type StrapiCollectionResponse = {
   data?: SitemapItem[];
 };
 
+type SitemapField = "slug" | "path";
+
 function normalizePath(path: string): string {
   const trimmedPath = path.trim();
 
@@ -22,7 +25,9 @@ function normalizePath(path: string): string {
     return "/";
   }
 
-  return trimmedPath.startsWith("/") ? trimmedPath : `/${trimmedPath}`;
+  return trimmedPath.startsWith("/")
+    ? trimmedPath
+    : `/${trimmedPath}`;
 }
 
 function getLastModified(item: SitemapItem): Date {
@@ -34,20 +39,39 @@ function getLastModified(item: SitemapItem): Date {
 
   const parsedDate = new Date(date);
 
-  return Number.isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
+  return Number.isNaN(parsedDate.getTime())
+    ? new Date()
+    : parsedDate;
 }
 
 async function fetchCollection(
-  endpoint: string
+  endpoint: string,
+  fields: SitemapField[]
 ): Promise<SitemapItem[]> {
   try {
+    const queryFields = [
+      ...fields,
+      "updatedAt",
+      "publishedAt",
+    ]
+      .map(
+        (field, index) =>
+          `fields[${index}]=${encodeURIComponent(field)}`
+      )
+      .join("&");
+
     const response = (await fetchFromStrapi(
-      `${endpoint}?pagination[pageSize]=1000&fields[0]=slug&fields[1]=path&fields[2]=updatedAt&fields[3]=publishedAt`
+      `${endpoint}?pagination[pageSize]=100&${queryFields}`
     )) as StrapiCollectionResponse;
 
-    return Array.isArray(response?.data) ? response.data : [];
+    return Array.isArray(response?.data)
+      ? response.data
+      : [];
   } catch (error) {
-    console.error(`Nepavyko gauti sitemap duomenų iš ${endpoint}:`, error);
+    console.error(
+      `Nepavyko gauti sitemap duomenų iš ${endpoint}:`,
+      error
+    );
 
     return [];
   }
@@ -128,13 +152,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     campuses,
     employees,
   ] = await Promise.all([
-    fetchCollection("/pages"),
-    fetchCollection("/news"),
-    fetchCollection("/announcements"),
-    fetchCollection("/projects"),
-    fetchCollection("/programs"),
-    fetchCollection("/campuses"),
-    fetchCollection("/employees"),
+    fetchCollection("/pages", ["path"]),
+    fetchCollection("/news", ["slug"]),
+    fetchCollection("/announcements", ["slug"]),
+    fetchCollection("/projects", ["slug"]),
+    fetchCollection("/programs", ["slug"]),
+    fetchCollection("/campuses", ["slug"]),
+    fetchCollection("/employees", ["slug"]),
   ]);
 
   const pageRoutes: MetadataRoute.Sitemap = pages
@@ -155,14 +179,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }));
 
-  const announcementRoutes: MetadataRoute.Sitemap = announcements
-    .filter((item) => item.slug)
-    .map((item) => ({
-      url: `${siteUrl}/skelbimai/${item.slug}`,
-      lastModified: getLastModified(item),
-      changeFrequency: "weekly",
-      priority: 0.7,
-    }));
+  const announcementRoutes: MetadataRoute.Sitemap =
+    announcements
+      .filter((item) => item.slug)
+      .map((item) => ({
+        url: `${siteUrl}/skelbimai/${item.slug}`,
+        lastModified: getLastModified(item),
+        changeFrequency: "weekly",
+        priority: 0.7,
+      }));
 
   const projectRoutes: MetadataRoute.Sitemap = projects
     .filter((item) => item.slug)
