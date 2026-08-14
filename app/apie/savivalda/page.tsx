@@ -1,12 +1,14 @@
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { InfoCard } from "@/components/InfoCard";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import Link from "next/link";
 
 export default function SavivaldaPage() {
   return (
     <>
+      <Header />
+
       <PageHero
         label="Apie centrą"
         title="Savivalda"
@@ -23,59 +25,47 @@ export default function SavivaldaPage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <Link
+          <InfoCard
+            title="Įstaigos taryba (kolegialus valdymo organas)"
             href="/apie/savivalda/istaigos-taryba-kolegialus-valdymo-organas"
-            className="block"
           >
-            <InfoCard title="Įstaigos taryba (kolegialus valdymo organas)">
-              Informacija apie kolegialų valdymo organą, jo sudėtį ir veiklą.
-            </InfoCard>
-          </Link>
+            Informacija apie kolegialų valdymo organą, jo sudėtį ir veiklą.
+          </InfoCard>
 
-          <Link
+          <InfoCard
+            title="Įstaigos taryba (savivaldos institucija)"
             href="/apie/savivalda/istaigos-taryba-savivaldos-institucija"
-            className="block"
           >
-            <InfoCard title="Įstaigos taryba (savivaldos institucija)">
-              Informacija apie savivaldos instituciją ir jos funkcijas.
-            </InfoCard>
-          </Link>
+            Informacija apie savivaldos instituciją ir jos funkcijas.
+          </InfoCard>
 
-          <Link
+          <InfoCard
+            title="Darbo taryba"
             href="/apie/savivalda/darbo-taryba"
-            className="block"
           >
-            <InfoCard title="Darbo taryba">
-              Darbo tarybos sudėtis, veikla ir aktuali informacija darbuotojams.
-            </InfoCard>
-          </Link>
+            Darbo tarybos sudėtis, veikla ir aktuali informacija darbuotojams.
+          </InfoCard>
 
-          <Link
+          <InfoCard
+            title="Bendrojo ugdymo dalykų metodinė grupė"
             href="/apie/savivalda/bendrojo-ugdymo-dalyku-metodine-grupe"
-            className="block"
           >
-            <InfoCard title="Bendrojo ugdymo dalykų metodinė grupė">
-              Informacija apie metodinės grupės veiklą ir tikslus.
-            </InfoCard>
-          </Link>
+            Informacija apie metodinės grupės veiklą ir tikslus.
+          </InfoCard>
 
-          <Link
+          <InfoCard
+            title="Specialybės dalykų metodinė grupė"
             href="/apie/savivalda/specialybes-dalyku-metodine-grupe"
-            className="block"
           >
-            <InfoCard title="Specialybės dalykų metodinė grupė">
-              Informacija apie profesinio mokymo metodinę veiklą.
-            </InfoCard>
-          </Link>
+            Informacija apie profesinio mokymo metodinę veiklą.
+          </InfoCard>
 
-          <Link
+          <InfoCard
+            title="Mokinių taryba"
             href="/apie/savivalda/mokiniu-taryba"
-            className="block"
           >
-            <InfoCard title="Mokinių taryba">
-              Mokinių savivaldos veikla, iniciatyvos ir atstovavimas mokiniams.
-            </InfoCard>
-          </Link>
+            Mokinių savivaldos veikla, iniciatyvos ir atstovavimas mokiniams.
+          </InfoCard>
         </div>
       </main>
 

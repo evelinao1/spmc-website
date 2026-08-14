@@ -1,17 +1,23 @@
 "use client";
 
+import Link from "next/link";
 import { ReactNode } from "react";
 import { colors } from "@/lib/theme";
 
 type InfoCardProps = {
   title: string;
   children: ReactNode;
+  href?: string;
 };
 
-export function InfoCard({ title, children }: InfoCardProps) {
-  return (
+export function InfoCard({
+  title,
+  children,
+  href,
+}: InfoCardProps) {
+  const card = (
     <div
-      className="rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+      className="h-full rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
       onMouseEnter={(event) => {
         const title = event.currentTarget.querySelector("h3");
 
@@ -39,4 +45,14 @@ export function InfoCard({ title, children }: InfoCardProps) {
       </div>
     </div>
   );
+
+  if (href) {
+    return (
+      <Link href={href} className="block h-full">
+        {card}
+      </Link>
+    );
+  }
+
+  return card;
 }

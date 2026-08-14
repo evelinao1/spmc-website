@@ -1,12 +1,14 @@
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { InfoCard } from "@/components/InfoCard";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import Link from "next/link";
 
 export default function KompetencijuVertinimoCentrasPage() {
   return (
     <>
+      <Header />
+
       <PageHero
         label="Apie centrą"
         title="Kompetencijų vertinimo centras"
@@ -23,33 +25,27 @@ export default function KompetencijuVertinimoCentrasPage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          <Link
+          <InfoCard
+            title="Apie centrą"
             href="/apie/kompetenciju-vertinimo-centras/apie-centra"
-            className="block"
           >
-            <InfoCard title="Apie centrą">
-              Centro funkcijos, pasitelktos įstaigos, kontaktinė informacija.
-            </InfoCard>
-          </Link>
+            Centro funkcijos, pasitelktos įstaigos, kontaktinė informacija.
+          </InfoCard>
 
-          <Link
+          <InfoCard
+            title="Registracija"
             href="/apie/kompetenciju-vertinimo-centras/registracija"
-            className="block"
           >
-            <InfoCard title="Registracija">
-              Čia bus pateikiama registracijos tvarka, terminai ir kontaktinė
-              informacija.
-            </InfoCard>
-          </Link>
+            Čia bus pateikiama registracijos tvarka, terminai ir kontaktinė
+            informacija.
+          </InfoCard>
 
-          <Link
+          <InfoCard
+            title="Tvarkaraščiai"
             href="/apie/kompetenciju-vertinimo-centras/tvarkarasciai"
-            className="block"
           >
-            <InfoCard title="Tvarkaraščiai">
-              Čia bus skelbiami kompetencijų vertinimo tvarkaraščiai.
-            </InfoCard>
-          </Link>
+            Čia bus skelbiami kompetencijų vertinimo tvarkaraščiai.
+          </InfoCard>
         </div>
       </main>
 

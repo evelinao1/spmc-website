@@ -3,7 +3,6 @@ import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { InfoCard } from "@/components/InfoCard";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import Link from "next/link";
 
 export default function ItraukusisUgdymasPage() {
   return (
@@ -25,45 +24,36 @@ export default function ItraukusisUgdymasPage() {
           />
 
           <div className="mt-10 grid gap-6 md:grid-cols-2">
-            <Link
+            <InfoCard
+              title="Profesijos"
               href="/itraukusis-ugdymas/profesijos"
-              className="block"
             >
-              <InfoCard title="Profesijos">
-                Informacija apie profesinio mokymo galimybes specialiųjų
-                ugdymosi poreikių turintiems mokiniams.
-              </InfoCard>
-            </Link>
+              Informacija apie profesinio mokymo galimybes specialiųjų
+              ugdymosi poreikių turintiems mokiniams.
+            </InfoCard>
 
-            <Link
+            <InfoCard
+              title="Nemokamas maitinimas"
               href="/itraukusis-ugdymas/nemokamas-maitinimas"
-              className="block"
             >
-              <InfoCard title="Nemokamas maitinimas">
-                Informacija apie mokinių maitinimo organizavimą ir paramos
-                galimybes.
-              </InfoCard>
-            </Link>
+              Informacija apie mokinių maitinimo organizavimą ir paramos
+              galimybes.
+            </InfoCard>
 
-            <Link
+            <InfoCard
+              title="Dokumentai"
               href="/itraukusis-ugdymas/dokumentai"
-              className="block"
             >
-              <InfoCard title="Dokumentai">
-                Čia bus skelbiami su įtraukiuoju ugdymu susiję dokumentai ir
-                tvarkos aprašai.
-              </InfoCard>
-            </Link>
+              Čia bus skelbiami su įtraukiuoju ugdymu susiję dokumentai ir
+              tvarkos aprašai.
+            </InfoCard>
 
-            <Link
+            <InfoCard
+              title="Socialinių įgūdžių ugdymas"
               href="/itraukusis-ugdymas/socialiniu-igudziu-ugdymas"
-              className="block"
             >
-              <InfoCard title="Socialinių įgūdžių ugdymas">
-                Informacija apie socialinių įgūdžių ugdymo veiklas ir
-                programas.
-              </InfoCard>
-            </Link>
+              Informacija apie socialinių įgūdžių ugdymo veiklas ir programas.
+            </InfoCard>
           </div>
         </section>
       </main>

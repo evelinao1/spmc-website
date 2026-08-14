@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
   FaFacebookF,
   FaInstagram,
@@ -44,6 +43,58 @@ function getMapsHref(address: string) {
   )}`;
 }
 
+type EmployeeContactCardProps = {
+  employee: Awaited<ReturnType<typeof getContactEmployees>>[number];
+};
+
+function EmployeeContactCard({
+  employee,
+}: EmployeeContactCardProps) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h4 className="text-lg font-semibold text-slate-900">
+        {employee.fullName}
+      </h4>
+
+      {employee.position && (
+        <p className="mt-1 text-sm text-slate-500">
+          {employee.position}
+        </p>
+      )}
+
+      <div className="mt-4 space-y-2 text-sm text-slate-600">
+        {employee.phone && (
+          <p>
+            <strong className="text-slate-900">
+              Tel.
+            </strong>{" "}
+            <a
+              href={getPhoneHref(employee.phone)}
+              className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
+            >
+              {employee.phone}
+            </a>
+          </p>
+        )}
+
+        {employee.email && (
+          <p>
+            <strong className="text-slate-900">
+              El. paštas:
+            </strong>{" "}
+            <a
+              href={`mailto:${employee.email}`}
+              className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
+            >
+              {employee.email}
+            </a>
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default async function KontaktaiPage() {
   const [contact, campuses, employees] = await Promise.all([
     getContact(),
@@ -52,22 +103,22 @@ export default async function KontaktaiPage() {
   ]);
 
   const employeeGroups = campuses
-  .map((campus) => ({
-    campus,
-    employees: employees.filter((employee) =>
-      employee.padaliniais?.some(
-        (employeeCampus) => employeeCampus.id === campus.id
-      )
-    ),
-  }))
-  .filter((group) => group.employees.length > 0);
+    .map((campus) => ({
+      campus,
+      employees: employees.filter((employee) =>
+        employee.padaliniais?.some(
+          (employeeCampus) => employeeCampus.id === campus.id
+        )
+      ),
+    }))
+    .filter((group) => group.employees.length > 0);
 
   const employeesWithoutCampus = employees.filter(
     (employee) =>
       !employee.padaliniais ||
       employee.padaliniais.length === 0
   );
-  
+
   const breadcrumbJsonLd = createBreadcrumbJsonLd([
     {
       label: "Pradžia",
@@ -187,9 +238,7 @@ export default async function KontaktaiPage() {
                   </strong>
 
                   <div className="mt-2 [&>div]:space-y-1 [&_p]:leading-6">
-                    <RichText
-                      blocks={contact.workingHours}
-                    />
+                    <RichText blocks={contact.workingHours} />
                   </div>
                 </div>
               )}
@@ -360,9 +409,7 @@ export default async function KontaktaiPage() {
                         Adresas:
                       </strong>{" "}
                       <a
-                        href={getMapsHref(
-                          campus.address
-                        )}
+                        href={getMapsHref(campus.address)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
@@ -378,9 +425,7 @@ export default async function KontaktaiPage() {
                         Tel.
                       </strong>{" "}
                       <a
-                        href={getPhoneHref(
-                          campus.phone
-                        )}
+                        href={getPhoneHref(campus.phone)}
                         className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
                       >
                         {campus.phone}
@@ -402,154 +447,53 @@ export default async function KontaktaiPage() {
                     </p>
                   )}
                 </div>
-
-                <Link
-                  href={`/padaliniai/${campus.slug}`}
-                  className="mt-5 flex w-fit text-sm font-semibold text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
-                >
-                  Plačiau apie padalinį →
-                </Link>
               </div>
             ))}
           </div>
         </section>
 
         {/* Darbuotojai */}
-<section className="mt-16">
-  <h2 className="text-2xl font-bold text-slate-900">
-    Administracija ir specialistai
-  </h2>
+        <section className="mt-16">
+          <h2 className="text-2xl font-bold text-slate-900">
+            Administracija ir specialistai
+          </h2>
 
-  <div className="mt-8 space-y-12">
-    {employeeGroups.map(({ campus, employees }) => (
-      <div key={campus.id}>
-        <h3 className="text-xl font-semibold text-slate-900">
-          {campus.title}
-        </h3>
+          <div className="mt-8 space-y-12">
+            {employeeGroups.map(({ campus, employees }) => (
+              <div key={campus.id}>
+                <h3 className="text-xl font-semibold text-slate-900">
+                  {campus.title}
+                </h3>
 
-        <div className="mt-5 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {employees.map((employee) => (
-            <div
-              key={employee.id}
-              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-            >
-              <h4 className="text-lg font-semibold text-slate-900">
-                {employee.fullName}
-              </h4>
-
-              {employee.position && (
-                <p className="mt-1 text-sm text-slate-500">
-                  {employee.position}
-                </p>
-              )}
-
-              <div className="mt-4 space-y-2 text-sm text-slate-600">
-                {employee.phone && (
-                  <p>
-                    <strong className="text-slate-900">
-                      Tel.
-                    </strong>{" "}
-                    <a
-                      href={getPhoneHref(employee.phone)}
-                      className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
-                    >
-                      {employee.phone}
-                    </a>
-                  </p>
-                )}
-
-                {employee.email && (
-                  <p>
-                    <strong className="text-slate-900">
-                      El. paštas:
-                    </strong>{" "}
-                    <a
-                      href={`mailto:${employee.email}`}
-                      className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
-                    >
-                      {employee.email}
-                    </a>
-                  </p>
-                )}
+                <div className="mt-5 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {employees.map((employee) => (
+                    <EmployeeContactCard
+                      key={employee.id}
+                      employee={employee}
+                    />
+                  ))}
+                </div>
               </div>
+            ))}
 
-              <Link
-                href={`/apie/darbuotojai/${employee.slug}`}
-                className="mt-5 flex w-fit text-sm font-semibold text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
-              >
-                Plačiau →
-              </Link>
-            </div>
-          ))}
-        </div>
-      </div>
-    ))}
+            {employeesWithoutCampus.length > 0 && (
+              <div>
+                <h3 className="text-xl font-semibold text-slate-900">
+                  Kiti darbuotojai
+                </h3>
 
-    {employeesWithoutCampus.length > 0 && (
-      <div>
-        <h3 className="text-xl font-semibold text-slate-900">
-          Kiti darbuotojai
-        </h3>
-
-        <div className="mt-5 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {employeesWithoutCampus.map((employee) => (
-            <div
-              key={employee.id}
-              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-            >
-              <h4 className="text-lg font-semibold text-slate-900">
-                {employee.fullName}
-              </h4>
-
-              {employee.position && (
-                <p className="mt-1 text-sm text-slate-500">
-                  {employee.position}
-                </p>
-              )}
-
-              <div className="mt-4 space-y-2 text-sm text-slate-600">
-                {employee.phone && (
-                  <p>
-                    <strong className="text-slate-900">
-                      Tel.
-                    </strong>{" "}
-                    <a
-                      href={getPhoneHref(employee.phone)}
-                      className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
-                    >
-                      {employee.phone}
-                    </a>
-                  </p>
-                )}
-
-                {employee.email && (
-                  <p>
-                    <strong className="text-slate-900">
-                      El. paštas:
-                    </strong>{" "}
-                    <a
-                      href={`mailto:${employee.email}`}
-                      className="text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
-                    >
-                      {employee.email}
-                    </a>
-                  </p>
-                )}
+                <div className="mt-5 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {employeesWithoutCampus.map((employee) => (
+                    <EmployeeContactCard
+                      key={employee.id}
+                      employee={employee}
+                    />
+                  ))}
+                </div>
               </div>
-
-              <Link
-                href={`/apie/darbuotojai/${employee.slug}`}
-                className="mt-5 flex w-fit text-sm font-semibold text-[#154280] transition-colors hover:text-[#10376B] hover:underline"
-              >
-                Plačiau →
-              </Link>
-            </div>
-          ))}
-        </div>
-      </div>
-    )}
-  </div>
-</section>
+            )}
+          </div>
+        </section>
       </main>
 
       <Footer />

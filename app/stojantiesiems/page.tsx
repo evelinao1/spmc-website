@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
-import Link from "next/link";
+import { InfoCard } from "@/components/InfoCard";
 import { PrimaryButton } from "@/components/PrimaryButton";
 
 export default function StojantiesiemsPage() {
@@ -17,48 +17,37 @@ export default function StojantiesiemsPage() {
 
       <main className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-6 md:grid-cols-3">
-          <Link
+          <InfoCard
+            title="Kaip pateikti prašymą?"
             href="/stojantiesiems/kaip-pateikti-prasyma"
-            className="group block rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
           >
-            <h2 className="text-xl font-semibold text-slate-900 transition-colors duration-200 group-hover:text-[#154280]">
-              Kaip pateikti prašymą?
-            </h2>
-
-            <p className="mt-3 text-slate-600">
+            <p>
               Sužinok, kaip pateikti prašymą mokytis ir kokie žingsniai laukia
               stojimo proceso metu.
             </p>
-          </Link>
+          </InfoCard>
 
-          <Link
+          <InfoCard
+            title="Priėmimo terminai"
             href="/stojantiesiems/priemimo-terminai"
-            className="group block rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
           >
-            <h2 className="text-xl font-semibold text-slate-900 transition-colors duration-200 group-hover:text-[#154280]">
-              Priėmimo terminai
-            </h2>
-
-            <p className="mt-3 text-slate-600">
+            <p>
               Svarbiausios datos ir informacija apie pagrindinį bei papildomą
               priėmimą.
             </p>
-          </Link>
+          </InfoCard>
 
-          <Link
+          <InfoCard
+            title="Reikalingi dokumentai"
             href="/stojantiesiems/reikalingi-dokumentai"
-            className="group block rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
           >
-            <h2 className="text-xl font-semibold text-slate-900 transition-colors duration-200 group-hover:text-[#154280]">
-              Reikalingi dokumentai
-            </h2>
-
-            <p className="mt-3 text-slate-600">
+            <p>
               Dokumentų sąrašas ir kita informacija, reikalinga stojant į
               profesinio mokymo programas.
             </p>
-          </Link>
+          </InfoCard>
         </div>
+
         <div className="mt-12 rounded-3xl bg-slate-50 p-8 text-center">
           <h2 className="text-2xl font-bold text-slate-900">
             Pasiruošęs tapti ŠPMC bendruomenės dalimi?

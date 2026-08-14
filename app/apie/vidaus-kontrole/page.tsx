@@ -1,12 +1,14 @@
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { InfoCard } from "@/components/InfoCard";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import Link from "next/link";
 
 export default function VidausKontrolePage() {
   return (
     <>
+      <Header />
+
       <PageHero
         label="Apie centrą"
         title="Vidaus kontrolė"
@@ -23,23 +25,19 @@ export default function VidausKontrolePage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <Link
+          <InfoCard
+            title="Vidaus kontrolės politika"
             href="/apie/vidaus-kontrole/vidaus-kontroles-politika"
-            className="block"
           >
-            <InfoCard title="Vidaus kontrolės politika">
-              Vidaus kontrolės tikslai, principai ir pagrindinės nuostatos.
-            </InfoCard>
-          </Link>
+            Vidaus kontrolės tikslai, principai ir pagrindinės nuostatos.
+          </InfoCard>
 
-          <Link
+          <InfoCard
+            title="Dokumentai"
             href="/apie/vidaus-kontrole/vidaus-kontroles-dokumentai"
-            className="block"
           >
-            <InfoCard title="Dokumentai">
-              Vidaus kontrolės tvarkos, aprašai ir kita susijusi dokumentacija.
-            </InfoCard>
-          </Link>
+            Vidaus kontrolės tvarkos, aprašai ir kita susijusi dokumentacija.
+          </InfoCard>
         </div>
       </main>
 

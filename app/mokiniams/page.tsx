@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
@@ -67,9 +66,13 @@ export default function MokiniamsPage() {
       <main className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-6 md:grid-cols-2">
           {studentLinks.map((item) => (
-            <Link key={item.title} href={item.href} className="block">
-              <InfoCard title={item.title}>{item.description}</InfoCard>
-            </Link>
+            <InfoCard
+              key={item.title}
+              title={item.title}
+              href={item.href}
+            >
+              {item.description}
+            </InfoCard>
           ))}
         </div>
       </main>

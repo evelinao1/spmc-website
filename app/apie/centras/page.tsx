@@ -1,12 +1,14 @@
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { InfoCard } from "@/components/InfoCard";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import Link from "next/link";
 
 export default function CentrasPage() {
   return (
     <>
+      <Header />
+
       <PageHero
         label="Apie centrą"
         title="Šilutės profesinio mokymo centras"
@@ -23,36 +25,29 @@ export default function CentrasPage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          <Link
+          <InfoCard
+            title="Centro pristatymas"
             href="/apie/centras/centro-pristatymas"
-            className="block"
           >
-            <InfoCard title="Centro pristatymas">
-              Šilutės profesinio mokymo centras rengia specialistus,
-              pasirengusius šiuolaikinei darbo rinkai.
-            </InfoCard>
-          </Link>
+            Šilutės profesinio mokymo centras rengia specialistus,
+            pasirengusius šiuolaikinei darbo rinkai.
+          </InfoCard>
 
-          <Link
+          <InfoCard
+            title="Istorija"
             href="/apie/centras/istorija"
-            className="block"
           >
-            <InfoCard title="Istorija">
-              Čia bus pateikiama centro istorija, svarbiausi veiklos
-              etapai ir pokyčiai.
-            </InfoCard>
-          </Link>
+            Čia bus pateikiama centro istorija, svarbiausi veiklos etapai ir
+            pokyčiai.
+          </InfoCard>
 
-          <Link
+          <InfoCard
+            title="Misija ir vizija"
             href="/apie/centras/misija-ir-vizija"
-            className="block"
           >
-            <InfoCard title="Misija ir vizija">
-              Siekiame užtikrinti kokybišką profesinį mokymą, ugdyti
-              atsakingą ir kūrybingą asmenybę bei stiprinti ryšį su
-              darbo rinka.
-            </InfoCard>
-          </Link>
+            Siekiame užtikrinti kokybišką profesinį mokymą, ugdyti atsakingą ir
+            kūrybingą asmenybę bei stiprinti ryšį su darbo rinka.
+          </InfoCard>
         </div>
       </main>
 

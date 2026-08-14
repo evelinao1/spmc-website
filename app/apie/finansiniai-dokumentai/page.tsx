@@ -1,12 +1,14 @@
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { InfoCard } from "@/components/InfoCard";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import Link from "next/link";
 
 export default function FinansiniaiDokumentaiPage() {
   return (
     <>
+      <Header />
+
       <PageHero
         label="Apie centrą"
         title="Finansiniai dokumentai"
@@ -23,23 +25,19 @@ export default function FinansiniaiDokumentaiPage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <Link
+          <InfoCard
+            title="Biudžeto vykdymo ataskaitų rinkiniai"
             href="/apie/finansiniai-dokumentai/biudzeto-vykdymo-ataskaitu-rinkiniai"
-            className="block"
           >
-            <InfoCard title="Biudžeto vykdymo ataskaitų rinkiniai">
-              Biudžeto vykdymo ataskaitų rinkiniai ir susijusi informacija.
-            </InfoCard>
-          </Link>
+            Biudžeto vykdymo ataskaitų rinkiniai ir susijusi informacija.
+          </InfoCard>
 
-          <Link
+          <InfoCard
+            title="Finansinių ataskaitų rinkiniai"
             href="/apie/finansiniai-dokumentai/finansiniu-ataskaitu-rinkiniai"
-            className="block"
           >
-            <InfoCard title="Finansinių ataskaitų rinkiniai">
-              Finansinių ataskaitų rinkiniai ir kita finansinė dokumentacija.
-            </InfoCard>
-          </Link>
+            Finansinių ataskaitų rinkiniai ir kita finansinė dokumentacija.
+          </InfoCard>
         </div>
       </main>
 

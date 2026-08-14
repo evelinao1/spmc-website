@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
@@ -8,17 +7,20 @@ const libraryLinks = [
   {
     title: "Privaloma literatūra",
     href: "/mokiniams/biblioteka/privaloma-literatura",
-    description: "Privalomos literatūros sąrašai ir mokiniams aktuali informacija.",
+    description:
+      "Privalomos literatūros sąrašai ir mokiniams aktuali informacija.",
   },
   {
     title: "Vadovėliai",
     href: "/mokiniams/biblioteka/vadoveliai",
-    description: "Vadovėlių sąrašai ir informacija apie naujausius įsigytus vadovėlius.",
+    description:
+      "Vadovėlių sąrašai ir informacija apie naujausius įsigytus vadovėlius.",
   },
   {
     title: "Naudingos nuorodos",
     href: "/mokiniams/biblioteka/naudingos-nuorodos",
-    description: "Bibliotekos rekomenduojamos nuorodos mokiniams ir mokytojams.",
+    description:
+      "Bibliotekos rekomenduojamos nuorodos mokiniams ir mokytojams.",
   },
   {
     title: "Bibliotekos renginiai",
@@ -31,6 +33,7 @@ export default function BibliotekaPage() {
   return (
     <>
       <Header />
+
       <PageHero
         label="Mokiniams"
         title="Biblioteka"
@@ -40,9 +43,13 @@ export default function BibliotekaPage() {
       <main className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-6 md:grid-cols-2">
           {libraryLinks.map((item) => (
-            <Link key={item.title} href={item.href} className="block">
-              <InfoCard title={item.title}>{item.description}</InfoCard>
-            </Link>
+            <InfoCard
+              key={item.title}
+              title={item.title}
+              href={item.href}
+            >
+              {item.description}
+            </InfoCard>
           ))}
         </div>
       </main>

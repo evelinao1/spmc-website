@@ -1,8 +1,7 @@
-import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
-import { colors } from "@/lib/theme";
+import { InfoCard } from "@/components/InfoCard";
 
 const aboutItems = [
   {
@@ -75,26 +74,13 @@ export default function ApiePage() {
       <main className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {aboutItems.map((item) => (
-            <Link
+            <InfoCard
               key={item.title}
+              title={item.title}
               href={item.href}
-              className="rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-md"
             >
-              <h2 className="text-xl font-semibold text-slate-900">
-                {item.title}
-              </h2>
-
-              <p className="mt-3 text-slate-600">
-                {item.description}
-              </p>
-
-              <span
-                className="mt-2 block font-semibold"
-                style={{ color: colors.primary }}
-              >
-                Atverti →
-              </span>
-            </Link>
+              {item.description}
+            </InfoCard>
           ))}
         </div>
       </main>

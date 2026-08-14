@@ -1,12 +1,14 @@
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { InfoCard } from "@/components/InfoCard";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import Link from "next/link";
 
 export default function ViesiejiPirkimaiPage() {
   return (
     <>
+      <Header />
+
       <PageHero
         label="Apie centrą"
         title="Viešieji pirkimai"
@@ -23,23 +25,19 @@ export default function ViesiejiPirkimaiPage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <Link
+          <InfoCard
+            title="Viešųjų pirkimų planas"
             href="/apie/viesieji-pirkimai/viesuju-pirkimu-planas"
-            className="block"
           >
-            <InfoCard title="Viešųjų pirkimų planas">
-              Metiniai viešųjų pirkimų planai ir jų pakeitimai.
-            </InfoCard>
-          </Link>
+            Metiniai viešųjų pirkimų planai ir jų pakeitimai.
+          </InfoCard>
 
-          <Link
+          <InfoCard
+            title="Viešųjų pirkimų taisyklės"
             href="/apie/viesieji-pirkimai/viesuju-pirkimu-taisykles"
-            className="block"
           >
-            <InfoCard title="Viešųjų pirkimų taisyklės">
-              Centro viešųjų pirkimų organizavimo tvarkos ir taisyklės.
-            </InfoCard>
-          </Link>
+            Centro viešųjų pirkimų organizavimo tvarkos ir taisyklės.
+          </InfoCard>
         </div>
       </main>
 

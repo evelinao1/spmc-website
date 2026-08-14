@@ -1,8 +1,8 @@
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { InfoCard } from "@/components/InfoCard";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import Link from "next/link";
 
 const documentCategories = [
   {
@@ -40,6 +40,8 @@ const documentCategories = [
 export default function DokumentaiPage() {
   return (
     <>
+      <Header />
+
       <PageHero
         label="Apie centrą"
         title="Dokumentai"
@@ -57,15 +59,13 @@ export default function DokumentaiPage() {
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {documentCategories.map((category) => (
-            <Link
+            <InfoCard
               key={category.title}
+              title={category.title}
               href={category.href}
-              className="block"
             >
-              <InfoCard title={category.title}>
-                {category.items}
-              </InfoCard>
-            </Link>
+              {category.items}
+            </InfoCard>
           ))}
         </div>
       </main>

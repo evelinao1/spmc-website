@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
@@ -8,12 +7,14 @@ const examLinks = [
   {
     title: "Brandos egzaminai",
     href: "/mokiniams/egzaminai/brandos-egzaminai",
-    description: "Brandos egzaminų tvarkaraščiai, taisyklės ir kita svarbi informacija.",
+    description:
+      "Brandos egzaminų tvarkaraščiai, taisyklės ir kita svarbi informacija.",
   },
   {
     title: "Kompetencijų vertinimas",
     href: "/mokiniams/egzaminai/kompetenciju-vertinimas",
-    description: "Profesinio mokymo kompetencijų vertinimo informacija mokiniams.",
+    description:
+      "Profesinio mokymo kompetencijų vertinimo informacija mokiniams.",
   },
   {
     title: "PUPP",
@@ -26,6 +27,7 @@ export default function EgzaminaiPage() {
   return (
     <>
       <Header />
+
       <PageHero
         label="Mokiniams"
         title="Egzaminai"
@@ -35,9 +37,13 @@ export default function EgzaminaiPage() {
       <main className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-6 md:grid-cols-3">
           {examLinks.map((item) => (
-            <Link key={item.title} href={item.href} className="block">
-              <InfoCard title={item.title}>{item.description}</InfoCard>
-            </Link>
+            <InfoCard
+              key={item.title}
+              title={item.title}
+              href={item.href}
+            >
+              {item.description}
+            </InfoCard>
           ))}
         </div>
       </main>

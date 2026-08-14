@@ -1,9 +1,8 @@
-import Link from "next/link";
-
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { InfoCard } from "@/components/InfoCard";
 
 const sections = [
   {
@@ -72,19 +71,13 @@ export default function KorupcijosPrevencijaPage() {
 
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           {sections.map((section) => (
-            <Link
+            <InfoCard
               key={section.href}
+              title={section.title}
               href={section.href}
-              className="group rounded-2xl border border-slate-200 bg-white p-7 transition hover:-translate-y-1 hover:border-[#154280]/30 hover:shadow-md"
             >
-              <h2 className="text-2xl font-bold text-slate-950 transition group-hover:text-[#154280]">
-                {section.title}
-              </h2>
-
-              <p className="mt-3 leading-7 text-slate-600">
-                {section.description}
-              </p>
-            </Link>
+              {section.description}
+            </InfoCard>
           ))}
         </div>
       </main>
