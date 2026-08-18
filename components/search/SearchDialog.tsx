@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
+import { FiSearch } from "react-icons/fi";
 
 import { searchItems, type SearchItem } from "@/lib/search";
 import { SearchResultsList } from "@/components/search/SearchResultsList";
@@ -124,7 +125,7 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
         className="mx-auto w-full max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
       >
         <div className="flex items-center gap-3 border-b border-slate-200 px-5 py-4">
-          <span className="text-lg text-slate-400">🔍</span>
+          <FiSearch className="h-5 w-5 shrink-0 text-[#154280]" />
 
           <input
             type="search"
@@ -137,7 +138,7 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md border border-slate-200 px-2 py-1 text-xs font-medium text-slate-500 transition hover:bg-slate-50"
+            className="rounded-md border border-slate-200 px-2 py-1 text-xs font-medium text-slate-500 transition hover:border-[#154280]/30 hover:bg-slate-50 hover:text-[#154280]"
           >
             Esc
           </button>
@@ -156,7 +157,7 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                     key={item}
                     type="button"
                     onClick={() => setQuery(item)}
-                    className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
+                    className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-700 transition hover:border-[#154280]/30 hover:bg-[#154280]/5 hover:text-[#154280]"
                   >
                     {item}
                   </button>
@@ -171,16 +172,20 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
 
           {query.trim() && (
             <>
-              <SearchResultsList results={results} onResultClick={onClose} />
+              <SearchResultsList
+                results={results}
+                onResultClick={onClose}
+              />
 
               {results.length > 0 && (
                 <div className="mt-5 border-t border-slate-100 pt-4">
                   <button
                     type="button"
                     onClick={showAllResults}
-                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50"
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-[#154280] transition hover:border-[#154280]/30 hover:bg-[#154280]/5"
                   >
-                    🔎 Rodyti visus rezultatus
+                    <FiSearch className="h-4 w-4" />
+                    Rodyti visus rezultatus
                   </button>
                 </div>
               )}
