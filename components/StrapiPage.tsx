@@ -4,9 +4,9 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { StrapiBlocks } from "@/components/StrapiBlocks";
 import { AttachmentsList } from "@/components/AttachmentsList";
 import { DocumentSections } from "@/components/DocumentSections";
+import { CKEditorContent } from "@/components/CKEditorContent";
 
 import { fetchFromStrapi } from "@/lib/strapi";
 
@@ -87,7 +87,7 @@ export async function StrapiPage({
         <Breadcrumb items={breadcrumbItems} />
 
         <div className="mt-10">
-          <StrapiBlocks content={page.content} />
+          <CKEditorContent content={page.content} />
 
           <DocumentSections
             sections={page.documentSections}
