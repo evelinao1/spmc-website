@@ -10,6 +10,11 @@ const studentLinks = [
     description: "Pamokų, praktinio mokymo ir kitų veiklų tvarkaraščiai.",
   },
   {
+    title: "Pamokų laikas",
+    href: "/mokiniams/pamoku-laikas",
+    description: "Pamokų ir pertraukų pradžios bei pabaigos laikas.",
+  },
+  {
     title: "Stipendijos",
     href: "/mokiniams/stipendijos",
     description: "Informacija apie stipendijas, paramą ir skatinimo galimybes.",
