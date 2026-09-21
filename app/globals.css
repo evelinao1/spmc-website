@@ -32,3 +32,39 @@ body {
 .footer-link:hover {
   color: #7eb5e3;
 }
+/* Partnerių logotipai */
+
+.partners-scroll {
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+}
+
+.partners-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.partner-logo {
+  width: auto;
+  height: auto;
+
+  /* Melsvai pilkas atspalvis */
+  filter:
+    grayscale(1)
+    sepia(0.2)
+    saturate(1.4)
+    hue-rotate(175deg)
+    brightness(0.8);
+
+  opacity: 0.72;
+
+  transition:
+    filter 0.25s ease,
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.partner-logo:hover {
+  filter: none;
+  opacity: 1;
+  transform: scale(1.04);
+}
