@@ -31,7 +31,7 @@ const libraryLinks = [
 
 export default function BibliotekaPage() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
       <PageHero
@@ -40,7 +40,7 @@ export default function BibliotekaPage() {
         description="Bibliotekos informacija, literatūros sąrašai, vadovėliai ir renginiai."
       />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-16">
         <div className="grid gap-6 md:grid-cols-2">
           {libraryLinks.map((item) => (
             <InfoCard
@@ -55,6 +55,6 @@ export default function BibliotekaPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

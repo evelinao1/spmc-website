@@ -154,7 +154,7 @@ export default async function KontaktaiPage() {
   });
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <SchemaJsonLd data={breadcrumbJsonLd} />
       <SchemaJsonLd data={contactPageJsonLd} />
 
@@ -166,7 +166,7 @@ export default async function KontaktaiPage() {
         description="Turite klausimų apie priėmimą, mokymo programas ar studijas? Susisiekite su mumis."
       />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-16">
         <Breadcrumb
           items={[
             {
@@ -497,6 +497,6 @@ export default async function KontaktaiPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

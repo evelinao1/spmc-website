@@ -25,10 +25,10 @@ export default async function ProfesijosPage() {
   );
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main>
+      <main className="w-full flex-1">
         <PageHero
           title="Profesijos"
           description="Profesinio mokymo galimybės specialiųjų ugdymosi poreikių turintiems mokiniams."
@@ -67,6 +67,6 @@ export default async function ProfesijosPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

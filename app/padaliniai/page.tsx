@@ -37,7 +37,7 @@ export default async function PadaliniaiPage() {
   const campuses: Campus[] = data.data;
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
       <PageHero
@@ -46,7 +46,7 @@ export default async function PadaliniaiPage() {
         description="Šilutės profesinio mokymo centrą sudaro keli padaliniai, kuriuose mokiniai mokosi ir įgyja profesinių įgūdžių."
       />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-16">
         <div className="grid gap-6 md:grid-cols-3">
           {campuses.map((campus) => {
             const imageUrl = campus.image?.url
@@ -95,6 +95,6 @@ export default async function PadaliniaiPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

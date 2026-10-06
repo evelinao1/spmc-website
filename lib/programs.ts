@@ -16,6 +16,7 @@ export type Program = {
   category: ProgramCategory;
   shortDescription?: string;
   description?: unknown[];
+  descriptionHtml?: string | null;
   duration?: string;
   qualification?: string;
   targetAudience?: string;

@@ -8,6 +8,7 @@ import { PageHero } from "@/components/PageHero";
 import { RichText, type StrapiBlock } from "@/components/RichText";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { SchemaJsonLd } from "@/components/SchemaJsonLd";
+import { CKEditorContent } from "@/components/CKEditorContent";
 
 import {
   getProgramBySlug,
@@ -122,13 +123,13 @@ export default async function ProgramPage({
   });
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <SchemaJsonLd data={breadcrumbJsonLd} />
       <SchemaJsonLd data={courseJsonLd} />
 
       <Header />
 
-      <main>
+      <main className="w-full flex-1">
         <PageHero
           title={program.title}
           description={
@@ -232,17 +233,17 @@ export default async function ProgramPage({
             </div>
           )}
 
-          {program.description && (
+          {program.descriptionHtml?.trim() ? (
+            <CKEditorContent content={program.descriptionHtml} />
+          ) : program.description ? (
             <RichText
-              blocks={
-                program.description as StrapiBlock[]
-              }
+              blocks={program.description as StrapiBlock[]}
             />
-          )}
+          ) : null}
         </section>
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

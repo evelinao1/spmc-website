@@ -6,7 +6,7 @@ import { PrimaryButton } from "@/components/PrimaryButton";
 
 export default function StojantiesiemsPage() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
       <PageHero
@@ -15,7 +15,7 @@ export default function StojantiesiemsPage() {
         description="Visa svarbiausia informacija apie priėmimą, dokumentų pateikimą ir profesinio mokymo programas."
       />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-16">
         <div className="grid gap-6 md:grid-cols-3">
           <InfoCard
             title="Kaip pateikti prašymą?"
@@ -66,6 +66,6 @@ export default function StojantiesiemsPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

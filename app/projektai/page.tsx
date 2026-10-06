@@ -70,10 +70,10 @@ export default async function ProjectsPage({
   const projects = data.data as Project[];
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main>
+      <main className="w-full flex-1">
         <PageHero
           title={
             category && category !== "Visi projektai"
@@ -164,6 +164,6 @@ export default async function ProjectsPage({
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

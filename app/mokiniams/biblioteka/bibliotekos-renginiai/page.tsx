@@ -5,10 +5,10 @@ import { NewsList } from "@/components/NewsList";
 
 export default function BibliotekosRenginiaiPage() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main>
+      <main className="w-full flex-1">
         <PageHero
           label="Biblioteka"
           title="Bibliotekos renginiai"
@@ -21,6 +21,6 @@ export default function BibliotekosRenginiaiPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

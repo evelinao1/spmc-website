@@ -51,7 +51,7 @@ const sections = [
 
 export default function KorupcijosPrevencijaPage() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
       <PageHero
@@ -60,7 +60,7 @@ export default function KorupcijosPrevencijaPage() {
         description="Informacija apie Šilutės profesinio mokymo centro vykdomas korupcijos prevencijos, skaidrumo ir pranešėjų apsaugos priemones."
       />
 
-      <main className="mx-auto max-w-7xl px-6 pb-20 pt-6">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-16">
         <Breadcrumb
           items={[
             { label: "Pradžia", href: "/" },
@@ -83,6 +83,6 @@ export default function KorupcijosPrevencijaPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

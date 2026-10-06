@@ -6,7 +6,7 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function KompetencijuVertinimoCentrasPage() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
       <PageHero
@@ -15,7 +15,7 @@ export default function KompetencijuVertinimoCentrasPage() {
         description="Informacija apie asmens įgytų kompetencijų vertinimą, kvalifikacijų suteikimą ir registraciją."
       />
 
-      <main className="mx-auto max-w-7xl px-6 pb-16 pt-6">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-16">
         <Breadcrumb
           items={[
             { label: "Pradžia", href: "/" },
@@ -50,6 +50,6 @@ export default function KompetencijuVertinimoCentrasPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

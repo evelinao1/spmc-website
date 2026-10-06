@@ -17,10 +17,10 @@ export const metadata: Metadata = createMetadata({
 
 export default function NewsPage() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main>
+      <main className="w-full flex-1">
         <PageHero
           title="Naujienos"
           description="Šilutės profesinio mokymo centro naujienos, renginiai ir aktualijos."
@@ -32,6 +32,6 @@ export default function NewsPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

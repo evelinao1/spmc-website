@@ -46,10 +46,10 @@ export default async function AnnouncementsPage() {
   const announcements = data.data as Announcement[];
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main>
+      <main className="w-full flex-1">
         <PageHero
           title="Skelbimai"
           description="Svarbi informacija mokiniams, darbuotojams ir bendruomenei."
@@ -99,6 +99,6 @@ export default async function AnnouncementsPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

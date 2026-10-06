@@ -73,10 +73,10 @@ export default async function DarbuotojaiPage({
     : employees;
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main>
+      <main className="w-full flex-1">
         <PageHero
           label="Apie centrą"
           title={
@@ -214,6 +214,6 @@ export default async function DarbuotojaiPage({
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

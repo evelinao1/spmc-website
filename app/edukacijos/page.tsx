@@ -24,10 +24,10 @@ export default async function EdukacijosPage() {
   const educations = await getEducations();
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main>
+      <main className="w-full flex-1">
         <PageHero
           title="Edukacijos"
           description="Praktinės, pažintinės ir kūrybinės edukacijos įvairioms amžiaus grupėms."
@@ -104,6 +104,6 @@ export default async function EdukacijosPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

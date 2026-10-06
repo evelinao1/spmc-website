@@ -6,10 +6,10 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function ItraukusisUgdymasPage() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main>
+      <main className="w-full flex-1">
         <PageHero
           title="Įtraukusis ugdymas"
           description="Informacija mokiniams, tėvams ir specialistams apie įtraukiojo ugdymo galimybes Šilutės profesinio mokymo centre."
@@ -59,6 +59,6 @@ export default function ItraukusisUgdymasPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

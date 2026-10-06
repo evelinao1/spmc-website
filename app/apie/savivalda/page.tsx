@@ -6,7 +6,7 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function SavivaldaPage() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
       <PageHero
@@ -15,7 +15,7 @@ export default function SavivaldaPage() {
         description="Informacija apie centro savivaldos institucijas ir kolegialius valdymo organus."
       />
 
-      <main className="mx-auto max-w-7xl px-6 pb-16 pt-6">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-16">
         <Breadcrumb
           items={[
             { label: "Pradžia", href: "/" },
@@ -70,6 +70,6 @@ export default function SavivaldaPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

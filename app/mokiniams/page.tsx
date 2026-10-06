@@ -59,7 +59,7 @@ const studentLinks = [
 
 export default function MokiniamsPage() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
       <PageHero
@@ -68,7 +68,7 @@ export default function MokiniamsPage() {
         description="Čia rasi informaciją apie mokymąsi, tvarkaraščius, stipendijas, bendrabutį, praktiką, pagalbą ir kasdienį gyvenimą centre."
       />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-16">
         <div className="grid gap-6 md:grid-cols-2">
           {studentLinks.map((item) => (
             <InfoCard
@@ -83,6 +83,6 @@ export default function MokiniamsPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

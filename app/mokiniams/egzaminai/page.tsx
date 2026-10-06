@@ -25,7 +25,7 @@ const examLinks = [
 
 export default function EgzaminaiPage() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
       <PageHero
@@ -34,7 +34,7 @@ export default function EgzaminaiPage() {
         description="Svarbiausia informacija apie egzaminus ir pasiekimų vertinimus."
       />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-16">
         <div className="grid gap-6 md:grid-cols-3">
           {examLinks.map((item) => (
             <InfoCard
@@ -49,6 +49,6 @@ export default function EgzaminaiPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

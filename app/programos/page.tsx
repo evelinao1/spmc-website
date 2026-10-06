@@ -75,10 +75,10 @@ export default async function ProgramosPage({
     : "Atraskite profesinio mokymo programas pagal savo išsilavinimą, poreikius ir karjeros tikslus.";
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main>
+      <main className="w-full flex-1">
         <PageHero title={pageTitle} description={pageDescription} />
 
         <section className="mx-auto max-w-7xl px-6 py-16">
@@ -148,6 +148,6 @@ export default async function ProgramosPage({
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

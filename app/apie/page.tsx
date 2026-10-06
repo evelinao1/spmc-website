@@ -62,7 +62,7 @@ const aboutItems = [
 
 export default function ApiePage() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
 
       <PageHero
@@ -71,7 +71,7 @@ export default function ApiePage() {
         description="Darbuotojai, dokumentai, kompetencijų vertinimas, savivalda, finansinė informacija ir kita aktuali informacija apie Šilutės profesinio mokymo centrą."
       />
 
-      <main className="mx-auto max-w-7xl px-6 py-16">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-16">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {aboutItems.map((item) => (
             <InfoCard
@@ -86,6 +86,6 @@ export default function ApiePage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }
