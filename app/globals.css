@@ -68,3 +68,12 @@ body {
   opacity: 1;
   transform: scale(1.04);
 }
+
+/* CKEditor turinys naudoja svetainės šriftą. */
+.ckeditor-content {
+  font-family: inherit;
+}
+
+.ckeditor-content * {
+  font-family: inherit !important;
+}
