@@ -77,3 +77,29 @@ body {
 .ckeditor-content * {
   font-family: inherit !important;
 }
+.ckeditor-content a.content-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid #154280;
+  border-radius: 0.75rem;
+  background-color: #154280;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.ckeditor-content a.content-button:hover {
+  background-color: #103365;
+  border-color: #103365;
+}
+
+.ckeditor-content a.content-button:focus-visible {
+  outline: 3px solid #154280;
+  outline-offset: 3px;
+}
