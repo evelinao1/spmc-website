@@ -12,6 +12,7 @@ export type Education = {
   slug: string;
   summary?: string;
   content?: unknown[];
+  contentHtml?: string | null;
   coverImage?: {
     url: string;
     alternativeText?: string | null;

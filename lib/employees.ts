@@ -37,6 +37,7 @@ export type Employee = {
   category?: EmployeeCategory | null;
   photo?: EmployeeMedia | null;
   description?: StrapiBlock[] | null;
+  descriptionHtml?: string | null;
   workingHours?: StrapiBlock[] | null;
   attachments?: EmployeeMedia[];
   padaliniais?: EmployeeCampus[];

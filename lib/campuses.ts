@@ -16,6 +16,7 @@ export type Campus = {
   phone?: string | null;
   email?: string | null;
   description?: StrapiBlock[] | null;
+  contentHtml?: string | null;
   image?: CampusMedia | null;
   active?: boolean;
   order?: number | null;

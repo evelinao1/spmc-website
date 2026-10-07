@@ -9,6 +9,7 @@ import { PageHero } from "@/components/PageHero";
 import { RichText } from "@/components/RichText";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { SchemaJsonLd } from "@/components/SchemaJsonLd";
+import { CKEditorContent } from "@/components/CKEditorContent";
 
 import {
   getEmployeeBySlug,
@@ -273,18 +274,20 @@ export default async function EmployeePage({
             </aside>
 
             <div>
-              {employee.description &&
-                employee.description.length > 0 && (
-                  <section>
-                    <h2 className="mb-6 text-2xl font-bold text-slate-900">
-                      Aprašymas
-                    </h2>
+              {(employee.descriptionHtml?.trim() ||
+                      (employee.description && employee.description.length > 0)) && (
+                      <section>
+                        <h2 className="mb-6 text-2xl font-bold text-slate-900">
+                          Aprašymas
+                        </h2>
 
-                    <RichText
-                      blocks={employee.description}
-                    />
-                  </section>
-                )}
+                        {employee.descriptionHtml?.trim() ? (
+                          <CKEditorContent content={employee.descriptionHtml} />
+                        ) : (
+                          <RichText blocks={employee.description ?? []} />
+                        )}
+                      </section>
+                    )}
 
               {employee.workingHours &&
                 employee.workingHours.length > 0 && (

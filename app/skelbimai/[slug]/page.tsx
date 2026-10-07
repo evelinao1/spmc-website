@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RichText, type StrapiBlock } from "@/components/RichText";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { CKEditorContent } from "@/components/CKEditorContent";
 
 import { fetchFromStrapi } from "@/lib/strapi";
 import { createMetadata } from "@/lib/seo";
@@ -23,6 +24,7 @@ type Announcement = {
   slug: string;
   shortText?: string;
   content?: StrapiBlock[];
+  contentHtml?: string | null;
   image?: StrapiMedia | null;
   attachments?: StrapiMedia[];
   publishDate?: string;
@@ -188,9 +190,11 @@ export default async function AnnouncementDetailPage({
             </div>
           )}
 
-          {announcement.content && (
+          {announcement.contentHtml?.trim() ? (
+            <CKEditorContent content={announcement.contentHtml} />
+          ) : announcement.content && announcement.content.length > 0 ? (
             <RichText blocks={announcement.content} />
-          )}
+          ) : null}
 
           {announcement.attachments &&
             announcement.attachments.length > 0 && (

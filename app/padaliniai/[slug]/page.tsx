@@ -11,6 +11,7 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 import { SchemaJsonLd } from "@/components/SchemaJsonLd";
 import { CampusEmployees } from "@/components/CampusEmployees";
 import { CampusPrograms } from "@/components/CampusPrograms";
+import { CKEditorContent } from "@/components/CKEditorContent";
 
 import { fetchFromStrapi } from "@/lib/strapi";
 import { createMetadata } from "@/lib/seo";
@@ -54,6 +55,7 @@ type Campus = {
   slug: string;
   shortDescription?: string | null;
   content?: StrapiBlock[] | null;
+  contentHtml?: string | null;
   address?: string | null;
   phone?: string | null;
   email?: string | null;
@@ -308,10 +310,11 @@ export default async function CampusPage({
             </div>
           </div>
 
-          {campus.content &&
-            campus.content.length > 0 && (
+          {campus.contentHtml?.trim() ? (
+              <CKEditorContent content={campus.contentHtml} />
+            ) : campus.content && campus.content.length > 0 ? (
               <RichText blocks={campus.content} />
-            )}
+            ) : null}
 
           {campus.programos &&
             campus.programos.length > 0 && (

@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { RichText, type StrapiBlock } from "@/components/RichText";
 import { LightboxGallery } from "@/components/LightboxGallery";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { CKEditorContent } from "@/components/CKEditorContent";
 
 import { fetchFromStrapi } from "@/lib/strapi";
 import { createMetadata } from "@/lib/seo";
@@ -28,6 +29,7 @@ type Project = {
   category?: string;
   summary?: string;
   content?: StrapiBlock[];
+  contentHtml?: string | null;
   coverImage?: StrapiMedia | null;
   gallery?: StrapiMedia[];
   attachments?: StrapiMedia[];
@@ -195,9 +197,11 @@ export default async function ProjectDetailPage({ params }: Props) {
             </div>
           )}
 
-          {project.content && (
+          {project.contentHtml?.trim() ? (
+            <CKEditorContent content={project.contentHtml} />
+          ) : project.content && project.content.length > 0 ? (
             <RichText blocks={project.content} />
-          )}
+          ) : null}
 
           {project.gallery && project.gallery.length > 0 && (
             <section className="mt-12">

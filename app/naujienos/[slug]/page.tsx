@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { RichText, type StrapiBlock } from "@/components/RichText";
 import { LightboxGallery } from "@/components/LightboxGallery";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { CKEditorContent } from "@/components/CKEditorContent";
 
 import { fetchFromStrapi } from "@/lib/strapi";
 import { createMetadata } from "@/lib/seo";
@@ -30,6 +31,7 @@ type NewsArticle = {
   slug: string;
   excerpt?: string;
   content?: StrapiBlock[];
+  contentHtml?: string | null;
   publishDate?: string;
   updatedAt?: string;
   coverImage?: StrapiMedia | null;
@@ -209,9 +211,11 @@ export default async function NewsDetailPage({ params }: Props) {
             </div>
           )}
 
-          {article.content && (
+          {article.contentHtml?.trim() ? (
+            <CKEditorContent content={article.contentHtml} />
+          ) : article.content && article.content.length > 0 ? (
             <RichText blocks={article.content} />
-          )}
+          ) : null}
 
           {article.gallery && article.gallery.length > 0 && (
             <section className="mt-12">

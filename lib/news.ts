@@ -14,6 +14,7 @@ export type NewsArticle = {
   slug: string;
   excerpt?: string;
   content?: StrapiBlock[];
+  contentHtml?: string | null;
   publishDate?: string;
   category?: string | null;
   coverImage?: StrapiMedia | null;

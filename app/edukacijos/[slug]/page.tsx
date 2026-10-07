@@ -12,6 +12,7 @@ import { getEducationBySlug } from "@/lib/educations";
 import { createMetadata } from "@/lib/seo";
 import { createBreadcrumbJsonLd } from "@/lib/schema";
 import { colors } from "@/lib/theme";
+import { CKEditorContent } from "@/components/CKEditorContent";
 
 type EducationPageProps = {
   params: Promise<{
@@ -147,13 +148,17 @@ export default async function EducationPage({
                 </div>
               )}
 
-              {education.content &&
+              {education.contentHtml?.trim() ? (
+                <CKEditorContent content={education.contentHtml} />
+              ) : (
+                education.content &&
                 Array.isArray(education.content) &&
                 education.content.length > 0 && (
                   <RichText
                     content={education.content as StrapiBlock[]}
                   />
-                )}
+                )
+              )}
             </div>
 
             {(education.duration || education.price || education.audience) && (
