@@ -48,6 +48,10 @@ export type Employee = {
 };
 
 export function getEmployeeCategoryLabel(category?: string | null) {
+  if (category === "Kitas darbuotojas") {
+    return "Kiti darbuotojai";
+  }
+
   return category || "Darbuotojas";
 }
 

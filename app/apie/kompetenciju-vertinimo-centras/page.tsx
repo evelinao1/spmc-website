@@ -29,22 +29,21 @@ export default function KompetencijuVertinimoCentrasPage() {
             title="Apie centrą"
             href="/apie/kompetenciju-vertinimo-centras/apie-centra"
           >
-            Centro funkcijos, pasitelktos įstaigos, kontaktinė informacija.
+            Kompetencijų vertinimo centro veikla, pasitelktos įstaigos ir kontaktai.
           </InfoCard>
 
           <InfoCard
             title="Registracija"
             href="/apie/kompetenciju-vertinimo-centras/registracija"
           >
-            Čia bus pateikiama registracijos tvarka, terminai ir kontaktinė
-            informacija.
+            Registracijos į kompetencijų vertinimą tvarka, terminai ir kontaktai.
           </InfoCard>
 
           <InfoCard
             title="Tvarkaraščiai"
             href="/apie/kompetenciju-vertinimo-centras/tvarkarasciai"
           >
-            Čia bus skelbiami kompetencijų vertinimo tvarkaraščiai.
+            Kompetencijų vertinimo datos, laikas ir vietos.
           </InfoCard>
         </div>
       </main>

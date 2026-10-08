@@ -12,9 +12,9 @@ const quickLinks = [
     href: "/programos",
   },
   {
-    title: "Mokiniams",
-    description: "Tvarkaraščiai ir kita svarbi informacija",
-    href: "/mokiniams",
+    title: "Tvarkaraščiai",
+    description: "Pamokų ir praktinio mokymo tvarkaraščiai.",
+    href: "/mokiniams/tvarkarasciai-mokiniams",
   },
   {
     title: "Apie centrą",

@@ -90,16 +90,24 @@ export function CampusPrograms({
               )}
 
               <div className="p-5">
-                <h3 className="text-lg font-bold text-slate-900">
-                  {program.title}
-                </h3>
+              {program.category && (
+                <span className="mb-3 inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-[#154280]">
+                  {program.category === "SUP"
+                    ? "Įtraukusis ugdymas"
+                    : program.category}
+                </span>
+              )}
 
-                {program.shortDescription && (
-                  <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-600">
-                    {program.shortDescription}
-                  </p>
-                )}
-              </div>
+              <h3 className="text-lg font-bold text-slate-900">
+                {program.title}
+              </h3>
+
+              {program.shortDescription && (
+                <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-600">
+                  {program.shortDescription}
+                </p>
+              )}
+            </div>
             </Link>
           );
         })}

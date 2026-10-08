@@ -29,24 +29,21 @@ export default function CentrasPage() {
             title="Centro pristatymas"
             href="/apie/centras/centro-pristatymas"
           >
-            Šilutės profesinio mokymo centras rengia specialistus,
-            pasirengusius šiuolaikinei darbo rinkai.
+            Centro veikla, mokymo kryptys ir padaliniai.
           </InfoCard>
 
           <InfoCard
             title="Istorija"
             href="/apie/centras/istorija"
           >
-            Čia bus pateikiama centro istorija, svarbiausi veiklos etapai ir
-            pokyčiai.
+            Centro įkūrimas, raida ir svarbiausi veiklos etapai.
           </InfoCard>
 
           <InfoCard
             title="Misija ir vizija"
             href="/apie/centras/misija-ir-vizija"
           >
-            Siekiame užtikrinti kokybišką profesinį mokymą, ugdyti atsakingą ir
-            kūrybingą asmenybę bei stiprinti ryšį su darbo rinka.
+            Centro paskirtis, vertybės ir ateities siekiai.
           </InfoCard>
         </div>
       </main>
