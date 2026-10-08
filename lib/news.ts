@@ -66,3 +66,25 @@ export async function getOtherNews(slug: string) {
 
   return data.data as NewsArticle[];
 }
+export async function getNewsPage(
+  category?: string,
+  page = 1
+) {
+  const categoryFilter = category
+    ? `&filters[category][$eq]=${encodeURIComponent(category)}`
+    : "";
+
+  const data = await fetchFromStrapi(
+    `/news?filters[active][$eq]=true${categoryFilter}&sort[0]=publishDate:desc&sort[1]=id:desc&populate=coverImage&pagination[page]=${page}&pagination[pageSize]=12&pagination[withCount]=true`
+  );
+
+  return {
+    news: data.data as NewsArticle[],
+    pagination: data.meta.pagination as {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    },
+  };
+}

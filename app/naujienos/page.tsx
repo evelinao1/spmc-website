@@ -15,8 +15,16 @@ export const metadata: Metadata = createMetadata({
   type: "website",
 });
 
-export default function NewsPage() {
-  return (
+export default async function NewsPage({
+    searchParams,
+  }: {
+    searchParams: Promise<{
+      page?: string | string[];
+    }>;
+  }) {
+    const { page } = await searchParams;
+
+    return (
     <div className="flex min-h-screen flex-col">
       <Header />
 
@@ -27,7 +35,7 @@ export default function NewsPage() {
         />
 
         <section className="mx-auto max-w-7xl px-6 py-16">
-          <NewsList />
+          <NewsList page={page} basePath="/naujienos" />
         </section>
       </main>
 
