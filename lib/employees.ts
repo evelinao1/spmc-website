@@ -55,25 +55,59 @@ export function getEmployeeCategoryLabel(category?: string | null) {
   return category || "Darbuotojas";
 }
 
-export async function getEmployees() {
-  const data = await fetchFromStrapi(
-    "/employees?filters[active][$eq]=true&sort=order:asc&populate[photo]=true&populate[padaliniais]=true"
-  );
+// Paimami visi Strapi puslapiai ir sujungiami į vieną sąrašą.
+async function getAllEmployees(query: string): Promise<Employee[]> {
+  const employees: Employee[] = [];
+  let page = 1;
+  let pageCount = 1;
 
-  return data.data as Employee[];
+  do {
+    const response = await fetchFromStrapi(
+      `${query}&pagination[page]=${page}&pagination[pageSize]=25&pagination[withCount]=true`
+    );
+
+    if (!Array.isArray(response.data)) {
+      throw new Error("Nepavyko gauti darbuotojų sąrašo.");
+    }
+
+    const pagination = response.meta?.pagination;
+
+    if (!pagination || typeof pagination.pageCount !== "number") {
+      throw new Error(
+        "Darbuotojų atsakyme nėra puslapiavimo informacijos."
+      );
+    }
+
+    employees.push(...(response.data as Employee[]));
+
+    pageCount = pagination.pageCount;
+    page += 1;
+  } while (page <= pageCount);
+
+  return employees;
 }
 
-export async function getEmployeeBySlug(slug: string) {
+// Visi aktyvūs darbuotojai darbuotojų puslapiui.
+export async function getEmployees(): Promise<Employee[]> {
+  return getAllEmployees(
+    "/employees?filters[active][$eq]=true&sort[0]=order:asc&sort[1]=id:asc&populate[photo]=true&populate[padaliniais]=true"
+  );
+}
+
+// Vieno darbuotojo informacija pagal jo nuorodą.
+export async function getEmployeeBySlug(
+  slug: string
+): Promise<Employee | undefined> {
   const data = await fetchFromStrapi(
-    `/employees?filters[slug][$eq]=${slug}&filters[active][$eq]=true&populate=*`
+    `/employees?filters[slug][$eq]=${encodeURIComponent(slug)}&filters[active][$eq]=true&populate=*`
   );
 
   return data.data?.[0] as Employee | undefined;
 }
-export async function getContactEmployees() {
-  const data = await fetchFromStrapi(
-    "/employees?filters[active][$eq]=true&filters[showOnContacts][$eq]=true&sort=sortOrder:asc&populate[photo]=true&populate[padaliniais]=true"
-  );
 
-  return data.data as Employee[];
+// Visi aktyvūs darbuotojai, pažymėti rodyti kontaktų puslapyje.
+export async function getContactEmployees(): Promise<Employee[]> {
+  return getAllEmployees(
+    "/employees?filters[active][$eq]=true&filters[showOnContacts][$eq]=true&sort[0]=sortOrder:asc&sort[1]=id:asc&populate[photo]=true&populate[padaliniais]=true"
+  );
 }
