@@ -124,12 +124,12 @@ export default async function ProjectDetailPage({ params }: Props) {
   ]);
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <SchemaJsonLd data={breadcrumbJsonLd} />
 
       <Header />
 
-      <main className="mx-auto max-w-4xl px-6 py-16">
+      <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-16">
         <Breadcrumb
           items={[
             {
@@ -247,6 +247,6 @@ export default async function ProjectDetailPage({ params }: Props) {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }
